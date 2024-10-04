@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { loadShirtAssets, loadShoulderAssets, loadChestVolumeAssets, loadEyeballAssets, loadEyeShapeAssets, loadEyeMakeupAssets, loadEyeSocketShadowAssets, loadHeadAssets, loadChinAssets, loadEarAssets, loadHairAssets, loadFaceScarAssets, loadFringeAssets, loadBodyScarAssets, loadBackgroundAssets, loadAccessoryAssets, loadBeardAssets, loadMustacheAssets, loadCheekboneAssets, loadEyelashAssets, loadEyeColorAssets } from '../utilities/loadAssets';
+import { loadFrontLayerFringeAssets, loadSecondaryFringeAssets, loadMouthExpressionAssets, loadLipAssets, loadNoseApexAssets, loadNoseBridgeAssets, loadShirtAssets, loadShoulderAssets, loadChestVolumeAssets, loadEyeballAssets, loadEyeShapeAssets, loadEyeMakeupAssets, loadEyeSocketShadowAssets, loadHeadAssets, loadChinAssets, loadEarAssets, loadHairAssets, loadFaceScarAssets, loadBodyScarAssets, loadBackgroundAssets, loadAccessoryAssets, loadBeardAssets, loadMustacheAssets, loadCheekboneAssets, loadEyelashAssets, loadEyeColorAssets } from '../utilities/loadAssets';
 import './SafeSpace.css'; // Assuming you're using the provided CSS
 
 const SafeSpace = () => {
@@ -12,13 +12,21 @@ const SafeSpace = () => {
     const [selectedHairLinework, setSelectedHairLinework] = useState(null);
     const [selectedHairColor, setSelectedHairColor] = useState(null);
     const [selectedFaceScar, setSelectedFaceScar] = useState(null);
-    const [selectedFringeLinework, setSelectedFringeLinework] = useState(null);
-    const [selectedFringeColor, setSelectedFringeColor] = useState(null);
+    const [selectedFrontLayerFringeLinework, setSelectedFrontLayerFringeLinework] = useState(null);
+    const [selectedFrontLayerFringeColor, setSelectedFrontLayerFringeColor] = useState(null);
+
+    const [selectedSecondaryFringeLinework, setSelectedSecondaryFringeLinework] = useState(null);
+    const [selectedSecondaryFringeColor, setSelectedSecondaryFringeColor] = useState(null);
+
     const [selectedBodyScar, setSelectedBodyScar] = useState(null);
     const [selectedBackground, setSelectedBackground] = useState(null);
     const [selectedAccessory, setSelectedAccessory] = useState(null);
-    const [selectedBeard, setSelectedBeard] = useState(null);
-    const [selectedMustache, setSelectedMustache] = useState(null);
+
+    const [selectedMustacheLinework, setSelectedMustacheLinework] = useState(null);
+    const [selectedMustacheColor, setSelectedMustacheColor] = useState(null);
+    const [selectedBeardLinework, setSelectedBeardLinework] = useState(null);
+    const [selectedBeardColor, setSelectedBeardColor] = useState(null);
+
     const [selectedCheekbone, setSelectedCheekbone] = useState(null);
     const [selectedUpperEyelash, setSelectedUpperEyelash] = useState(null);
     const [selectedLowerEyelash, setSelectedLowerEyelash] = useState(null);
@@ -36,6 +44,12 @@ const SafeSpace = () => {
     const [selectedShirtLinework, setSelectedShirtLinework] = useState(null);
     const [selectedShirtColor, setSelectedShirtColor] = useState(null);
     const [shirtAssets, setShirtAssets] = useState({ linework: {}, colors: {} });
+    const [selectedNoseApex, setSelectedNoseApex] = useState(null);
+    const [selectedNoseBridge, setSelectedNoseBridge] = useState(null);
+    const [selectedMouthExpression, setSelectedMouthExpression] = useState(null);
+    const [selectedLipColor, setSelectedLipColor] = useState(null);
+
+
 
     useEffect(() => {
         // Load the shirt assets when the component mounts
@@ -64,7 +78,8 @@ const SafeSpace = () => {
     const faceScarAssets = loadFaceScarAssets(require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/4-Face-Scars', true, /\.(png|jpe?g|svg)$/));
 
     // Load fringe assets
-    const fringeAssets = loadFringeAssets(require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/2-Fringe', true, /\.(png|jpe?g|svg)$/));
+    const frontLayerFringeAssets = loadFrontLayerFringeAssets(require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/2-Fringe/FrontLayerFringe', true, /\.(png|jpe?g|svg)$/));
+    const secondaryFringeAssets = loadSecondaryFringeAssets(require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/2-Fringe/SecondaryFringe', true, /\.(png|jpe?g|svg)$/));
 
     // Load body scar assets
     const bodyScarAssets = loadBodyScarAssets(require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/11-Body-Scars', true, /\.(png|jpe?g|svg)$/));
@@ -76,8 +91,8 @@ const SafeSpace = () => {
     const accessoryAssets = loadAccessoryAssets(require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/0-Accessories', true, /\.(png|jpe?g|svg)$/));
 
     // Load beard and mustache assets
-    const beardAssets = loadBeardAssets(require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/1-Face-Hair/1-Beards', true, /\.(png|jpe?g|svg)$/));
-    const mustacheAssets = loadMustacheAssets(require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/1-Face-Hair/0-Mustashes', true, /\.(png|jpe?g|svg)$/));
+    const mustacheAssets = loadMustacheAssets(require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/1-Face-Hair/3-Mustashes', true, /\.(png|jpe?g|svg)$/));
+    const beardAssets = loadBeardAssets(require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/1-Face-Hair/5-Beards', true, /\.(png|jpe?g|svg)$/));
 
     // Load cheekbone and eyelash assets
     const cheekboneAssets = loadCheekboneAssets(require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/3-Face-Parts/Cheek-Bones', true, /\.(png|jpe?g|svg)$/));
@@ -98,7 +113,13 @@ const SafeSpace = () => {
     // Load chest volume assets
     const chestVolumeAssets = loadChestVolumeAssets(require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/12-Bodies/ChestVolumeAssets', true, /\.(png|jpe?g|svg)$/));
 
-    
+    // Load nose apex and nose bridge assets
+    const noseApexAssets = loadNoseApexAssets(require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/3-Face-Parts/Nose/Nose-Apex', true, /\.(png|jpe?g|svg)$/));
+    const noseBridgeAssets = loadNoseBridgeAssets(require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/3-Face-Parts/Nose/Nose-Bridge', true, /\.(png|jpe?g|svg)$/));
+
+    const mouthExpressionAssets = loadMouthExpressionAssets(require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/3-Face-Parts/Mouth/0-Expression', true, /\.(png|jpe?g|svg)$/));
+    const lipAssets = loadLipAssets(require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/3-Face-Parts/Mouth/1-Lip', true, /\.(png|jpe?g|svg)$/));
+
 
 
 
@@ -110,33 +131,33 @@ const SafeSpace = () => {
         }
     }, [chinAssets, selectedChinLinework]);
 
-// Update the skin tone when selecting
-const handleSkinToneChange = (skinTonePath) => {
-    const selectedToneNumber = skinTonePath.match(/Skin-Tone-(\d+)/)[1]; // Extract tone number from filename
+    // Update the skin tone when selecting
+    const handleSkinToneChange = (skinTonePath) => {
+        const selectedToneNumber = skinTonePath.match(/Skin-Tone-(\d+)/)[1]; // Extract tone number from filename
 
-    // Set the skin tone for the head
-    const matchingHeadSkinTone = headAssets.colors.find(file => file.includes(`Skin-Tone-${selectedToneNumber}`));
-    setSelectedHeadSkinTone(matchingHeadSkinTone);
+        // Set the skin tone for the head
+        const matchingHeadSkinTone = headAssets.colors.find(file => file.includes(`Skin-Tone-${selectedToneNumber}`));
+        setSelectedHeadSkinTone(matchingHeadSkinTone);
 
-    // Set the skin tone for the chin
-    const matchingChinSkinTone = chinAssets.colors.find(file => file.includes(`Chin-${selectedChinLinework.match(/Chin-(\d+)/)[1]}-Skin-Tone-${selectedToneNumber}`));
-    setSelectedChinSkinTone(matchingChinSkinTone);
+        // Set the skin tone for the chin
+        const matchingChinSkinTone = chinAssets.colors.find(file => file.includes(`Chin-${selectedChinLinework.match(/Chin-(\d+)/)[1]}-Skin-Tone-${selectedToneNumber}`));
+        setSelectedChinSkinTone(matchingChinSkinTone);
 
-    // Set the skin tone for the ears
-    const matchingEarSkinTone = earAssets.colors.find(file => file.includes(`Ear-${selectedEarLinework.match(/Ear-(\d+)/)[1]}-Skin-Tone-${selectedToneNumber}`));
-    setSelectedEarSkinTone(matchingEarSkinTone);
+        // Set the skin tone for the ears
+        const matchingEarSkinTone = earAssets.colors.find(file => file.includes(`Ear-${selectedEarLinework.match(/Ear-(\d+)/)[1]}-Skin-Tone-${selectedToneNumber}`));
+        setSelectedEarSkinTone(matchingEarSkinTone);
 
-    // Set the skin tone for the shoulders based on the selected shoulder linework
-    if (selectedShoulderLinework) {
-        // Extract shoulder type from the selected linework (Thin, Broad, or Narrow)
-        const shoulderType = selectedShoulderLinework.match(/(Thin|Broad|Narrow)-Shoulder/)[1];
-        const matchingShoulderSkinTone = shoulderAssets.colors.find(file => file.includes(`${shoulderType}-Shoulder-Skin-Tone-${selectedToneNumber}`));
+        // Set the skin tone for the shoulders based on the selected shoulder linework
+        if (selectedShoulderLinework) {
+            // Extract shoulder type from the selected linework (Thin, Broad, or Narrow)
+            const shoulderType = selectedShoulderLinework.match(/(Thin|Broad|Narrow)-Shoulder/)[1];
+            const matchingShoulderSkinTone = shoulderAssets.colors.find(file => file.includes(`${shoulderType}-Shoulder-Skin-Tone-${selectedToneNumber}`));
 
-        if (matchingShoulderSkinTone) {
-            setSelectedShoulderSkinTone(matchingShoulderSkinTone);
+            if (matchingShoulderSkinTone) {
+                setSelectedShoulderSkinTone(matchingShoulderSkinTone);
+            }
         }
-    }
-};
+    };
 
 
 
@@ -185,10 +206,24 @@ const handleSkinToneChange = (skinTonePath) => {
         }
     };
 
+    // Handle Hair Linework
     const handleHairLineworkChange = (hairLinework) => {
         setSelectedHairLinework(hairLinework);
-        setSelectedHairColor(null); // Reset color when linework changes
+
+        if (hairLinework) {
+            const currentColorNumber = selectedHairColor?.match(/Color-(\d+)/)?.[1];
+
+            // Find matching color for hair linework
+            const matchingHairColor = hairAssets.colors.find(asset =>
+                asset.includes(hairLinework.match(/Hair-\d+/)?.[0]) &&
+                asset.includes(`Color-${currentColorNumber}`)
+            );
+
+            setSelectedHairColor(matchingHairColor || null);
+        }
     };
+
+
 
     const handleHairColorChange = (hairColor) => {
         setSelectedHairColor(hairColor);
@@ -198,14 +233,51 @@ const handleSkinToneChange = (skinTonePath) => {
         setSelectedFaceScar(faceScar);
     };
 
-    const handleFringeLineworkChange = (fringeLinework) => {
-        setSelectedFringeLinework(fringeLinework);
-        setSelectedFringeColor(null); // Reset color when linework changes
+    // Handle Front Layer Fringe Linework
+    const handleFrontLayerFringeLineworkChange = (fringeLinework) => {
+        setSelectedFrontLayerFringeLinework(fringeLinework);
+
+        if (fringeLinework) {
+            const currentColorNumber = selectedFrontLayerFringeColor?.match(/Color-(\d+)/)?.[1];
+
+            // Find matching color for front fringe linework
+            const matchingColor = frontLayerFringeAssets.find(asset =>
+                asset.includes(fringeLinework.match(/Fringe-\d+/)?.[0]) &&
+                asset.includes(`Color-${currentColorNumber}`)
+            );
+
+            setSelectedFrontLayerFringeColor(matchingColor || null);
+        }
     };
 
-    const handleFringeColorChange = (fringeColor) => {
-        setSelectedFringeColor(fringeColor);
+
+    // Handle Front Layer Fringe color change
+    const handleFrontLayerFringeColorChange = (fringeColor) => {
+        setSelectedFrontLayerFringeColor(fringeColor);
     };
+
+    // Handle Secondary Fringe Linework
+    const handleSecondaryFringeLineworkChange = (fringeLinework) => {
+        setSelectedSecondaryFringeLinework(fringeLinework);
+
+        if (fringeLinework) {
+            const currentColorNumber = selectedSecondaryFringeColor?.match(/Color-(\d+)/)?.[1];
+
+            // Find matching color for secondary fringe linework
+            const matchingColor = secondaryFringeAssets.find(asset =>
+                asset.includes(fringeLinework.match(/Fringe-\d+/)?.[0]) &&
+                asset.includes(`Color-${currentColorNumber}`)
+            );
+
+            setSelectedSecondaryFringeColor(matchingColor || null);
+        }
+    };
+
+    // Handle Secondary Fringe color change
+    const handleSecondaryFringeColorChange = (fringeColor) => {
+        setSelectedSecondaryFringeColor(fringeColor);
+    };
+
 
     const handleBodyScarChange = (bodyScar) => {
         setSelectedBodyScar(bodyScar);
@@ -219,13 +291,56 @@ const handleSkinToneChange = (skinTonePath) => {
         setSelectedAccessory(accessory);
     };
 
-    const handleBeardChange = (beard) => {
-        setSelectedBeard(beard);
+    const handleMustacheLineworkChange = (mustacheLinework) => {
+        const currentColorNumber = selectedMustacheColor?.match(/Color-(\d+)/)?.[1]; // Extract current color number if any
+
+        setSelectedMustacheLinework(mustacheLinework);
+
+        // Find the matching color for the new mustache linework
+        const matchingMustacheColor = mustacheAssets.find(asset =>
+            asset.includes(mustacheLinework.match(/Face-Hair-\d+/)[0]) &&
+            asset.includes(`Color-${currentColorNumber}`)
+        );
+
+        // If matching color found, apply it
+        if (matchingMustacheColor) {
+            setSelectedMustacheColor(matchingMustacheColor);
+        } else {
+            setSelectedMustacheColor(null); // Clear color if no matching color found
+        }
     };
 
-    const handleMustacheChange = (mustache) => {
-        setSelectedMustache(mustache);
+
+    // Handle mustache color change
+    const handleMustacheColorChange = (mustacheColor) => {
+        setSelectedMustacheColor(mustacheColor);
     };
+
+    const handleBeardLineworkChange = (beardLinework) => {
+        const currentColorNumber = selectedBeardColor?.match(/Color-(\d+)/)?.[1]; // Extract current color number if any
+
+        setSelectedBeardLinework(beardLinework);
+
+        // Find the matching color for the new beard linework
+        const matchingBeardColor = beardAssets.find(asset =>
+            asset.includes(beardLinework.match(/Face-Hair-\d+/)[0]) &&
+            asset.includes(`Color-${currentColorNumber}`)
+        );
+
+        // If matching color found, apply it
+        if (matchingBeardColor) {
+            setSelectedBeardColor(matchingBeardColor);
+        } else {
+            setSelectedBeardColor(null); // Clear color if no matching color found
+        }
+    };
+
+
+    // Handle beard color change
+    const handleBeardColorChange = (beardColor) => {
+        setSelectedBeardColor(beardColor);
+    };
+
 
     const handleCheekboneChange = (cheekbone) => {
         setSelectedCheekbone(cheekbone);
@@ -258,104 +373,104 @@ const handleSkinToneChange = (skinTonePath) => {
         setSelectedEyeSocketShadow(eyeSocketShadow);
     };
 
-// Effect to set the default shoulder after shoulder assets are loaded
-useEffect(() => {
-    if (shoulderAssets.linework.length > 0 && !selectedShoulderLinework) {
-        // Set the default to 'Thin-Shoulder #1'
-        const defaultLinework = shoulderAssets.linework.find(linework => linework.includes('Thin-Shoulder-1'));
-        if (defaultLinework) {
-            setSelectedShoulderLinework(defaultLinework);
-        }
-    }
-}, [shoulderAssets.linework]); // Run this effect only when shoulder assets are loaded
-
-
-
-const handleShoulderLineworkChange = (linework) => {
-    // Step 1: Set the selected shoulder linework first
-    setSelectedShoulderLinework(linework);
-
-    // Step 2: Extract the shoulder type (Thin, Broad, Narrow) from the linework and capitalize the first letter
-    let shoulderType = linework.match(/(Thin|Broad|Narrow)-Shoulder/)?.[1]; // e.g., "Broad"
-    if (shoulderType) {
-        shoulderType = shoulderType.charAt(0).toUpperCase() + shoulderType.slice(1).toLowerCase(); // Ensure proper case
-    }
-
-    // Ensure shoulderType is defined
-    if (!shoulderType) {
-        console.warn("No shoulder type found in the linework.");
-        return;
-    }
-
-    // Step 3: Update the skin color size for the new shoulder size
-    if (selectedShoulderSkinTone) {
-        // Extract the skin tone number from the current skin tone (e.g., Skin-Tone-3)
-        const selectedToneNumber = selectedShoulderSkinTone.match(/Skin-Tone-(\d+)/)?.[1];
-
-        if (selectedToneNumber) {
-            // Find the corresponding skin tone for the new shoulder size
-            const matchingShoulderSkinTone = shoulderAssets.colors.find(file =>
-                file.includes(`${shoulderType}-Shoulder-Skin-Tone-${selectedToneNumber}`)
-            );
-
-            // Log the matching skin tone path
-            console.log("Matching Shoulder Skin Tone Path:", matchingShoulderSkinTone);
-
-            // If a matching skin tone is found, update the state
-            if (matchingShoulderSkinTone) {
-                setSelectedShoulderSkinTone(matchingShoulderSkinTone);
-            } else {
-                console.warn(`No matching shoulder skin tone found for ${shoulderType} and skin tone ${selectedToneNumber}`);
+    // Effect to set the default shoulder after shoulder assets are loaded
+    useEffect(() => {
+        if (shoulderAssets.linework.length > 0 && !selectedShoulderLinework) {
+            // Set the default to 'Thin-Shoulder #1'
+            const defaultLinework = shoulderAssets.linework.find(linework => linework.includes('Thin-Shoulder-1'));
+            if (defaultLinework) {
+                setSelectedShoulderLinework(defaultLinework);
             }
-        } else {
-            console.warn("No skin tone number found in selectedShoulderSkinTone.");
         }
-    }
+    }, [shoulderAssets.linework]); // Run this effect only when shoulder assets are loaded
 
-    // Step 4: Update the shirt linework and color based on the new shoulder type
-    const shirtNumber = selectedShirtLinework?.match(/Top-(\d+)/)?.[1]; // e.g., "Top-8"
 
-    if (shirtNumber) {
-        // Find the corresponding shirt linework for the new shoulder size
-        const matchingShirtLinework = shirtAssets.linework[shoulderType.toLowerCase()]?.find(
-            (shirt) => shirt.includes(`Top-${shirtNumber}`)
-        );
 
-        // Log the new shirt linework path
-        console.log("New Shirt Linework Path:", matchingShirtLinework);
+    const handleShoulderLineworkChange = (linework) => {
+        // Step 1: Set the selected shoulder linework first
+        setSelectedShoulderLinework(linework);
 
-        if (matchingShirtLinework) {
-            setSelectedShirtLinework(matchingShirtLinework); // Update the shirt linework
+        // Step 2: Extract the shoulder type (Thin, Broad, Narrow) from the linework and capitalize the first letter
+        let shoulderType = linework.match(/(Thin|Broad|Narrow)-Shoulder/)?.[1]; // e.g., "Broad"
+        if (shoulderType) {
+            shoulderType = shoulderType.charAt(0).toUpperCase() + shoulderType.slice(1).toLowerCase(); // Ensure proper case
+        }
 
-            // Extract the current shirt color number (if any)
-            const currentColorNumber = selectedShirtColor?.match(/Color-(\d+)/)?.[1]; // e.g., "3"
+        // Ensure shoulderType is defined
+        if (!shoulderType) {
+            console.warn("No shoulder type found in the linework.");
+            return;
+        }
 
-            if (currentColorNumber) {
-                // Find the corresponding shirt color for the new shoulder size
-                const matchingShirtColor = shirtAssets.colors[shoulderType.toLowerCase()]?.find(
-                    (color) => color.includes(`Top-${shirtNumber}`) && color.includes(`Color-${currentColorNumber}`)
+        // Step 3: Update the skin color size for the new shoulder size
+        if (selectedShoulderSkinTone) {
+            // Extract the skin tone number from the current skin tone (e.g., Skin-Tone-3)
+            const selectedToneNumber = selectedShoulderSkinTone.match(/Skin-Tone-(\d+)/)?.[1];
+
+            if (selectedToneNumber) {
+                // Find the corresponding skin tone for the new shoulder size
+                const matchingShoulderSkinTone = shoulderAssets.colors.find(file =>
+                    file.includes(`${shoulderType}-Shoulder-Skin-Tone-${selectedToneNumber}`)
                 );
 
-                // Log the new shirt color path
-                console.log("New Shirt Color Path:", matchingShirtColor);
+                // Log the matching skin tone path
+                console.log("Matching Shoulder Skin Tone Path:", matchingShoulderSkinTone);
 
-                if (matchingShirtColor) {
-                    setSelectedShirtColor(matchingShirtColor); // Update the shirt color
+                // If a matching skin tone is found, update the state
+                if (matchingShoulderSkinTone) {
+                    setSelectedShoulderSkinTone(matchingShoulderSkinTone);
                 } else {
-                    console.warn(`No matching shirt color found for ${shoulderType}-Shoulder with Top-${shirtNumber} and Color-${currentColorNumber}`);
+                    console.warn(`No matching shoulder skin tone found for ${shoulderType} and skin tone ${selectedToneNumber}`);
                 }
+            } else {
+                console.warn("No skin tone number found in selectedShoulderSkinTone.");
             }
-        } else {
-            console.warn(`No matching shirt linework found for ${shoulderType}-Shoulder with Top-${shirtNumber}`);
         }
-    }
-};
+
+        // Step 4: Update the shirt linework and color based on the new shoulder type
+        const shirtNumber = selectedShirtLinework?.match(/Top-(\d+)/)?.[1]; // e.g., "Top-8"
+
+        if (shirtNumber) {
+            // Find the corresponding shirt linework for the new shoulder size
+            const matchingShirtLinework = shirtAssets.linework[shoulderType.toLowerCase()]?.find(
+                (shirt) => shirt.includes(`Top-${shirtNumber}`)
+            );
+
+            // Log the new shirt linework path
+            console.log("New Shirt Linework Path:", matchingShirtLinework);
+
+            if (matchingShirtLinework) {
+                setSelectedShirtLinework(matchingShirtLinework); // Update the shirt linework
+
+                // Extract the current shirt color number (if any)
+                const currentColorNumber = selectedShirtColor?.match(/Color-(\d+)/)?.[1]; // e.g., "3"
+
+                if (currentColorNumber) {
+                    // Find the corresponding shirt color for the new shoulder size
+                    const matchingShirtColor = shirtAssets.colors[shoulderType.toLowerCase()]?.find(
+                        (color) => color.includes(`Top-${shirtNumber}`) && color.includes(`Color-${currentColorNumber}`)
+                    );
+
+                    // Log the new shirt color path
+                    console.log("New Shirt Color Path:", matchingShirtColor);
+
+                    if (matchingShirtColor) {
+                        setSelectedShirtColor(matchingShirtColor); // Update the shirt color
+                    } else {
+                        console.warn(`No matching shirt color found for ${shoulderType}-Shoulder with Top-${shirtNumber} and Color-${currentColorNumber}`);
+                    }
+                }
+            } else {
+                console.warn(`No matching shirt linework found for ${shoulderType}-Shoulder with Top-${shirtNumber}`);
+            }
+        }
+    };
 
 
 
 
 
-    
+
 
     // Handle toggling chest volume
     const toggleChestVolume = () => {
@@ -379,34 +494,34 @@ const handleShoulderLineworkChange = (linework) => {
     const handleShirtLineworkChange = (shirtLinework) => {
         // Step 1: Set the selected shirt linework
         setSelectedShirtLinework(shirtLinework);
-    
+
         // Step 2: Extract the shoulder type (Thin, Broad, Narrow) from the currently selected shoulder linework
         const shoulderType = selectedShoulderLinework.match(/(Thin|Broad|Narrow)-Shoulder/)?.[1];
-    
+
         if (!shoulderType) {
             console.warn("No shoulder type found.");
             return;
         }
-    
+
         // Ensure correct casing for shoulder type (capitalize the first letter)
         const formattedShoulderType = shoulderType.charAt(0).toUpperCase() + shoulderType.slice(1).toLowerCase();
-    
+
         // Step 3: Extract the shirt number from the linework
         const shirtNumber = shirtLinework.match(/Top-(\d+)/)?.[1];
-    
+
         // Step 4: Log the shirt linework file path
         console.log("Shirt Linework Path:", shirtLinework);
-    
+
         // Step 5: Apply the current shirt color to the new shirt linework (using the current color)
         if (selectedShirtColor) {
             const currentColorNumber = selectedShirtColor.match(/Color-(\d+)/)?.[1]; // Extract the color number
             const matchingShirtColor = shirtAssets.colors[formattedShoulderType.toLowerCase()]?.find(
                 (color) => color.includes(`Top-${shirtNumber}`) && color.includes(`Color-${currentColorNumber}`)
             );
-    
+
             // Log the matching shirt color file path
             console.log("Shirt Color Path:", matchingShirtColor);
-    
+
             if (matchingShirtColor) {
                 setSelectedShirtColor(matchingShirtColor);
             } else {
@@ -414,43 +529,43 @@ const handleShoulderLineworkChange = (linework) => {
             }
         }
     };
-    
-    
-    
-    
+
+
+
+
     const handleShirtColorChange = (shirtColor) => {
         // Step 1: Log the shirt color file path
         console.log("Shirt Color Path (on click):", shirtColor);
-    
+
         // Step 2: Set the selected shirt color
         setSelectedShirtColor(shirtColor);
     };
-    
+
     useEffect(() => {
         // Automatically update shirt linework and color when shoulder linework changes
         const shoulderType = selectedShoulderLinework?.match(/(Thin|Broad|Narrow)-Shoulder/)?.[1]?.toLowerCase();
-    
+
         if (shoulderType) {
             const shirtNumber = selectedShirtLinework?.match(/Top-(\d+)/)?.[1]; // Extract the shirt number if one is selected
-    
+
             if (shirtNumber) {
                 // Update shirt linework to match the new shoulder size
                 const matchingShirtLinework = shirtAssets.linework[shoulderType]?.find(
                     (shirt) => shirt.includes(`Top-${shirtNumber}`)
                 );
-    
+
                 if (matchingShirtLinework) {
                     setSelectedShirtLinework(matchingShirtLinework); // Update the shirt linework
-    
+
                     // Extract the color number from the currently selected color (if any)
                     const currentColorNumber = selectedShirtColor?.match(/Color-(\d+)/)?.[1];
-    
+
                     if (currentColorNumber) {
                         // Update shirt color to match the new shoulder size
                         const matchingShirtColor = shirtAssets.colors[shoulderType]?.find(
                             (color) => color.includes(`Top-${shirtNumber}`) && color.includes(`Color-${currentColorNumber}`)
                         );
-    
+
                         if (matchingShirtColor) {
                             setSelectedShirtColor(matchingShirtColor); // Update the shirt color
                         }
@@ -459,8 +574,26 @@ const handleShoulderLineworkChange = (linework) => {
             }
         }
     }, [selectedShoulderLinework, selectedShirtLinework, selectedShirtColor, shirtAssets.linework, shirtAssets.colors]); // Add all dependencies
-    
-    
+
+    const handleNoseApexChange = (apex) => {
+        setSelectedNoseApex(apex);
+    };
+
+    const handleNoseBridgeChange = (bridge) => {
+        setSelectedNoseBridge(bridge);
+    };
+
+    // Handle mouth expression change
+    const handleMouthExpressionChange = (expression) => {
+        setSelectedMouthExpression(expression);
+    };
+
+    // Handle lip color change
+    const handleLipColorChange = (lip) => {
+        setSelectedLipColor(lip);
+    };
+
+
 
 
     return (
@@ -541,7 +674,7 @@ const handleShoulderLineworkChange = (linework) => {
                 {selectedHairLinework && (
                     <img
                         src={selectedHairLinework}
-                        alt="Hair Linework"
+                        alt="Selected Hair Linework"
                         className="character-layer hair-linework"
                     />
                 )}
@@ -551,7 +684,7 @@ const handleShoulderLineworkChange = (linework) => {
                     <img
                         src={selectedCheekbone}
                         alt="Selected Cheekbone"
-                        className="character-layer cheekbone"
+                        className="character-layer cheek-bones"
                     />
                 )}
 
@@ -587,7 +720,7 @@ const handleShoulderLineworkChange = (linework) => {
                     <img
                         src={selectedEyeball}
                         alt="Selected Eyeball"
-                        className="character-layer eyeball"
+                        className="character-layer eyeballs"
                     />
                 )}
 
@@ -619,39 +752,78 @@ const handleShoulderLineworkChange = (linework) => {
                 )}
 
 
+                {/* Render selected nose apex */}
+                {selectedNoseApex && (
+                    <img
+                        src={selectedNoseApex}
+                        alt="Selected Nose Apex"
+                        className="character-layer nose-apex"
+                    />
+                )}
+
+                {/* Render selected nose bridge */}
+                {selectedNoseBridge && (
+                    <img
+                        src={selectedNoseBridge}
+                        alt="Selected Nose Bridge"
+                        className="character-layer nose-bridge"
+                    />
+                )}
+
+
+
                 {/* Render selected face scar */}
                 {selectedFaceScar && (
                     <img
                         src={selectedFaceScar}
                         alt="Selected Face Scar"
-                        className="character-layer face-scar"
+                        className="character-layer face-scars"
                     />
                 )}
 
-                {/* Render selected fringe color */}
-                {selectedFringeColor && (
+                {/* Render selected Front Layer Fringe Linework */}
+                {selectedFrontLayerFringeLinework && (
                     <img
-                        src={selectedFringeColor}
-                        alt="Selected Fringe Color"
-                        className="character-layer fringe-color"
+                        src={selectedFrontLayerFringeLinework}
+                        alt="Selected Front Layer Fringe Linework"
+                        className="character-layer front-fringe-linework"
                     />
                 )}
 
-                {/* Render fringe linework */}
-                {selectedFringeLinework && (
+                {/* Render selected Front Layer Fringe color */}
+                {selectedFrontLayerFringeColor && (
                     <img
-                        src={selectedFringeLinework}
-                        alt="Fringe Linework"
-                        className="character-layer fringe-linework"
+                        src={selectedFrontLayerFringeColor}
+                        alt="Selected Front Layer Fringe Color"
+                        className="character-layer front-fringe-color"
                     />
                 )}
+
+                {/* Render selected Secondary Fringe Linework */}
+                {selectedSecondaryFringeLinework && (
+                    <img
+                        src={selectedSecondaryFringeLinework}
+                        alt="Selected Secondary Fringe Linework"
+                        className="character-layer secondary-fringe-linework"
+                    />
+                )}
+
+                {/* Render selected Secondary Fringe color */}
+                {selectedSecondaryFringeColor && (
+                    <img
+                        src={selectedSecondaryFringeColor}
+                        alt="Selected Secondary Fringe Color"
+                        className="character-layer secondary-fringe-color"
+                    />
+                )}
+
 
                 {/* Render selected body scar */}
                 {selectedBodyScar && (
                     <img
                         src={selectedBodyScar}
                         alt="Selected Body Scar"
-                        className="character-layer body-scar"
+                        className="character-layer body-scars"
                     />
                 )}
 
@@ -664,48 +836,82 @@ const handleShoulderLineworkChange = (linework) => {
                     />
                 )}
 
-                {/* Render selected beard */}
-                {selectedBeard && (
+                {/* Render selected mustache linework */}
+                {selectedMustacheLinework && (
                     <img
-                        src={selectedBeard}
-                        alt="Selected Beard"
-                        className="character-layer beard"
+                        src={selectedMustacheLinework}
+                        alt="Selected Mustache Linework"
+                        className="character-layer mustache-linework"
                     />
                 )}
 
-                {/* Render selected mustache */}
-                {selectedMustache && (
+                {/* Render selected mustache color */}
+                {selectedMustacheColor && (
                     <img
-                        src={selectedMustache}
-                        alt="Selected Mustache"
-                        className="character-layer mustache"
+                        src={selectedMustacheColor}
+                        alt="Selected Mustache Color"
+                        className="character-layer mustache-color"
                     />
                 )}
+
+                {/* Render selected beard linework */}
+                {selectedBeardLinework && (
+                    <img
+                        src={selectedBeardLinework}
+                        alt="Selected Beard Linework"
+                        className="character-layer beard-linework"
+                    />
+                )}
+
+                {/* Render selected beard color */}
+                {selectedBeardColor && (
+                    <img
+                        src={selectedBeardColor}
+                        alt="Selected Beard Color"
+                        className="character-layer beard-color"
+                    />
+                )}
+
 
                 {/* Render shoulder linework */}
                 {selectedShoulderLinework && (
-                    <img src={selectedShoulderLinework} alt="Shoulder Linework" className="character-layer" />
+                    <img
+                        src={selectedShoulderLinework}
+                        alt="Shoulder Linework"
+                        className="character-layer shoulder-linework" />
                 )}
 
                 {/* Render shoulder skin tone */}
                 {selectedShoulderSkinTone && (
-                    <img src={selectedShoulderSkinTone} alt="Shoulder Skin Tone" className="character-layer" />
+                    <img
+                        src={selectedShoulderSkinTone}
+                        alt="Shoulder Skin Tone"
+                        className="character-layer shoulder-skin-color" />
                 )}
 
                 {/* Render Chest Volume if applicable */}
                 {getChestVolume() && (
                     <div className="chest-volume-display">
-                        <img src={getChestVolume()} alt="Chest Volume" className='character-layer' />
+                        <img
+                            src={getChestVolume()}
+                            alt="Chest Volume"
+                            className='character-layer chest-volume' />
                     </div>
                 )}
 
-{selectedShirtLinework && (
-    <img src={selectedShirtLinework} alt="Shirt Linework" className="character-layer shirt-linework" />
-)}
+                {selectedShirtLinework && (
+                    <img
+                        src={selectedShirtLinework}
+                        alt="Shirt Linework"
+                        className="character-layer shirt-linework" />
+                )}
 
-{selectedShirtColor && (
-    <img src={selectedShirtColor} alt="Shirt Color" className="character-layer shirt-color" />
-)}
+                {selectedShirtColor && (
+                    <img
+                        src={selectedShirtColor}
+                        alt="Shirt Color"
+                        className="character-layer shirt-color" />
+                )}
 
 
 
@@ -714,9 +920,28 @@ const handleShoulderLineworkChange = (linework) => {
                     <img
                         src={selectedBackground}
                         alt="Selected Background"
-                        className="character-layer background"
+                        className="character-layer colorSwatches"
                     />
                 )}
+
+                {/* Render selected mouth expression */}
+                {selectedMouthExpression && (
+                    <img
+                        src={selectedMouthExpression}
+                        alt="Selected Mouth Expression"
+                        className="character-layer mouth-expression"
+                    />
+                )}
+
+                {/* Render selected lip color */}
+                {selectedLipColor && (
+                    <img
+                        src={selectedLipColor}
+                        alt="Selected Lip Color"
+                        className="character-layer lips-color"
+                    />
+                )}
+
 
 
             </div>
@@ -730,215 +955,6 @@ const handleShoulderLineworkChange = (linework) => {
                     {headAssets.colors.map((colorAsset, index) => (
                         <button key={index} onClick={() => handleSkinToneChange(colorAsset)}>
                             <img src={colorAsset} alt={`Skin Tone ${index}`} />
-                        </button>
-                    ))}
-                </div>
-
-                {/* Chin Linework Options (excluding cleft linework) */}
-                <div className="option-category">
-                    <h3>Chin Linework</h3>
-                    {chinAssets.linework
-                        .filter(lineworkAsset => !lineworkAsset.includes('Cleft')) // Exclude cleft options
-                        .map((lineworkAsset, index) => (
-                            <button key={index} onClick={() => handleChinLineworkChange(lineworkAsset)}>
-                                <img src={lineworkAsset} alt={`Chin Linework ${index}`} />
-                            </button>
-                        ))}
-                </div>
-
-                {/* Cleft Option */}
-                <div className="option-category">
-                    <h3>Cleft Chin</h3>
-                    <button onClick={handleCleftToggle}>
-                        {isCleft ? 'Remove Cleft' : 'Add Cleft'}
-                    </button>
-                </div>
-
-                {/* Ear Linework Options */}
-                <div className="option-category">
-                    <h3>Ear Linework</h3>
-                    {earAssets.linework
-                        .filter(lineworkAsset => lineworkAsset.includes('Ear') && !lineworkAsset.includes('Skin-Color')) // Exclude skin-tone options
-                        .map((lineworkAsset, index) => (
-                            <button key={index} onClick={() => handleEarLineworkChange(lineworkAsset)}>
-                                <img src={lineworkAsset} alt={`Ear Linework ${index}`} />
-                            </button>
-                        ))}
-                </div>
-
-                {/* Hair Linework Options */}
-                <div className="option-category">
-                    <h3>Hair Linework</h3>
-                    {hairAssets.linework.map((lineworkAsset, index) => (
-                        <button key={index} onClick={() => handleHairLineworkChange(lineworkAsset)}>
-                            <img src={lineworkAsset} alt={`Hair Linework ${index}`} />
-                        </button>
-                    ))}
-                </div>
-
-                {/* Hair Color Options */}
-                {selectedHairLinework && (
-                    <div className="option-category">
-                        <h3>Hair Colors</h3>
-                        {hairAssets.colors
-                            .filter(colorAsset => colorAsset.includes(selectedHairLinework.match(/Hair-\d+/)[0])) // Match colors to selected linework
-                            .map((colorAsset, index) => (
-                                <button key={index} onClick={() => handleHairColorChange(colorAsset)}>
-                                    <img src={colorAsset} alt={`Hair Color ${index}`} />
-                                </button>
-                            ))}
-                    </div>
-                )}
-
-                {/* Cheekbone Options */}
-                <div className="option-category">
-                    <h3>Cheekbones</h3>
-                    {cheekboneAssets.cheekbones.map((cheekboneAsset, index) => (
-                        <button key={index} onClick={() => handleCheekboneChange(cheekboneAsset)}>
-                            <img src={cheekboneAsset} alt={`Cheekbone ${index}`} />
-                        </button>
-                    ))}
-                </div>
-
-                {/* Upper Eyelash Options */}
-                <div className="option-category">
-                    <h3>Upper Eyelashes</h3>
-                    {eyelashAssets.eyelashes.filter(asset => asset.includes('Upper-Eyelash')).map((upperEyelashAsset, index) => (
-                        <button key={index} onClick={() => handleUpperEyelashChange(upperEyelashAsset)}>
-                            <img src={upperEyelashAsset} alt={`Upper Eyelash ${index}`} />
-                        </button>
-                    ))}
-                </div>
-
-                {/* Lower Eyelash Options */}
-                <div className="option-category">
-                    <h3>Lower Eyelashes</h3>
-                    {eyelashAssets.eyelashes.filter(asset => asset.includes('Lower-Eyelash')).map((lowerEyelashAsset, index) => (
-                        <button key={index} onClick={() => handleLowerEyelashChange(lowerEyelashAsset)}>
-                            <img src={lowerEyelashAsset} alt={`Lower Eyelash ${index}`} />
-                        </button>
-                    ))}
-                </div>
-
-                {/* Eye Color Options */}
-                <div className="option-category">
-                    <h3>Eye Colors</h3>
-                    {eyeColorAssets.colors.map((eyeColorAsset, index) => (
-                        <button key={index} onClick={() => handleEyeColorChange(eyeColorAsset)}>
-                            <img src={eyeColorAsset} alt={`Eye Color ${index}`} />
-                        </button>
-                    ))}
-                </div>
-
-                {/* Eyeball Options */}
-                <div className="option-category">
-                    <h3>Eyeballs</h3>
-                    {eyeballAssets.eyeballs.map((eyeballAsset, index) => (
-                        <button key={index} onClick={() => handleEyeballChange(eyeballAsset)}>
-                            <img src={eyeballAsset} alt={`Eyeball ${index}`} />
-                        </button>
-                    ))}
-                </div>
-
-                {/* Eye Shape Options */}
-                <div className="option-category">
-                    <h3>Eye Shapes</h3>
-                    {eyeShapeAssets.shapes.map((eyeShapeAsset, index) => (
-                        <button key={index} onClick={() => handleEyeShapeChange(eyeShapeAsset)}>
-                            <img src={eyeShapeAsset} alt={`Eye Shape ${index}`} />
-                        </button>
-                    ))}
-                </div>
-
-                {/* Eye Makeup Options */}
-                <div className="option-category">
-                    <h3>Eye Makeup</h3>
-                    {eyeMakeupAssets.makeup.map((eyeMakeupAsset, index) => (
-                        <button key={index} onClick={() => handleEyeMakeupChange(eyeMakeupAsset)}>
-                            <img src={eyeMakeupAsset} alt={`Eye Makeup ${index}`} />
-                        </button>
-                    ))}
-                </div>
-
-                {/* Eye Socket Shadow Options */}
-                <div className="option-category">
-                    <h3>Eye Socket Shadows</h3>
-                    <button onClick={() => handleEyeSocketShadowChange(eyeSocketShadowAssets.socketShadows[0])}>
-                        <img src={eyeSocketShadowAssets.socketShadows[0]} alt="Eye Socket Shadow" />
-                    </button>
-                </div>
-
-
-                {/* Face Scar Options */}
-                <div className="option-category">
-                    <h3>Face Scars</h3>
-                    {faceScarAssets.scars.map((scarAsset, index) => (
-                        <button key={index} onClick={() => handleFaceScarChange(scarAsset)}>
-                            <img src={scarAsset} alt={`Face Scar ${index}`} />
-                        </button>
-                    ))}
-                </div>
-
-                {/* Fringe Linework Options */}
-                <div className="option-category">
-                    <h3>Fringe Linework</h3>
-                    {fringeAssets.linework.map((lineworkAsset, index) => (
-                        <button key={index} onClick={() => handleFringeLineworkChange(lineworkAsset)}>
-                            <img src={lineworkAsset} alt={`Fringe Linework ${index}`} />
-                        </button>
-                    ))}
-                </div>
-
-                {/* Fringe Color Options */}
-                {selectedFringeLinework && (
-                    <div className="option-category">
-                        <h3>Fringe Colors</h3>
-                        {fringeAssets.colors
-                            .filter(colorAsset => colorAsset.includes(selectedFringeLinework.match(/Fringe-\d+/)[0])) // Match colors to selected fringe linework
-                            .map((colorAsset, index) => (
-                                <button key={index} onClick={() => handleFringeColorChange(colorAsset)}>
-                                    <img src={colorAsset} alt={`Fringe Color ${index}`} />
-                                </button>
-                            ))}
-                    </div>
-                )}
-
-                {/* Body Scar Options */}
-                <div className="option-category">
-                    <h3>Body Scars</h3>
-                    {bodyScarAssets.scars.map((scarAsset, index) => (
-                        <button key={index} onClick={() => handleBodyScarChange(scarAsset)}>
-                            <img src={scarAsset} alt={`Body Scar ${index}`} />
-                        </button>
-                    ))}
-                </div>
-
-                {/* Accessory Options */}
-                <div className="option-category">
-                    <h3>Accessories</h3>
-                    {accessoryAssets.accessories.map((accessoryAsset, index) => (
-                        <button key={index} onClick={() => handleAccessoryChange(accessoryAsset)}>
-                            <img src={accessoryAsset} alt={`Accessory ${index}`} />
-                        </button>
-                    ))}
-                </div>
-
-                {/* Beard Options */}
-                <div className="option-category">
-                    <h3>Beards</h3>
-                    {beardAssets.colors.map((beardAsset, index) => (
-                        <button key={index} onClick={() => handleBeardChange(beardAsset)}>
-                            <img src={beardAsset} alt={`Beard ${index}`} />
-                        </button>
-                    ))}
-                </div>
-
-                {/* Mustache Options */}
-                <div className="option-category">
-                    <h3>Mustaches</h3>
-                    {mustacheAssets.colors.map((mustacheAsset, index) => (
-                        <button key={index} onClick={() => handleMustacheChange(mustacheAsset)}>
-                            <img src={mustacheAsset} alt={`Mustache ${index}`} />
                         </button>
                     ))}
                 </div>
@@ -964,26 +980,342 @@ const handleShoulderLineworkChange = (linework) => {
                     </button>
                 </div>
 
-<div className="option-category">
-    <h3>Shirt Linework</h3>
-    {shirtAssets.linework[selectedShoulderType]?.map((linework, index) => (
-        <button key={index} onClick={() => handleShirtLineworkChange(linework)}>
-            <img src={linework} alt={`Shirt Linework ${index}`} />
-        </button>
-    ))}
-</div>
+                {/* Chin Linework Options (excluding cleft linework) */}
+                <div className="option-category">
+                    <h3>Chin Linework</h3>
+                    {chinAssets.linework
+                        .filter(lineworkAsset => !lineworkAsset.includes('Cleft')) // Exclude cleft options
+                        .map((lineworkAsset, index) => (
+                            <button key={index} onClick={() => handleChinLineworkChange(lineworkAsset)}>
+                                <img src={lineworkAsset} alt={`Chin Linework ${index}`} />
+                            </button>
+                        ))}
+                </div>
 
-{selectedShirtLinework && (
-    <div className="option-category">
-        <h3>Shirt Colors</h3>
-        {shirtAssets.colors[selectedShoulderType]?.filter(colorAsset => colorAsset.includes(selectedShirtLinework.match(/Top-\d+/)[0])) // Match colors to selected linework
-        .map((colorAsset, index) => (
-            <button key={index} onClick={() => handleShirtColorChange(colorAsset)}>
-                <img src={colorAsset} alt={`Shirt Color ${index}`} />
-            </button>
-        ))}
-    </div>
-)}
+                {/* Cleft Option */}
+                <div className="option-category">
+                    <h3>Cleft Chin</h3>
+                    <button onClick={handleCleftToggle}>
+                        {isCleft ? 'Remove Cleft' : 'Add Cleft'}
+                    </button>
+                </div>
+
+                {/* Nose Apex Options */}
+                <div className="option-category">
+                    <h3>Nose Apex</h3>
+                    {noseApexAssets.apex.map((apex, index) => (
+                        <button key={index} onClick={() => handleNoseApexChange(apex)}>
+                            <img src={apex} alt={`Nose Apex ${index}`} />
+                        </button>
+                    ))}
+                </div>
+
+                {/* Nose Bridge Options */}
+                <div className="option-category">
+                    <h3>Nose Bridge</h3>
+                    {noseBridgeAssets.bridge.map((bridge, index) => (
+                        <button key={index} onClick={() => handleNoseBridgeChange(bridge)}>
+                            <img src={bridge} alt={`Nose Bridge ${index}`} />
+                        </button>
+                    ))}
+                </div>
+
+                {/* Face Scar Options */}
+                <div className="option-category">
+                    <h3>Face Scars</h3>
+                    {faceScarAssets.scars.map((scarAsset, index) => (
+                        <button key={index} onClick={() => handleFaceScarChange(scarAsset)}>
+                            <img src={scarAsset} alt={`Face Scar ${index}`} />
+                        </button>
+                    ))}
+                </div>
+
+                {/* Body Scar Options */}
+                <div className="option-category">
+                    <h3>Body Scars</h3>
+                    {bodyScarAssets.scars.map((scarAsset, index) => (
+                        <button key={index} onClick={() => handleBodyScarChange(scarAsset)}>
+                            <img src={scarAsset} alt={`Body Scar ${index}`} />
+                        </button>
+                    ))}
+                </div>
+
+
+                {/* Eyeball Options */}
+                <div className="option-category">
+                    <h3>Eyeballs</h3>
+                    {eyeballAssets.eyeballs.map((eyeballAsset, index) => (
+                        <button key={index} onClick={() => handleEyeballChange(eyeballAsset)}>
+                            <img src={eyeballAsset} alt={`Eyeball ${index}`} />
+                        </button>
+                    ))}
+                </div>
+
+                {/* Eye Shape Options */}
+                <div className="option-category">
+                    <h3>Eye Shapes</h3>
+                    {eyeShapeAssets.shapes.map((eyeShapeAsset, index) => (
+                        <button key={index} onClick={() => handleEyeShapeChange(eyeShapeAsset)}>
+                            <img src={eyeShapeAsset} alt={`Eye Shape ${index}`} />
+                        </button>
+                    ))}
+                </div>
+
+                {/* Eye Color Options */}
+                <div className="option-category">
+                    <h3>Eye Colors</h3>
+                    {eyeColorAssets.colors.map((eyeColorAsset, index) => (
+                        <button key={index} onClick={() => handleEyeColorChange(eyeColorAsset)}>
+                            <img src={eyeColorAsset} alt={`Eye Color ${index}`} />
+                        </button>
+                    ))}
+                </div>
+
+                {/* Upper Eyelash Options */}
+                <div className="option-category">
+                    <h3>Upper Eyelashes</h3>
+                    {eyelashAssets.eyelashes.filter(asset => asset.includes('Upper-Eyelash')).map((upperEyelashAsset, index) => (
+                        <button key={index} onClick={() => handleUpperEyelashChange(upperEyelashAsset)}>
+                            <img src={upperEyelashAsset} alt={`Upper Eyelash ${index}`} />
+                        </button>
+                    ))}
+                </div>
+
+                {/* Lower Eyelash Options */}
+                <div className="option-category">
+                    <h3>Lower Eyelashes</h3>
+                    {eyelashAssets.eyelashes.filter(asset => asset.includes('Lower-Eyelash')).map((lowerEyelashAsset, index) => (
+                        <button key={index} onClick={() => handleLowerEyelashChange(lowerEyelashAsset)}>
+                            <img src={lowerEyelashAsset} alt={`Lower Eyelash ${index}`} />
+                        </button>
+                    ))}
+                </div>
+
+
+                {/* Eye Socket Shadow Options */}
+                <div className="option-category">
+                    <h3>Eye Socket Shadows</h3>
+                    <button onClick={() => handleEyeSocketShadowChange(eyeSocketShadowAssets.socketShadows[0])}>
+                        <img src={eyeSocketShadowAssets.socketShadows[0]} alt="Eye Socket Shadow" />
+                    </button>
+                </div>
+
+                {/* Eye Makeup Options */}
+                <div className="option-category">
+                    <h3>Eye Makeup</h3>
+                    {eyeMakeupAssets.makeup.map((eyeMakeupAsset, index) => (
+                        <button key={index} onClick={() => handleEyeMakeupChange(eyeMakeupAsset)}>
+                            <img src={eyeMakeupAsset} alt={`Eye Makeup ${index}`} />
+                        </button>
+                    ))}
+                </div>
+
+
+                {/* Accessory Options */}
+                <div className="option-category">
+                    <h3>Accessories</h3>
+                    {accessoryAssets.accessories.map((accessoryAsset, index) => (
+                        <button key={index} onClick={() => handleAccessoryChange(accessoryAsset)}>
+                            <img src={accessoryAsset} alt={`Accessory ${index}`} />
+                        </button>
+                    ))}
+                </div>
+
+                {/* Mouth Expression Options */}
+                <div className="option-category">
+                    <h3>Mouth Expressions</h3>
+                    {mouthExpressionAssets.map((expression, index) => (
+                        <button key={index} onClick={() => handleMouthExpressionChange(expression)}>
+                            <img src={expression} alt={`Mouth Expression ${index}`} />
+                        </button>
+                    ))}
+                </div>
+
+                {/* Lip Color Options */}
+                <div className="option-category">
+                    <h3>Lip Colors</h3>
+                    {lipAssets.map((lip, index) => (
+                        <button key={index} onClick={() => handleLipColorChange(lip)}>
+                            <img src={lip} alt={`Lip Color ${index}`} />
+                        </button>
+                    ))}
+                </div>
+
+
+                {/* Cheekbone Options */}
+                <div className="option-category">
+                    <h3>Cheekbones</h3>
+                    {cheekboneAssets.cheekbones.map((cheekboneAsset, index) => (
+                        <button key={index} onClick={() => handleCheekboneChange(cheekboneAsset)}>
+                            <img src={cheekboneAsset} alt={`Cheekbone ${index}`} />
+                        </button>
+                    ))}
+                </div>
+
+
+                {/* Hair Linework Options */}
+                <div className="option-category">
+                    <h3>Hair Linework</h3>
+                    {hairAssets && hairAssets.linework.map((hairLinework, index) => (
+                        <button key={index} onClick={() => handleHairLineworkChange(hairLinework)}>
+                            <img src={hairLinework} alt={`Hair Linework ${index}`} />
+                        </button>
+                    ))}
+                </div>
+
+
+                {/* Hair Color Options */}
+                {selectedHairLinework && (
+                    <div className="option-category">
+                        <h3>Hair Colors</h3>
+                        {hairAssets.colors
+                            .filter(colorAsset => colorAsset.includes(selectedHairLinework.match(/Hair-\d+/)[0])) // Match colors to selected linework
+                            .map((colorAsset, index) => (
+                                <button key={index} onClick={() => handleHairColorChange(colorAsset)}>
+                                    <img src={colorAsset} alt={`Hair Color ${index}`} />
+                                </button>
+                            ))}
+                    </div>
+                )}
+
+                {/* Front Layer Fringe Options */}
+                <div className="option-category">
+                    <h3>Front Layer Fringe</h3>
+                    {frontLayerFringeAssets && frontLayerFringeAssets
+                        .filter(asset => !asset.includes('Hair-Color')) // Ensure only linework assets are shown
+                        .map((fringeLinework, index) => (
+                            <button key={index} onClick={() => handleFrontLayerFringeLineworkChange(fringeLinework)}>
+                                <img src={fringeLinework} alt={`Front Layer Fringe Linework ${index}`} />
+                            </button>
+                        ))}
+                </div>
+
+
+                {/* Front Layer Fringe Color Options */}
+                {selectedFrontLayerFringeLinework && (
+                    <div className="option-category">
+                        <h3>Front Layer Fringe Colors</h3>
+                        {frontLayerFringeAssets.filter(asset => asset.includes(selectedFrontLayerFringeLinework.match(/Fringe-\d+/)[0]) && asset.includes('Hair-Color'))
+                            .map((fringeColor, index) => (
+                                <button key={index} onClick={() => handleFrontLayerFringeColorChange(fringeColor)}>
+                                    <img src={fringeColor} alt={`Front Layer Fringe Color ${index}`} className='fringe-color' />
+                                </button>
+                            ))}
+                    </div>
+                )}
+
+                {/* Secondary Fringe Linework Options */}
+                <div className="option-category">
+                    <h3>Secondary Fringe</h3>
+                    {secondaryFringeAssets && secondaryFringeAssets
+                        .filter(asset => !asset.includes('Hair-Color')) // Ensure only linework assets are shown
+                        .map((fringeLinework, index) => (
+                            <button key={index} onClick={() => handleSecondaryFringeLineworkChange(fringeLinework)}>
+                                <img src={fringeLinework} alt={`Secondary Fringe Linework ${index}`} />
+                            </button>
+                        ))}
+                </div>
+
+
+                {/* Secondary Fringe Color Options */}
+                {selectedSecondaryFringeLinework && (
+                    <div className="option-category">
+                        <h3>Secondary Fringe Colors</h3>
+                        {secondaryFringeAssets.filter(asset => asset.includes(selectedSecondaryFringeLinework.match(/Fringe-\d+/)[0]) && asset.includes('Hair-Color'))
+                            .map((fringeColor, index) => (
+                                <button key={index} onClick={() => handleSecondaryFringeColorChange(fringeColor)}>
+                                    <img src={fringeColor} alt={`Secondary Fringe Color ${index}`} className='secondary-fringe-color' />
+                                </button>
+                            ))}
+                    </div>
+                )}
+
+
+
+                {/* Mustache Linework Options */}
+                <div className="option-category">
+                    <h3>Mustaches</h3>
+                    {mustacheAssets.filter(asset => !asset.includes('Hair-Color')).map((mustacheLinework, index) => (
+                        <button key={index} onClick={() => handleMustacheLineworkChange(mustacheLinework)}>
+                            <img src={mustacheLinework} alt={`Mustache Linework ${index}`} />
+                        </button>
+                    ))}
+                </div>
+
+                {/* Mustache Color Options */}
+                {selectedMustacheLinework && (
+                    <div className="option-category">
+                        <h3>Mustache Colors</h3>
+                        {mustacheAssets
+                            .filter(asset => asset.includes(selectedMustacheLinework.match(/Face-Hair-\d+/)[0])) // Match by linework type
+                            .filter(asset => asset.includes('Hair-Color')) // Only include files with 'Hair-Color' in their names
+                            .map((mustacheColor, index) => (
+                                <button key={index} onClick={() => handleMustacheColorChange(mustacheColor)}>
+                                    <img src={mustacheColor} alt={`Mustache Color ${index}`} />
+                                </button>
+                            ))}
+                    </div>
+                )}
+
+
+                {/* Beard Linework Options */}
+                <div className="option-category">
+                    <h3>Beards</h3>
+                    {beardAssets.filter(asset => !asset.includes('Hair-Color')).map((beardLinework, index) => (
+                        <button key={index} onClick={() => handleBeardLineworkChange(beardLinework)}>
+                            <img src={beardLinework} alt={`Beard Linework ${index}`} />
+                        </button>
+                    ))}
+                </div>
+
+                {/* Beard Color Options */}
+                {selectedBeardLinework && (
+                    <div className="option-category">
+                        <h3>Beard Colors</h3>
+                        {beardAssets
+                            .filter(asset => asset.includes(selectedBeardLinework.match(/Face-Hair-\d+/)[0])) // Match by linework type
+                            .filter(asset => asset.includes('Hair-Color')) // Only include files with 'Hair-Color' in their names
+                            .map((beardColor, index) => (
+                                <button key={index} onClick={() => handleBeardColorChange(beardColor)}>
+                                    <img src={beardColor} alt={`Beard Color ${index}`} />
+                                </button>
+                            ))}
+                    </div>
+                )}
+
+
+                {/* Ear Linework Options */}
+                <div className="option-category">
+                    <h3>Ear Linework</h3>
+                    {earAssets.linework
+                        .filter(lineworkAsset => lineworkAsset.includes('Ear') && !lineworkAsset.includes('Skin-Color')) // Exclude skin-tone options
+                        .map((lineworkAsset, index) => (
+                            <button key={index} onClick={() => handleEarLineworkChange(lineworkAsset)}>
+                                <img src={lineworkAsset} alt={`Ear Linework ${index}`} />
+                            </button>
+                        ))}
+                </div>
+
+                <div className="option-category">
+                    <h3>Shirt Linework</h3>
+                    {shirtAssets.linework[selectedShoulderType]?.map((linework, index) => (
+                        <button key={index} onClick={() => handleShirtLineworkChange(linework)}>
+                            <img src={linework} alt={`Shirt Linework ${index}`} />
+                        </button>
+                    ))}
+                </div>
+
+                {selectedShirtLinework && (
+                    <div className="option-category">
+                        <h3>Shirt Colors</h3>
+                        {shirtAssets.colors[selectedShoulderType]?.filter(colorAsset => colorAsset.includes(selectedShirtLinework.match(/Top-\d+/)[0])) // Match colors to selected linework
+                            .map((colorAsset, index) => (
+                                <button key={index} onClick={() => handleShirtColorChange(colorAsset)}>
+                                    <img src={colorAsset} alt={`Shirt Color ${index}`} />
+                                </button>
+                            ))}
+                    </div>
+                )}
 
 
                 {/* Background Options */}

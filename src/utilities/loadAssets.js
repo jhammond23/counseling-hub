@@ -50,14 +50,14 @@ export const loadFaceScarAssets = (context) => {
     return assets;
 };
 
-export const loadFringeAssets = (context) => {
-    const keys = context.keys();
-    const values = keys.map(context);
-    const assets = {
-        linework: values.filter((_, index) => keys[index].includes('Fringe') && !keys[index].includes('Hair-Color')),
-        colors: values.filter((_, index) => keys[index].includes('Hair-Color'))
-    };
-    return assets;
+// Load front layer fringe assets
+export const loadFrontLayerFringeAssets = (requireContext) => {
+    return requireContext.keys().map(requireContext);
+};
+
+// Load secondary fringe assets
+export const loadSecondaryFringeAssets = (requireContext) => {
+    return requireContext.keys().map(requireContext);
 };
 
 export const loadBodyScarAssets = (context) => {
@@ -87,23 +87,18 @@ export const loadAccessoryAssets = (context) => {
     return assets;
 };
 
-export const loadBeardAssets = (context) => {
-    const keys = context.keys();
-    const values = keys.map(context);
-    const assets = {
-        colors: values.filter((_, index) => keys[index].includes('Face-Hair') && !keys[index].includes('Linework'))
-    };
-    return assets;
-};
-
 export const loadMustacheAssets = (context) => {
     const keys = context.keys();
     const values = keys.map(context);
-    const assets = {
-        colors: values.filter((_, index) => keys[index].includes('Face-Hair') && !keys[index].includes('Linework'))
-    };
-    return assets;
+    return values; // Return array of assets
 };
+
+export const loadBeardAssets = (context) => {
+    const keys = context.keys();
+    const values = keys.map(context);
+    return values; // Return array of assets
+};
+
 
 export const loadCheekboneAssets = (context) => {
     const keys = context.keys();
@@ -224,3 +219,44 @@ export const loadShirtAssets = () => {
     };
 };
 
+export const loadNoseApexAssets = (context) => {
+    const keys = context.keys();
+    const values = keys.map(context);
+    const assets = {
+        apex: values.filter((_, index) => keys[index].includes('Nose-Apex')),
+    };
+    return assets;
+};
+
+export const loadNoseBridgeAssets = (context) => {
+    const keys = context.keys();
+    const values = keys.map(context);
+    const assets = {
+        bridge: values.filter((_, index) => keys[index].includes('Nose-Bridge')),
+    };
+    return assets;
+};
+
+export const loadMouthExpressionAssets = (context) => {
+    const keys = context.keys();
+    const values = keys.map(context);
+    return values; // Return the array directly
+};
+
+export const loadLipAssets = (context) => {
+    const keys = context.keys();
+    const values = keys.map(context);
+    return values; // Return the array directly
+};
+
+// Load the color swatches
+const colorSwatchesContext = require.context(
+    '../media/Tasia-Pixel-Project-Revision-1056x1056/14-Color-Swatches', 
+    false, 
+    /\.(png|jpe?g|svg)$/
+  );
+  
+  const colorSwatches = colorSwatchesContext.keys().map(colorSwatchesContext);
+  
+  export { colorSwatches };
+  

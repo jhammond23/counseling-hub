@@ -130,94 +130,179 @@
 
 /* Background and color swatches */
 .character-layer.colorSwatches {
-    z-index: 1; /* Background layer, should be the lowest */
+    z-index: 1;
 }
 
-.character-layer.backgrounds {
-    z-index: 2; /* Behind most elements, but above color swatches */
+.character-layer.background {
+    z-index: 2;
 }
 
-/* Skin and base head elements */
-.character-layer.head {
+.character-layer.shoulder-skin-color {
+    z-index: 3;
+}
+
+.character-layer.shoulder-linework {
+    z-index: 4;
+}
+
+.character-layer.chest-volume {
     z-index: 5;
 }
 
-/* Hair and facial hair */
-.character-layer.headHair {
-    z-index: 15; /* Above the head and face features */
+.character-layer.body-scars {
+    z-index: 6;
 }
 
-.character-layer.faceHair {
-    z-index: 16; /* Facial hair is above head but below other facial features */
+.character-layer.base-layer-tops-color {
+    z-index: 7;
 }
 
-/* Facial features */
+.character-layer.base-layer-linework {
+    z-index: 8;
+}
+
+.character-layer.mid-layer-tops-color {
+    z-index: 9;
+}
+
+.character-layer.mid-layer-tops-linework {
+    z-index: 10;
+}
+
+.character-layer.outer-layer-tops-color {
+    z-index: 11;
+}
+
+.character-layer.outer-layer-tops-linework {
+    z-index: 12;
+}
+
+.character-layer.shirt-color {
+    z-index: 13;
+}
+
+.character-layer.shirt-linework {
+    z-index: 14;
+}
+
+.character-layer.head-skin-tone {
+    z-index: 15;
+}
+
+.character-layer.head-linework {
+    z-index: 16;
+}
+
+.character-layer.eye-socket-shadow {
+    z-index: 17;
+}
+
+.character-layer.hair-color {
+    z-index: 18;
+}
+
+.character-layer.hair-linework {
+    z-index: 19;
+}
+
+.character-layer.ear-skin-tone {
+    z-index: 20;
+}
+
+.character-layer.ear-linework {
+    z-index: 21;
+}
+
+.character-layer.chin-skin-tone {
+    z-index: 22; 
+}
+
+.character-layer.chin-linework, .character-layer.cleft-linework {
+    z-index: 23; 
+}
+
+.character-layer.face-scars {
+    z-index: 24; 
+}
+
+.character-layer.cheek-bones {
+    z-index: 25; 
+}
+
+.character-layer.eye-makeup {
+    z-index: 26;
+}
+
+.character-layer.eye-shape {
+    z-index: 27; 
+}
+
+.character-layer.eye-color {
+    z-index: 28; 
+}
+
+.character-layer.eyeballs {
+    z-index: 29; 
+}
+
+.character-layer.upper-eyelash, .character-layer.lower-eyelash {
+    z-index: 30; 
+}
+
 .character-layer.eyebrows {
-    z-index: 20; /* Eyebrows are above the head but below eyes */
+    z-index: 31; 
 }
 
-.character-layer.eyes {
-    z-index: 25; /* Eyes are above eyebrows */
+.character-layer.beard-color {
+    z-index: 32; 
 }
 
-.character-layer.nose {
-    z-index: 30; /* Nose is on top of the face features */
+.character-layer.beard-linework {
+    z-index: 33; 
 }
 
-.character-layer.noseBridge {
-    z-index: 31; /* Nose bridge is slightly above the nose */
+.character-layer.lip-color {
+    z-index: 34; 
 }
 
-.character-layer.mouth {
-    z-index: 32; /* Mouth is above most facial features */
+.character-layer.mouth-expression {
+    z-index: 35; 
 }
 
-.character-layer.chin {
-    z-index: 33; /* Chin is above the mouth */
+.character-layer.mustache-color {
+    z-index: 36; 
 }
 
-.character-layer.cheeks {
-    z-index: 34; /* Cheeks should be above chin and mouth */
+.character-layer.mustache-linework {
+    z-index: 37; 
 }
 
-.character-layer.ears {
-    z-index: 35; /* Ears go on top of cheeks and head */
+.character-layer.nose-bridge {
+    z-index: 38;
 }
 
-/* Additional features like scars, makeup, etc. */
-.character-layer.scars {
-    z-index: 40; /* Scars are above all facial features */
+.character-layer.nose-apex {
+    z-index: 39;
 }
 
-.character-layer.eyeMakeup {
-    z-index: 45; /* Eye makeup is above eyes and eyebrows */
+.character-layer.secondary-fringe-color {
+    z-index: 40; 
 }
 
-.character-layer.lipShape {
-    z-index: 46; /* Lip shape is above mouth */
+.character-layer.secondary-fringe-linework {
+    z-index: 41; 
 }
 
-/* Fringe or bangs */
-.character-layer.fringe {
-    z-index: 50; /* Fringe or bangs should be on top of everything else on the head */
+.character-layer.front-fringe-color {
+    z-index: 42; 
 }
 
-/* Accessories and clothing */
-.character-layer.accessories {
-    z-index: 55; /* Accessories can go on top of the head features */
+.character-layer.front-fringe-linework {
+    z-index: 43; 
 }
 
-.character-layer.shoulder {
-    z-index: 60; /* Shoulders go behind tops */
-}
-
-.character-layer.tops {
-    z-index: 65; /* Tops should be above shoulders but below accessories */
-}
-
-/* Final layer for any overlays or additional items */
-.character-layer.finalOverlay {
-    z-index: 70; /* If there's any final overlay or effect, place it on top */
+.character-layer.accessory {
+    z-index: 44;
 }
 
 
