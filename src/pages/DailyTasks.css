@@ -1,0 +1,161 @@
+.daily-tasks-parent {
+    background: #382828;
+    min-height: 100vh;
+    min-width: 100vw;
+    position: relative;
+    z-index: 0;
+    overflow-x: hidden;
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .daily-tasks-parent::before {
+    content: '';
+    background: url('../media/mainpage-bg8.webp');
+    background-repeat: no-repeat;
+    background-size: cover;
+    top: 0px;
+    right: 0px;
+    left: 0px;
+    bottom: 0px;
+    height: 110vh;
+    width: 100%;
+    position: fixed;
+    z-index: -1;
+    bottom: 0px;
+    left: 0px;
+    opacity: .25;
+    background-position: center 100%;
+  }
+
+  .daily-tasks-board {
+    background: url('../media/bulletin.png') no-repeat center 100%;
+    background-size: 80%;
+    height: 110vh;
+    width: 100%;
+    position: fixed;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    opacity: 1;
+    transform: scale(.9) translateY(5vh);
+  }
+  
+  .daily-tasks-board::after {
+    content: '';
+    background: url('../media/crumpled-paper2.jpg') no-repeat center;
+    background-size: cover; /* Adjust the background size to contain so it scales within the content box */
+    position: absolute;
+    z-index: -1;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 50vh; /* Increase the height to cover more of the board */
+    width: 40vw; /* Increase the width to cover more of the board */
+  }
+  
+  .daily-tasks-cont {
+    width: 35vw;
+    margin: 28vh auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .daily-tasks-parent p {
+    font-size: 1.2em;
+    margin: 0 auto;
+    padding: 10px;
+  }
+
+  .prompt-goal {
+    color: #2a5d34;
+    text-shadow: 0 0 5px #baffc9;
+    font-weight: bold;
+  }
+
+  .prompt-goal:hover {
+    color: #2a5d34;
+    filter: brightness(130%);
+  }
+
+  .go-to-daily-task {
+    color: #2a5d34;
+    text-shadow: 0 0 5px #baffc9;
+    font-weight: bold;
+    background-color: #baffc9;
+    border-radius: 15px;
+    padding: 10px;
+    margin: 10px;
+
+  }
+  
+  .congratulations {
+    background-color: #baffc9; /* Light green for success messages */
+    color: #2a5d34; /* Darker green for text */
+    border-radius: 15px;
+    animation: bounce 1s infinite alternate;
+  }
+
+  .uncomplete {
+    background-color: #ffadad; /* Light red for uncompleted tasks */
+    color: #7a1616; /* Darker red for text */
+    border-radius: 15px;
+  }
+  
+  .progress {
+    background-color: #ffd6a5; /* Soft orange for progress */
+    color: #994c00; /* Darker orange for text */
+    border-radius: 15px;
+    animation: pulse 2s infinite alternate;
+  }
+  
+  @keyframes bounce {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(-5px);
+    }
+  }
+  
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+      box-shadow: none;
+    }
+    100% {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(255, 199, 165, 0.75);
+    }
+  }
+  
+  .claim-rewards-btn {
+    background-color: #baffc9;
+    border: none;
+    color: #2a5d34; 
+    padding: 15px 32px; /* Padding for size */
+    text-align: center; /* Centered text */
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px; /* Readable text size */
+    margin: 4px 2px; /* Some margin */
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 15px; /* Rounded corners */
+    transition: all 0.3s ease; /* Smooth transition for hover effect */
+    margin: 20px auto; /* Center the button */
+    width: fit-content;
+  }
+  
+  .claim-rewards-btn:hover {
+    filter: brightness(1.1);
+    scale: 1.02;
+  }
+  
+  .daily-task-info {
+    text-align: center;
+  }

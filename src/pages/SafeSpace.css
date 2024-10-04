@@ -1,0 +1,236 @@
+/* Character Customization Container */
+.character-customization {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+    background-color: #f9f9f9;
+    min-height: 100vh;
+    font-family: 'Arial', sans-serif;
+    padding-top: 100px;
+}
+
+/* Character Preview Section */
+.character-preview {
+    width: 70%; /* Maintain the larger width */
+    height: 90vh; /* Maintain the larger height */
+    background-color: #ffffff;
+    border: 2px solid #e0e0e0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.character-preview img {
+    max-width: 100%;
+    max-height: 100%;
+    position: absolute;
+    object-fit: contain;
+}
+
+/* Customization Options Panel */
+.customization-options {
+    width: 25%; /* Adjust width to balance with the larger preview */
+    background-color: #ffffff;
+    border: 2px solid #e0e0e0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    padding: 20px;
+    overflow-y: auto;
+    max-height: 90vh;
+}
+
+.customization-options h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.option-category {
+    margin-bottom: 20px;
+}
+
+.option-category h3 {
+    font-size: 20px;
+    color: #2F855A;
+    margin-bottom: 10px;
+}
+
+.option-category button {
+    display: inline-block;
+    background-color: #2F855A;
+    color: #ffffff;
+    border: none;
+    padding: 10px 15px;
+    margin: 5px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    height: 150px;
+    aspect-ratio: 1/1;
+}
+
+.option-category button img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transform: scale(2);
+}
+
+.option-category button:hover {
+    background-color: #276749;
+}
+
+.option-category button:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(47, 133, 90, 0.4);
+}
+
+.option-category button:disabled {
+    background-color: #a0aec0;
+    cursor: not-allowed;
+}
+
+/* Scrollbar Styling */
+.customization-options::-webkit-scrollbar {
+    width: 12px;
+}
+
+.customization-options::-webkit-scrollbar-track {
+    background-color: #f9f9f9;
+    border-radius: 12px;
+}
+
+.customization-options::-webkit-scrollbar-thumb {
+    background-color: #2F855A;
+    border-radius: 12px;
+}
+
+/* SafeSpace.css */
+
+/* Base styles for all character layers */
+.character-layer {
+    position: absolute; /* Ensure all layers are positioned relative to each other */
+    left: 50%; /* Center horizontally */
+    top: 50%;  /* Center vertically */
+    transform: translate(-50%, -50%); /* Center each layer */
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* Z-Index definitions for each layer */
+
+/* Background and color swatches */
+.character-layer.colorSwatches {
+    z-index: 1; /* Background layer, should be the lowest */
+}
+
+.character-layer.backgrounds {
+    z-index: 2; /* Behind most elements, but above color swatches */
+}
+
+/* Skin and base head elements */
+.character-layer.head {
+    z-index: 5;
+}
+
+/* Hair and facial hair */
+.character-layer.headHair {
+    z-index: 15; /* Above the head and face features */
+}
+
+.character-layer.faceHair {
+    z-index: 16; /* Facial hair is above head but below other facial features */
+}
+
+/* Facial features */
+.character-layer.eyebrows {
+    z-index: 20; /* Eyebrows are above the head but below eyes */
+}
+
+.character-layer.eyes {
+    z-index: 25; /* Eyes are above eyebrows */
+}
+
+.character-layer.nose {
+    z-index: 30; /* Nose is on top of the face features */
+}
+
+.character-layer.noseBridge {
+    z-index: 31; /* Nose bridge is slightly above the nose */
+}
+
+.character-layer.mouth {
+    z-index: 32; /* Mouth is above most facial features */
+}
+
+.character-layer.chin {
+    z-index: 33; /* Chin is above the mouth */
+}
+
+.character-layer.cheeks {
+    z-index: 34; /* Cheeks should be above chin and mouth */
+}
+
+.character-layer.ears {
+    z-index: 35; /* Ears go on top of cheeks and head */
+}
+
+/* Additional features like scars, makeup, etc. */
+.character-layer.scars {
+    z-index: 40; /* Scars are above all facial features */
+}
+
+.character-layer.eyeMakeup {
+    z-index: 45; /* Eye makeup is above eyes and eyebrows */
+}
+
+.character-layer.lipShape {
+    z-index: 46; /* Lip shape is above mouth */
+}
+
+/* Fringe or bangs */
+.character-layer.fringe {
+    z-index: 50; /* Fringe or bangs should be on top of everything else on the head */
+}
+
+/* Accessories and clothing */
+.character-layer.accessories {
+    z-index: 55; /* Accessories can go on top of the head features */
+}
+
+.character-layer.shoulder {
+    z-index: 60; /* Shoulders go behind tops */
+}
+
+.character-layer.tops {
+    z-index: 65; /* Tops should be above shoulders but below accessories */
+}
+
+/* Final layer for any overlays or additional items */
+.character-layer.finalOverlay {
+    z-index: 70; /* If there's any final overlay or effect, place it on top */
+}
+
+
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .character-customization {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .character-preview, .customization-options {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+}

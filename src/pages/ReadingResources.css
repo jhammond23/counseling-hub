@@ -1,0 +1,120 @@
+/* General Bookshelf and Background */
+.bookshelf {
+    background-color: #7d5a50; /* A warm, wood-like color for a cozy feel */
+    color: #f4ede4; /* Creamy text color for readability */
+    font-family: 'Merriweather', serif; /* A warm, readable font */
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .bookshelf .header {
+    margin-top: 100px;
+    background-color: #533333;
+    padding: 20px;
+    border-radius: 15px;
+    border: 10px solid #382828; /* Creamy border for contrast */
+  }
+
+  /* Resource Grid & Category Styling */
+  .resource-grid-style {
+    display: grid;
+    align-items: center; /* Center the categories */
+    gap: 20px;
+    padding-top: 50px; /* Space from the top of the bookshelf */
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 50px;
+    width: 1200px;
+  }
+  
+  .resource-grid-style > div {
+    background: rgba(217, 191, 173, 0.9); /* Semi-transparent tiles for categories */
+    border-radius: 15px;
+    padding: 20px;
+    max-width: 800px; /* Maximum width for each category */
+    width: 80%; /* Full width on small screens */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Soft shadow for depth */
+    margin-bottom: 20px; /* Space between categories */
+    border: 10px solid #382828; /* Creamy border for contrast */
+    justify-self: center;
+
+  }
+  
+  .resource-grid-style h1 {
+    color: #f4ede4; /* Title color */
+    font-size: 2.5em;
+  }
+  
+  .resource-grid-style h2 {
+    color: #5a3e36; /* Subtitles for categories */
+    font-size: 1.8em;
+    margin-bottom: 10px;
+  }
+  
+  .bookshelf ul {
+    list-style: none; /* Remove default list styling */
+    padding-left: 0; /* Align list items to the left */
+  }
+
+  .bookshelf ul li {
+    width: 100%; /* Ensures the list items take up full width of their container */
+  }
+  
+  .bookshelf li a {
+    color: #5a3e36; /* Color for resource links */
+    text-decoration: none; /* No underline */
+    transition: all .3s ease; /* Smooth color transition */
+    width: 100%; /* Full width for links */
+
+  }
+
+  .bookshelf li:nth-child(odd) a {
+    background-color: #7d5a50;
+    color: #f4ede4;
+  }
+
+  .bookshelf li:nth-child(odd) a:hover {
+    color: white;
+    text-shadow: 0 0 10px #5a3e36;
+  }
+  
+  .bookshelf li a:hover {
+    color: #88662b; /* Highlight color on hover */
+    text-shadow: 0 0 1px #5a3e36; /* Soft shadow for emphasis */
+    letter-spacing: 1px;
+  }
+
+  .bookshelf li a:hover::before {
+    content: '📚 '; /* Add a book emoji before the link on hover */
+    }
+
+    .bookshelf li a::before {
+      content: '- '; /* Add a book emoji before the link */
+    }
+
+    .bookshelf ul li a {
+        display: block; /* Makes the link take up the full width of its container */
+        color: #5a3e36; /* Color for resource links */
+        text-decoration: none; /* No underline */
+        transition: all .3s ease; /* Smooth transition for interaction states */
+        border-radius: 4px;
+        padding: 2px;
+      }
+    
+  
+  /* Media queries for responsiveness */
+  @media (max-width: 768px) {
+    .resource-grid-style {
+      padding: 20px; /* Smaller padding on smaller screens */
+    }
+  }
+  
+  /* Import fonts */
+  @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap');
+  
+  /* Additional styles can be added as needed */
+  

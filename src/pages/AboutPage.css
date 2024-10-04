@@ -1,0 +1,79 @@
+/* Coziness inspired by Stardew Valley */
+
+/* Main container */
+.aboutPage {
+    background: #E0C9A6; /* Light, warm background */
+    color: #4E3620; /* Dark brown, rustic text */
+    padding: 2rem;
+    height: auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Amatic SC', cursive; /* Playful, cozy font */
+    background-size: cover;
+    background-position: center;
+    padding-top: 100px;
+    
+}
+
+/* Cozy title */
+.aboutHeader {
+    text-align: center;
+    margin-bottom: 2rem;
+    background-color: #d49c6a; /* Soft, warm wood panel color */
+    border-radius: 20px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+}
+
+.cozyTitle {
+    font-size: 3rem;
+    color: #FFF8E1;
+    text-shadow: 2px 2px 8px #6F4E37;
+}
+
+/* Content styling */
+.aboutContentCont {
+    max-width: 800px;
+    font-size: 1.3rem;
+    line-height: 1.8;
+    padding: 2rem;
+    background-color: rgba(255, 255, 255, 0.7); /* Light backdrop with opacity */
+    border-radius: 15px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Slightly heavier shadow for content box */
+    backdrop-filter: blur(5px);
+}
+
+/* Links or special callout text */
+.aboutContentCont p {
+    margin-bottom: 1.2rem;
+    color: #4E3620;
+    font-family: 'Georgia', serif; /* Classic serif font for body text */
+}
+
+/* Mobile responsive design */
+@media only screen and (max-width: 768px) {
+    .cozyTitle {
+        font-size: 2.5rem;
+    }
+
+    .aboutContentCont {
+        font-size: 1.1rem;
+        padding: 1rem;
+    }
+
+    .aboutPage {
+        padding: 1rem;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .cozyTitle {
+        font-size: 2rem;
+    }
+
+    .aboutContentCont {
+        font-size: 1rem;
+    }
+}

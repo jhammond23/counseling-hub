@@ -1,0 +1,161 @@
+body * {
+    font-family: 'Indie Flower', cursive;
+}  
+  
+  nav {
+    background-color: #533333;
+    color: #FFF8E1;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    z-index: 100000000000;
+    border-bottom: 4px solid #382828;
+    position: fixed;
+    width: 100%;
+  }
+  
+  nav .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+  }
+
+  .logo-link-cont {
+    text-decoration: none;
+  }
+  
+  .logo {
+    font-size: 2rem;
+    font-family: 'Rubik Bubbles', sans-serif;
+    padding: 0;
+    margin: 0;
+    color: #FFF8E1;
+  }
+  
+  nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+  }
+  
+  nav ul li {
+    position: relative;
+  }
+  
+  nav ul li a {
+    text-decoration: none;
+    color: #FFF8E1;
+    padding: 20px 15px;
+    display: block;
+    transition: color 0.3s ease;
+    font-size: 1.15rem;
+  }
+  
+  nav ul li button {
+    background: none;
+    border: none;
+    color: #FFF8E1;
+    cursor: pointer;
+    padding: 20px 15px;
+    font-size: 1.15rem;
+  }
+
+  .login-button a,
+  .signup-button a,
+  .logout-btn  {
+    background-color: #418663;
+    color: #FFF8E1;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.15rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    padding: 8px 20px;
+    font-family: 'Rubik Bubbles', sans-serif;
+  }
+
+  .logout-btn button {
+    padding: 0px;
+  }
+
+  .signup-button a {
+    background-color: #FFF8E1;
+    color: #418663;
+    margin-left: 10px;
+  }
+  
+  /* Hover Effects */
+  nav ul li a:hover,
+  nav ul li button:hover {
+    color: #A7DE9B; /* Lighter shade for hover */
+  }
+  
+  /* Dropdown Styles */
+  nav ul li ul {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #382828;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    padding: 10px 0;
+    z-index: 1000;
+    width: 200px;
+    border-bottom: 5px solid #FFF8E1;
+
+  }
+  
+  nav ul li:hover ul {
+    display: block; /* Show dropdown on hover */
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  nav ul li ul li {
+    clear: both;
+    width: 100%;
+  }
+  
+  nav ul li ul li a {
+    padding: 10px 15px;
+    color: #FFF8E1;
+    text-align: left;
+  }
+  
+  /* Smooth Fade-in Animation for Dropdown */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    nav .container {
+      flex-direction: column;
+    }
+  
+    nav ul {
+      flex-direction: column;
+      width: 100%;
+    }
+  
+    nav ul li button,
+    nav ul li a {
+      width: 100%;
+      text-align: center;
+    }
+  
+    nav ul li ul {
+      width: 100%;
+      top: auto;
+      left: auto;
+    }
+  }
+  

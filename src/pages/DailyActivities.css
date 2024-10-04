@@ -1,0 +1,175 @@
+/* General Page Layout */
+.daily-activities-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    color: #333;
+    font-family: 'Cormorant Garamond', serif;
+    overflow: hidden;
+}
+
+.daily-activities-container {
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+    transition: background-image 0.5s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* Backgrounds */
+.bg-texturedBackground1 {
+    background-image: url('/src/media/texturedBackground1.png');
+}
+
+.bg-texturedBackground2 {
+    background-image: url('/src/media/texturedBackground2.png');
+}
+
+.bg-texturedBackground3 {
+    background-image: url('/src/media/texturedBackground3.png');
+}
+
+.bg-texturedBackground4 {
+    background-image: url('/src/media/texturedBackground4.png');
+}
+
+.bg-texturedBackground5 {
+    background-image: url('/src/media/texturedBackground5.webp');
+}
+
+.bg-texturedBackground6 {
+    background-image: url('/src/media/texturedBackground6.webp');
+}
+
+.bg-texturedBackground7 {
+    background-image: url('/src/media/texturedBackground7.webp');
+}
+
+.bg-texturedBackground8 {
+    background-image: url('/src/media/texturedBackground8.webp');
+}
+
+.bg-texturedBackground9 {
+    background-image: url('/src/media/texturedBackground9.webp');
+}
+
+.bg-texturedBackground10 {
+    background-image: url('/src/media/texturedBackground10.webp');
+}
+
+.daily-activities-container::before {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-size: 110%;
+    background-repeat: no-repeat;
+    background-position: center 48%;
+    position: fixed;
+    content: '';
+    z-index: -1;
+    opacity: .4;
+}
+
+/* Content inside the daily activities container */
+.daily-activities-content {
+    text-align: center;
+    max-width: 80%;
+    margin: auto;
+}
+
+/* Unified Content Box */
+.daily-activity-box {
+    background-color: rgba(255, 248, 225, 0.9);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1), inset 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin-bottom: 30px;
+}
+
+.daily-activities-title {
+    font-size: 36px;
+    color: #2F855A; 
+    margin-bottom: 15px;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); 
+}
+
+.daily-activities-description {
+    font-size: 20px;
+    color: #3E2723;
+    text-align: left;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.daily-activity-divider {
+    height: 1px;
+    background-color: #2F855A;
+    margin: 20px 0;
+    opacity: 0.6;
+}
+
+.daily-activity {
+    font-size: 24px;
+    color: #3E2723;
+    text-align: center;
+    padding: 15px;
+}
+
+.daily-activities-button {
+    padding: 12px 25px;
+    background-color: #2F855A; 
+    color: #FFF8E1;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 20px;
+    margin-top: 30px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    text-align: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.daily-activities-button:hover {
+    transform: scale(1.05);
+    background-color: #276749; 
+}
+
+.daily-activities-button:disabled {
+    background-color: #cbd5e0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .daily-activities-container {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .daily-activity-box {
+        padding: 20px;
+    }
+
+    .daily-activities-title {
+        font-size: 28px;
+    }
+
+    .daily-activities-description,
+    .daily-activity {
+        font-size: 18px;
+    }
+
+    .daily-activities-button {
+        font-size: 16px;
+    }
+}

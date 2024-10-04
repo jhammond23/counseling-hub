@@ -1,0 +1,123 @@
+/* General container for auth pages */
+
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #382828;
+    position: relative;
+    z-index: 1;
+  }
+
+  .auth-container::before {
+    background: url('../media/green-country-side.png');
+    background-position: center 29%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100%;
+    left: 0px;  
+    opacity: .4;
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    transition: opacity 800ms ease,
+      background-size 800ms ease,
+      background-position 800ms ease;
+    width: 100%;
+    z-index: -1;
+    content: '';
+  }
+  
+  /* Auth form styling */
+  .auth-form {
+    padding: 40px;
+    background: #FFF8E1;
+    border-radius: 50px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    margin: 20px;
+    border: 4px solid #418663;
+  }
+  
+  .auth-form h2 {
+    margin-bottom: 20px;
+    color: #418663;
+    font-size: 2rem;
+    text-align: center;
+    font-family: 'Rubik Bubbles', sans-serif;
+  }
+  
+  /* Style for input fields */
+  .auth-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 3px solid #418663;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+  
+  /* Focus state for input fields */
+  .auth-form input:focus {
+    border-color: #264d3a;
+    outline: none;
+    transition: all 0.3s ease;
+    scale: 1.03;
+  }
+  
+  /* Style for buttons */
+  .auth-form button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background-color: #418663;
+    color: #FFF8E1;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    font-family: 'Rubik Bubbles', sans-serif;
+  }
+  
+  /* Hover state for buttons */
+  .auth-form button:hover {
+    background-color: #A7DE9B;
+    scale: 1.03;
+    transition: all 0.3s ease;
+  }
+  
+  /* Error message styling */
+  .error-message {
+    color: #d32f2f;
+    background-color: #fce4e4;
+    border: 1px solid #f44336;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  /* Link styles */
+  .auth-form .auth-link {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #6658f6;
+    text-decoration: none;
+  }
+  
+  .auth-form .auth-link:hover {
+    text-decoration: underline;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 600px) {
+    .auth-form {
+      padding: 20px;
+      margin: 10px;
+    }
+  }
+  
