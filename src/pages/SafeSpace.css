@@ -265,6 +265,10 @@
     z-index: 34; 
 }
 
+.character-layer.lip-linework {
+    z-index: 35; 
+}
+
 .character-layer.mouth-expression {
     z-index: 35; 
 }

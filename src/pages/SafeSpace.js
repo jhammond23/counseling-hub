@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { skinToneSwatches, hairColorSwatches, loadFrontLayerFringeAssets, loadSecondaryFringeAssets, loadMouthExpressionAssets, loadLipAssets, loadNoseApexAssets, loadNoseBridgeAssets, loadShirtAssets, loadShoulderAssets, loadChestVolumeAssets, loadEyeballAssets, loadEyeShapeAssets, loadEyeMakeupAssets, loadEyeSocketShadowAssets, loadHeadAssets, loadChinAssets, loadEarAssets, loadHairAssets, loadFaceScarAssets, loadBodyScarAssets, loadBackgroundAssets, loadAccessoryAssets, loadBeardAssets, loadMustacheAssets, loadCheekboneAssets, loadEyelashAssets, loadEyeColorAssets } from '../utilities/loadAssets';
+import { loadMakeupColorSwatches, loadLipShapeAssets, skinToneSwatches, hairColorSwatches, loadFrontLayerFringeAssets, loadSecondaryFringeAssets, loadMouthExpressionAssets, loadLipAssets, loadNoseApexAssets, loadNoseBridgeAssets, loadShirtAssets, loadShoulderAssets, loadChestVolumeAssets, loadEyeballAssets, loadEyeShapeAssets, loadEyeMakeupAssets, loadEyeSocketShadowAssets, loadHeadAssets, loadChinAssets, loadEarAssets, loadHairAssets, loadFaceScarAssets, loadBodyScarAssets, loadBackgroundAssets, loadAccessoryAssets, loadBeardAssets, loadMustacheAssets, loadCheekboneAssets, loadEyelashAssets, loadEyeColorAssets } from '../utilities/loadAssets';
 import './SafeSpace.css'; // Assuming you're using the provided CSS
 
 const SafeSpace = () => {
@@ -49,6 +49,7 @@ const SafeSpace = () => {
     const [selectedMouthExpression, setSelectedMouthExpression] = useState(null);
     const [selectedLipColor, setSelectedLipColor] = useState(null);
 
+    const [selectedLipShape, setSelectedLipShape] = useState(null);
 
 
     useEffect(() => {
@@ -120,6 +121,17 @@ const SafeSpace = () => {
     const mouthExpressionAssets = loadMouthExpressionAssets(require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/3-Face-Parts/Mouth/0-Expression', true, /\.(png|jpe?g|svg)$/));
     const lipAssets = loadLipAssets(require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/3-Face-Parts/Mouth/1-Lip', true, /\.(png|jpe?g|svg)$/));
 
+    // Load lip shape assets
+    const lipShapeAssets = loadLipShapeAssets(require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/3-Face-Parts/Mouth/Lip-Shape', true, /\.(png|jpe?g|svg)$/));
+
+// Load makeup color swatches
+const makeupColorSwatches = loadMakeupColorSwatches(
+    require.context(
+        '../media/Tasia-Pixel-Project-Revision-1056x1056/14-Color-Swatches',
+        false,
+        /Makeup-Color-\d+\.(png|jpe?g|svg)$/
+    )
+);
 
 
 
@@ -134,19 +146,19 @@ const SafeSpace = () => {
     // Update the skin tone when selecting
     const handleSkinToneChange = (swatch) => {
         const toneNumber = swatch.match(/Skin-Tone-(\d+)/)[1]; // Extract the skin tone number
-    
+
         // Update skin tone for the head
         const matchingHeadSkinTone = headAssets.colors.find(file => file.includes(`Skin-Tone-${toneNumber}`));
         setSelectedHeadSkinTone(matchingHeadSkinTone);
-    
+
         // Update skin tone for the chin
         const matchingChinSkinTone = chinAssets.colors.find(file => file.includes(`Chin-${selectedChinLinework.match(/Chin-(\d+)/)[1]}-Skin-Tone-${toneNumber}`));
         setSelectedChinSkinTone(matchingChinSkinTone);
-    
+
         // Update skin tone for the ears
         const matchingEarSkinTone = earAssets.colors.find(file => file.includes(`Ear-${selectedEarLinework.match(/Ear-(\d+)/)[1]}-Skin-Tone-${toneNumber}`));
         setSelectedEarSkinTone(matchingEarSkinTone);
-    
+
         // Update skin tone for the shoulders
         if (selectedShoulderLinework) {
             const shoulderType = selectedShoulderLinework.match(/(Thin|Broad|Narrow)-Shoulder/)[1];
@@ -154,7 +166,7 @@ const SafeSpace = () => {
             setSelectedShoulderSkinTone(matchingShoulderSkinTone);
         }
     };
-    
+
 
 
 
@@ -224,12 +236,12 @@ const SafeSpace = () => {
 
     const handleHairColorChange = (swatch) => {
         const colorNumber = swatch.match(/Hair-Color-(\d+)/)[1]; // Extract color number
-    
+
         if (selectedHairLinework) {
             const matchingHairColor = hairAssets.colors.find(
                 (color) => color.includes(`Hair-Color-${colorNumber}`) && color.includes(selectedHairLinework.match(/Hair-\d+/)[0])
             );
-    
+
             if (matchingHairColor) {
                 setSelectedHairColor(matchingHairColor); // Set the matching hair color
             } else {
@@ -264,15 +276,15 @@ const SafeSpace = () => {
 
     const handleFrontLayerFringeColorChange = (swatch) => {
         const colorNumber = swatch.match(/Hair-Color-(\d+)/)[1]; // Extract the color number from the swatch name
-    
+
         if (selectedFrontLayerFringeLinework) {
             const fringeNumber = selectedFrontLayerFringeLinework.match(/Fringe-(\d+)/)[1]; // Extract fringe number from the linework
-    
+
             // Find the matching asset using the fringe number and color number
             const matchingFringe = frontLayerFringeAssets.find(
                 asset => asset.includes(`Fringe-${fringeNumber}`) && asset.includes(`Hair-Color-${colorNumber}`)
             );
-    
+
             if (matchingFringe) {
                 setSelectedFrontLayerFringeColor(matchingFringe); // Set the matching fringe color
             } else {
@@ -282,7 +294,7 @@ const SafeSpace = () => {
             console.warn("No front fringe linework selected yet.");
         }
     };
-    
+
 
     // Handle Secondary Fringe Linework
     const handleSecondaryFringeLineworkChange = (fringeLinework) => {
@@ -303,15 +315,15 @@ const SafeSpace = () => {
 
     const handleSecondaryFringeColorChange = (swatch) => {
         const colorNumber = swatch.match(/Hair-Color-(\d+)/)[1]; // Extract the color number
-    
+
         if (selectedSecondaryFringeLinework) {
             const fringeNumber = selectedSecondaryFringeLinework.match(/Fringe-(\d+)/)[1]; // Extract fringe number from the linework
-    
+
             // Find the matching asset using the fringe number and color number
             const matchingFringe = secondaryFringeAssets.find(
                 asset => asset.includes(`Fringe-${fringeNumber}`) && asset.includes(`Hair-Color-${colorNumber}`)
             );
-    
+
             if (matchingFringe) {
                 setSelectedSecondaryFringeColor(matchingFringe); // Set the matching fringe color
             } else {
@@ -321,7 +333,7 @@ const SafeSpace = () => {
             console.warn("No secondary fringe linework selected yet.");
         }
     };
-    
+
 
 
     const handleBodyScarChange = (bodyScar) => {
@@ -410,9 +422,20 @@ const SafeSpace = () => {
         setSelectedEyeShape(eyeShape);
     };
 
-    const handleEyeMakeupChange = (eyeMakeup) => {
-        setSelectedEyeMakeup(eyeMakeup);
+    const handleEyeMakeupChange = (colorNumber) => {
+        // Find the eye makeup asset corresponding to the color number
+        const matchingEyeMakeup = eyeMakeupAssets.makeup.find(({ key }) =>
+            key.includes(`Makeup-Color-${colorNumber}`)
+        );
+    
+        if (matchingEyeMakeup) {
+            setSelectedEyeMakeup(matchingEyeMakeup);
+        } else {
+            console.warn(`No matching eye makeup found for Color-${colorNumber}`);
+            setSelectedEyeMakeup(null);
+        }
     };
+    
 
     const handleEyeSocketShadowChange = (eyeSocketShadow) => {
         setSelectedEyeSocketShadow(eyeSocketShadow);
@@ -633,10 +656,83 @@ const SafeSpace = () => {
         setSelectedMouthExpression(expression);
     };
 
-    // Handle lip color change
-    const handleLipColorChange = (lip) => {
-        setSelectedLipColor(lip);
+    const handleLipColorChange = (colorNumber) => {
+        if (selectedLipShape) {
+            const selectedLipNumber = selectedLipShape.key.match(/Lip-Shape-(\d+)/)[1];
+    
+            // Find the lip color asset corresponding to the selected lip number and color number
+            const matchingLipColor = lipAssets.find(({ key }) => {
+                const lipNumberMatch = key.match(/Lip-(\d+)\//);
+                const colorNumberMatch = key.match(/Color-(\d+)/);
+                return (
+                    lipNumberMatch &&
+                    colorNumberMatch &&
+                    lipNumberMatch[1] === selectedLipNumber &&
+                    colorNumberMatch[1] === colorNumber
+                );
+            });
+    
+            if (matchingLipColor) {
+                setSelectedLipColor(matchingLipColor);
+            } else {
+                console.warn(`No matching lip color found for Lip-${selectedLipNumber} and Color-${colorNumber}`);
+                setSelectedLipColor(null);
+            }
+        }
     };
+    
+
+
+    const handleLipShapeChange = ({ asset, key }) => {
+        setSelectedLipShape({ asset, key });
+    
+        // Check if a lip color is already selected
+        if (selectedLipColor) {
+            // Extract the color number from the previously selected lip color
+            const prevColorNumberMatch = selectedLipColor.key.match(/Color-(\d+)/);
+            if (prevColorNumberMatch) {
+                const colorNumber = prevColorNumberMatch[1];
+    
+                // Extract the new lip number from the selected lip shape
+                const newLipNumberMatch = key.match(/Lip-Shape-(\d+)/);
+                if (newLipNumberMatch) {
+                    const newLipNumber = newLipNumberMatch[1];
+    
+                    // Find the matching lip color for the new lip shape with the same color number
+                    const matchingLipColor = lipAssets.find(({ asset, key }) => {
+                        const lipNumberMatch = key.match(/Lip-(\d+)\//);
+                        const colorNumberMatch = key.match(/Color-(\d+)/);
+                        if (lipNumberMatch && colorNumberMatch) {
+                            const lipNumber = lipNumberMatch[1];
+                            const lipColorNumber = colorNumberMatch[1];
+                            return lipNumber === newLipNumber && lipColorNumber === colorNumber;
+                        }
+                        return false;
+                    });
+    
+                    // If a matching lip color is found, apply it
+                    if (matchingLipColor) {
+                        setSelectedLipColor(matchingLipColor);
+                    } else {
+                        // If no matching color is found, reset the lip color
+                        setSelectedLipColor(null);
+                    }
+                } else {
+                    // If the new lip number can't be extracted, reset the lip color
+                    setSelectedLipColor(null);
+                }
+            } else {
+                // If the previous color number can't be extracted, reset the lip color
+                setSelectedLipColor(null);
+            }
+        } else {
+            // If no lip color was previously selected, you might choose a default color or leave it null
+            setSelectedLipColor(null);
+        }
+    };
+    
+
+
 
 
 
@@ -706,14 +802,14 @@ const SafeSpace = () => {
                     />
                 )}
 
-{/* Render Selected Hair Color */}
-{selectedHairColor && (
-    <img
-        src={selectedHairColor}
-        alt="Selected Hair Color"
-        className="character-layer hair-color"
-    />
-)}
+                {/* Render Selected Hair Color */}
+                {selectedHairColor && (
+                    <img
+                        src={selectedHairColor}
+                        alt="Selected Hair Color"
+                        className="character-layer hair-color"
+                    />
+                )}
 
 
                 {/* Render hair linework */}
@@ -779,14 +875,15 @@ const SafeSpace = () => {
                     />
                 )}
 
-                {/* Render selected eye makeup */}
-                {selectedEyeMakeup && (
-                    <img
-                        src={selectedEyeMakeup}
-                        alt="Selected Eye Makeup"
-                        className="character-layer eye-makeup"
-                    />
-                )}
+{/* Render selected eye makeup */}
+{selectedEyeMakeup && (
+    <img
+        src={selectedEyeMakeup.asset}
+        alt="Selected Eye Makeup"
+        className="character-layer eye-makeup"
+    />
+)}
+
 
                 {/* Render selected eye socket shadow */}
                 {selectedEyeSocketShadow && (
@@ -979,14 +1076,24 @@ const SafeSpace = () => {
                     />
                 )}
 
+                {/* Render selected lip shape */}
+                {selectedLipShape && (
+                    <img
+                        src={selectedLipShape.asset}
+                        alt="Selected Lip Shape"
+                        className="character-layer lip-linework"
+                    />
+                )}
+
                 {/* Render selected lip color */}
                 {selectedLipColor && (
                     <img
-                        src={selectedLipColor}
+                        src={selectedLipColor.asset}
                         alt="Selected Lip Color"
-                        className="character-layer lips-color"
+                        className="character-layer lip-color"
                     />
                 )}
+
 
 
 
@@ -997,13 +1104,13 @@ const SafeSpace = () => {
 
                 {/* Skin Tone Options */}
                 <div className="option-category">
-    <h3>Skin Tone Options</h3>
-    {skinToneSwatches.map((swatch, index) => (
-        <button key={index} onClick={() => handleSkinToneChange(swatch)}>
-            <img src={swatch} alt={`Skin Tone ${index}`} />
-        </button>
-    ))}
-</div>
+                    <h3>Skin Tone Options</h3>
+                    {skinToneSwatches.map((swatch, index) => (
+                        <button key={index} onClick={() => handleSkinToneChange(swatch)}>
+                            <img src={swatch} alt={`Skin Tone ${index}`} />
+                        </button>
+                    ))}
+                </div>
 
 
                 {/* UI for Shoulder Linework */}
@@ -1147,15 +1254,40 @@ const SafeSpace = () => {
                     </button>
                 </div>
 
-                {/* Eye Makeup Options */}
-                <div className="option-category">
-                    <h3>Eye Makeup</h3>
-                    {eyeMakeupAssets.makeup.map((eyeMakeupAsset, index) => (
-                        <button key={index} onClick={() => handleEyeMakeupChange(eyeMakeupAsset)}>
-                            <img src={eyeMakeupAsset} alt={`Eye Makeup ${index}`} />
-                        </button>
-                    ))}
-                </div>
+{/* Eye Makeup Options */}
+<div className="option-category">
+    <h3>Eye Makeup</h3>
+    {(() => {
+        // Get available eye makeup color numbers
+        const availableEyeMakeupColorNumbers = Array.from(
+            new Set(
+                eyeMakeupAssets.makeup
+                    .map(({ key }) => {
+                        const colorNumberMatch = key.match(/Makeup-Color-(\d+)/);
+                        return colorNumberMatch ? colorNumberMatch[1] : null;
+                    })
+                    .filter(Boolean)
+            )
+        );
+
+        // Render swatches for available colors
+        return availableEyeMakeupColorNumbers.map((colorNumber) => {
+            // Find the swatch with this color number
+            const swatch = makeupColorSwatches.find(({ key }) =>
+                key.includes(`Makeup-Color-${colorNumber}`)
+            );
+            if (swatch) {
+                return (
+                    <button key={colorNumber} onClick={() => handleEyeMakeupChange(colorNumber)}>
+                        <img src={swatch.asset} alt={`Eye Makeup Color ${colorNumber}`} />
+                    </button>
+                );
+            }
+            return null;
+        });
+    })()}
+</div>
+
 
 
                 {/* Accessory Options */}
@@ -1178,15 +1310,65 @@ const SafeSpace = () => {
                     ))}
                 </div>
 
-                {/* Lip Color Options */}
+                {/* Lip Shape Options */}
                 <div className="option-category">
-                    <h3>Lip Colors</h3>
-                    {lipAssets.map((lip, index) => (
-                        <button key={index} onClick={() => handleLipColorChange(lip)}>
-                            <img src={lip} alt={`Lip Color ${index}`} />
+                    <h3>Lip Shapes</h3>
+                    {lipShapeAssets.map(({ asset, key }, index) => (
+                        <button key={index} onClick={() => handleLipShapeChange({ asset, key })}>
+                            <img src={asset} alt={`Lip Shape ${index}`} />
                         </button>
                     ))}
                 </div>
+
+
+
+{/* Lip Color Options */}
+{selectedLipShape && (
+    <div className="option-category">
+        <h3>Lip Colors</h3>
+        {(() => {
+            // Get the selected lip number
+            const selectedLipNumber = selectedLipShape.key.match(/Lip-Shape-(\d+)/)[1];
+
+            // Get available lip colors for the selected lip shape
+            const availableLipColors = lipAssets.filter(({ key }) => {
+                const lipNumberMatch = key.match(/Lip-(\d+)\//);
+                return lipNumberMatch && lipNumberMatch[1] === selectedLipNumber;
+            });
+
+            // Get unique color numbers
+            const availableColorNumbers = Array.from(
+                new Set(
+                    availableLipColors
+                        .map(({ key }) => {
+                            const colorNumberMatch = key.match(/Color-(\d+)/);
+                            return colorNumberMatch ? colorNumberMatch[1] : null;
+                        })
+                        .filter(Boolean)
+                )
+            );
+
+            // Render swatches for available colors
+            return availableColorNumbers.map((colorNumber) => {
+                // Find the swatch with this color number
+                const swatch = makeupColorSwatches.find(({ key }) =>
+                    key.includes(`Makeup-Color-${colorNumber}`)
+                );
+                if (swatch) {
+                    return (
+                        <button key={colorNumber} onClick={() => handleLipColorChange(colorNumber)}>
+                            <img src={swatch.asset} alt={`Lip Color ${colorNumber}`} />
+                        </button>
+                    );
+                }
+                return null;
+            });
+        })()}
+    </div>
+)}
+
+
+
 
 
                 {/* Cheekbone Options */}
@@ -1213,14 +1395,14 @@ const SafeSpace = () => {
 
                 {/* Hair Color Options */}
                 {selectedHairLinework && (
-  <div className="option-category">
-      <h3>Hair Color Options</h3>
-      {hairColorSwatches.map((swatch, index) => (
-          <button key={index} onClick={() => handleHairColorChange(swatch)}>
-              <img src={swatch} alt={`Hair Color ${index}`} />
-          </button>
-      ))}
-  </div>
+                    <div className="option-category">
+                        <h3>Hair Color Options</h3>
+                        {hairColorSwatches.map((swatch, index) => (
+                            <button key={index} onClick={() => handleHairColorChange(swatch)}>
+                                <img src={swatch} alt={`Hair Color ${index}`} />
+                            </button>
+                        ))}
+                    </div>
                 )}
 
                 {/* Front Layer Fringe Options */}
@@ -1237,15 +1419,15 @@ const SafeSpace = () => {
 
 
                 {selectedFrontLayerFringeLinework && (
-    <div className="option-category">
-        <h3>Front Layer Fringe Colors</h3>
-        {hairColorSwatches.map((swatch, index) => (
-            <button key={index} onClick={() => handleFrontLayerFringeColorChange(swatch)}>
-                <img src={swatch} alt={`Front Fringe Color ${index}`} className='fringe-color' />
-            </button>
-        ))}
-    </div>
-)}
+                    <div className="option-category">
+                        <h3>Front Layer Fringe Colors</h3>
+                        {hairColorSwatches.map((swatch, index) => (
+                            <button key={index} onClick={() => handleFrontLayerFringeColorChange(swatch)}>
+                                <img src={swatch} alt={`Front Fringe Color ${index}`} className='fringe-color' />
+                            </button>
+                        ))}
+                    </div>
+                )}
 
 
                 {/* Secondary Fringe Linework Options */}
@@ -1263,15 +1445,15 @@ const SafeSpace = () => {
 
                 {/* Secondary Fringe Color Options */}
                 {selectedSecondaryFringeLinework && (
-    <div className="option-category">
-        <h3>Secondary Fringe Colors</h3>
-        {hairColorSwatches.map((swatch, index) => (
-            <button key={index} onClick={() => handleSecondaryFringeColorChange(swatch)}>
-                <img src={swatch} alt={`Secondary Fringe Color ${index}`} className='secondary-fringe-color' />
-            </button>
-        ))}
-    </div>
-)}
+                    <div className="option-category">
+                        <h3>Secondary Fringe Colors</h3>
+                        {hairColorSwatches.map((swatch, index) => (
+                            <button key={index} onClick={() => handleSecondaryFringeColorChange(swatch)}>
+                                <img src={swatch} alt={`Secondary Fringe Color ${index}`} className='secondary-fringe-color' />
+                            </button>
+                        ))}
+                    </div>
+                )}
 
 
 

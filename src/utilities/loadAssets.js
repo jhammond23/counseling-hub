@@ -151,15 +151,6 @@ export const loadEyeShapeAssets = (context) => {
     return assets;
 };
 
-export const loadEyeMakeupAssets = (context) => {
-    const keys = context.keys();
-    const values = keys.map(context);
-    const assets = {
-        makeup: values.filter((_, index) => keys[index].includes('Eye-Makeup-Color'))
-    };
-    return assets;
-};
-
 export const loadEyeSocketShadowAssets = (context) => {
     const keys = context.keys();
     const values = keys.map(context);
@@ -243,11 +234,6 @@ export const loadMouthExpressionAssets = (context) => {
     return values; // Return the array directly
 };
 
-export const loadLipAssets = (context) => {
-    const keys = context.keys();
-    const values = keys.map(context);
-    return values; // Return the array directly
-};
 // Load hair color swatches
 const hairColorContext = require.context(
     '../media/Tasia-Pixel-Project-Revision-1056x1056/14-Color-Swatches', 
@@ -287,25 +273,48 @@ const skinToneContext = require.context(
 
 export const skinToneSwatches = skinToneContext.keys().map(skinToneContext);
 
-// Load shirt color swatches
-const shirtColorContext = require.context(
-    '../media/Tasia-Pixel-Project-Revision-1056x1056/14-Color-Swatches', 
-    false, 
-    /Clothes-Color-\d+\.(png|jpe?g|svg)$/  // Regex to match shirt color swatches
-);
-
-// Export shirt color swatches
-export const shirtColorSwatches = shirtColorContext.keys().map(shirtColorContext);
-
-
-// Load shirt assets (linework and colors)
-export const shirtAssets = {
-    linework: {
-        thin: require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/9-Thin-Shoulder-Tops', false, /Top-\d+\.png$/),
-        broad: require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/8-Broad-Shoulder-Tops', false, /Top-\d+\.png$/),
-        narrow: require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/10-Narrow-Shoulder-Tops', false, /Top-\d+\.png$/),
-    },
-    colors: shirtColorContext  // Shirt color swatches
+export const loadLipShapeAssets = (context) => {
+    const keys = context.keys();
+    const values = keys.map(context);
+    // Map both the asset and its key
+    const assets = values.map((asset, index) => ({
+        asset,
+        key: keys[index], // The key includes the original file path
+    }));
+    return assets;
 };
 
+export const loadLipAssets = (context) => {
+    const keys = context.keys();
+    const values = keys.map(context);
+    // Map both the asset and its key
+    const assets = values.map((asset, index) => ({
+        asset,
+        key: keys[index],
+    }));
+    return assets;
+};
 
+// Load makeup color swatches
+export const loadMakeupColorSwatches = (context) => {
+    const keys = context.keys();
+    const values = keys.map(context);
+    // Map both the asset and its key
+    const swatches = values.map((asset, index) => ({
+        asset,
+        key: keys[index],
+    }));
+    return swatches;
+};
+
+export const loadEyeMakeupAssets = (context) => {
+    const keys = context.keys();
+    const values = keys.map(context);
+    const assets = {
+        makeup: values.map((asset, index) => ({
+            asset,
+            key: keys[index],
+        })),
+    };
+    return assets;
+};
