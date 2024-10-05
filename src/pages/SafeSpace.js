@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { loadFrontLayerFringeAssets, loadSecondaryFringeAssets, loadMouthExpressionAssets, loadLipAssets, loadNoseApexAssets, loadNoseBridgeAssets, loadShirtAssets, loadShoulderAssets, loadChestVolumeAssets, loadEyeballAssets, loadEyeShapeAssets, loadEyeMakeupAssets, loadEyeSocketShadowAssets, loadHeadAssets, loadChinAssets, loadEarAssets, loadHairAssets, loadFaceScarAssets, loadBodyScarAssets, loadBackgroundAssets, loadAccessoryAssets, loadBeardAssets, loadMustacheAssets, loadCheekboneAssets, loadEyelashAssets, loadEyeColorAssets } from '../utilities/loadAssets';
+import { skinToneSwatches, hairColorSwatches, loadFrontLayerFringeAssets, loadSecondaryFringeAssets, loadMouthExpressionAssets, loadLipAssets, loadNoseApexAssets, loadNoseBridgeAssets, loadShirtAssets, loadShoulderAssets, loadChestVolumeAssets, loadEyeballAssets, loadEyeShapeAssets, loadEyeMakeupAssets, loadEyeSocketShadowAssets, loadHeadAssets, loadChinAssets, loadEarAssets, loadHairAssets, loadFaceScarAssets, loadBodyScarAssets, loadBackgroundAssets, loadAccessoryAssets, loadBeardAssets, loadMustacheAssets, loadCheekboneAssets, loadEyelashAssets, loadEyeColorAssets } from '../utilities/loadAssets';
 import './SafeSpace.css'; // Assuming you're using the provided CSS
 
 const SafeSpace = () => {
@@ -132,32 +132,29 @@ const SafeSpace = () => {
     }, [chinAssets, selectedChinLinework]);
 
     // Update the skin tone when selecting
-    const handleSkinToneChange = (skinTonePath) => {
-        const selectedToneNumber = skinTonePath.match(/Skin-Tone-(\d+)/)[1]; // Extract tone number from filename
-
-        // Set the skin tone for the head
-        const matchingHeadSkinTone = headAssets.colors.find(file => file.includes(`Skin-Tone-${selectedToneNumber}`));
+    const handleSkinToneChange = (swatch) => {
+        const toneNumber = swatch.match(/Skin-Tone-(\d+)/)[1]; // Extract the skin tone number
+    
+        // Update skin tone for the head
+        const matchingHeadSkinTone = headAssets.colors.find(file => file.includes(`Skin-Tone-${toneNumber}`));
         setSelectedHeadSkinTone(matchingHeadSkinTone);
-
-        // Set the skin tone for the chin
-        const matchingChinSkinTone = chinAssets.colors.find(file => file.includes(`Chin-${selectedChinLinework.match(/Chin-(\d+)/)[1]}-Skin-Tone-${selectedToneNumber}`));
+    
+        // Update skin tone for the chin
+        const matchingChinSkinTone = chinAssets.colors.find(file => file.includes(`Chin-${selectedChinLinework.match(/Chin-(\d+)/)[1]}-Skin-Tone-${toneNumber}`));
         setSelectedChinSkinTone(matchingChinSkinTone);
-
-        // Set the skin tone for the ears
-        const matchingEarSkinTone = earAssets.colors.find(file => file.includes(`Ear-${selectedEarLinework.match(/Ear-(\d+)/)[1]}-Skin-Tone-${selectedToneNumber}`));
+    
+        // Update skin tone for the ears
+        const matchingEarSkinTone = earAssets.colors.find(file => file.includes(`Ear-${selectedEarLinework.match(/Ear-(\d+)/)[1]}-Skin-Tone-${toneNumber}`));
         setSelectedEarSkinTone(matchingEarSkinTone);
-
-        // Set the skin tone for the shoulders based on the selected shoulder linework
+    
+        // Update skin tone for the shoulders
         if (selectedShoulderLinework) {
-            // Extract shoulder type from the selected linework (Thin, Broad, or Narrow)
             const shoulderType = selectedShoulderLinework.match(/(Thin|Broad|Narrow)-Shoulder/)[1];
-            const matchingShoulderSkinTone = shoulderAssets.colors.find(file => file.includes(`${shoulderType}-Shoulder-Skin-Tone-${selectedToneNumber}`));
-
-            if (matchingShoulderSkinTone) {
-                setSelectedShoulderSkinTone(matchingShoulderSkinTone);
-            }
+            const matchingShoulderSkinTone = shoulderAssets.colors.find(file => file.includes(`${shoulderType}-Shoulder-Skin-Tone-${toneNumber}`));
+            setSelectedShoulderSkinTone(matchingShoulderSkinTone);
         }
     };
+    
 
 
 
@@ -225,8 +222,22 @@ const SafeSpace = () => {
 
 
 
-    const handleHairColorChange = (hairColor) => {
-        setSelectedHairColor(hairColor);
+    const handleHairColorChange = (swatch) => {
+        const colorNumber = swatch.match(/Hair-Color-(\d+)/)[1]; // Extract color number
+    
+        if (selectedHairLinework) {
+            const matchingHairColor = hairAssets.colors.find(
+                (color) => color.includes(`Hair-Color-${colorNumber}`) && color.includes(selectedHairLinework.match(/Hair-\d+/)[0])
+            );
+    
+            if (matchingHairColor) {
+                setSelectedHairColor(matchingHairColor); // Set the matching hair color
+            } else {
+                console.warn("No matching hair color found.");
+            }
+        } else {
+            console.warn("No hair linework selected yet.");
+        }
     };
 
     const handleFaceScarChange = (faceScar) => {
@@ -251,10 +262,27 @@ const SafeSpace = () => {
     };
 
 
-    // Handle Front Layer Fringe color change
-    const handleFrontLayerFringeColorChange = (fringeColor) => {
-        setSelectedFrontLayerFringeColor(fringeColor);
+    const handleFrontLayerFringeColorChange = (swatch) => {
+        const colorNumber = swatch.match(/Hair-Color-(\d+)/)[1]; // Extract the color number from the swatch name
+    
+        if (selectedFrontLayerFringeLinework) {
+            const fringeNumber = selectedFrontLayerFringeLinework.match(/Fringe-(\d+)/)[1]; // Extract fringe number from the linework
+    
+            // Find the matching asset using the fringe number and color number
+            const matchingFringe = frontLayerFringeAssets.find(
+                asset => asset.includes(`Fringe-${fringeNumber}`) && asset.includes(`Hair-Color-${colorNumber}`)
+            );
+    
+            if (matchingFringe) {
+                setSelectedFrontLayerFringeColor(matchingFringe); // Set the matching fringe color
+            } else {
+                console.warn("No matching fringe found for the selected color.");
+            }
+        } else {
+            console.warn("No front fringe linework selected yet.");
+        }
     };
+    
 
     // Handle Secondary Fringe Linework
     const handleSecondaryFringeLineworkChange = (fringeLinework) => {
@@ -273,10 +301,27 @@ const SafeSpace = () => {
         }
     };
 
-    // Handle Secondary Fringe color change
-    const handleSecondaryFringeColorChange = (fringeColor) => {
-        setSelectedSecondaryFringeColor(fringeColor);
+    const handleSecondaryFringeColorChange = (swatch) => {
+        const colorNumber = swatch.match(/Hair-Color-(\d+)/)[1]; // Extract the color number
+    
+        if (selectedSecondaryFringeLinework) {
+            const fringeNumber = selectedSecondaryFringeLinework.match(/Fringe-(\d+)/)[1]; // Extract fringe number from the linework
+    
+            // Find the matching asset using the fringe number and color number
+            const matchingFringe = secondaryFringeAssets.find(
+                asset => asset.includes(`Fringe-${fringeNumber}`) && asset.includes(`Hair-Color-${colorNumber}`)
+            );
+    
+            if (matchingFringe) {
+                setSelectedSecondaryFringeColor(matchingFringe); // Set the matching fringe color
+            } else {
+                console.warn("No matching fringe found for the selected color.");
+            }
+        } else {
+            console.warn("No secondary fringe linework selected yet.");
+        }
     };
+    
 
 
     const handleBodyScarChange = (bodyScar) => {
@@ -661,14 +706,15 @@ const SafeSpace = () => {
                     />
                 )}
 
-                {/* Render selected hair color */}
-                {selectedHairColor && (
-                    <img
-                        src={selectedHairColor}
-                        alt="Selected Hair Color"
-                        className="character-layer hair-color"
-                    />
-                )}
+{/* Render Selected Hair Color */}
+{selectedHairColor && (
+    <img
+        src={selectedHairColor}
+        alt="Selected Hair Color"
+        className="character-layer hair-color"
+    />
+)}
+
 
                 {/* Render hair linework */}
                 {selectedHairLinework && (
@@ -951,13 +997,14 @@ const SafeSpace = () => {
 
                 {/* Skin Tone Options */}
                 <div className="option-category">
-                    <h3>Skin Tones</h3>
-                    {headAssets.colors.map((colorAsset, index) => (
-                        <button key={index} onClick={() => handleSkinToneChange(colorAsset)}>
-                            <img src={colorAsset} alt={`Skin Tone ${index}`} />
-                        </button>
-                    ))}
-                </div>
+    <h3>Skin Tone Options</h3>
+    {skinToneSwatches.map((swatch, index) => (
+        <button key={index} onClick={() => handleSkinToneChange(swatch)}>
+            <img src={swatch} alt={`Skin Tone ${index}`} />
+        </button>
+    ))}
+</div>
+
 
                 {/* UI for Shoulder Linework */}
                 <div className="option-category">
@@ -1166,16 +1213,14 @@ const SafeSpace = () => {
 
                 {/* Hair Color Options */}
                 {selectedHairLinework && (
-                    <div className="option-category">
-                        <h3>Hair Colors</h3>
-                        {hairAssets.colors
-                            .filter(colorAsset => colorAsset.includes(selectedHairLinework.match(/Hair-\d+/)[0])) // Match colors to selected linework
-                            .map((colorAsset, index) => (
-                                <button key={index} onClick={() => handleHairColorChange(colorAsset)}>
-                                    <img src={colorAsset} alt={`Hair Color ${index}`} />
-                                </button>
-                            ))}
-                    </div>
+  <div className="option-category">
+      <h3>Hair Color Options</h3>
+      {hairColorSwatches.map((swatch, index) => (
+          <button key={index} onClick={() => handleHairColorChange(swatch)}>
+              <img src={swatch} alt={`Hair Color ${index}`} />
+          </button>
+      ))}
+  </div>
                 )}
 
                 {/* Front Layer Fringe Options */}
@@ -1191,18 +1236,17 @@ const SafeSpace = () => {
                 </div>
 
 
-                {/* Front Layer Fringe Color Options */}
                 {selectedFrontLayerFringeLinework && (
-                    <div className="option-category">
-                        <h3>Front Layer Fringe Colors</h3>
-                        {frontLayerFringeAssets.filter(asset => asset.includes(selectedFrontLayerFringeLinework.match(/Fringe-\d+/)[0]) && asset.includes('Hair-Color'))
-                            .map((fringeColor, index) => (
-                                <button key={index} onClick={() => handleFrontLayerFringeColorChange(fringeColor)}>
-                                    <img src={fringeColor} alt={`Front Layer Fringe Color ${index}`} className='fringe-color' />
-                                </button>
-                            ))}
-                    </div>
-                )}
+    <div className="option-category">
+        <h3>Front Layer Fringe Colors</h3>
+        {hairColorSwatches.map((swatch, index) => (
+            <button key={index} onClick={() => handleFrontLayerFringeColorChange(swatch)}>
+                <img src={swatch} alt={`Front Fringe Color ${index}`} className='fringe-color' />
+            </button>
+        ))}
+    </div>
+)}
+
 
                 {/* Secondary Fringe Linework Options */}
                 <div className="option-category">
@@ -1219,16 +1263,15 @@ const SafeSpace = () => {
 
                 {/* Secondary Fringe Color Options */}
                 {selectedSecondaryFringeLinework && (
-                    <div className="option-category">
-                        <h3>Secondary Fringe Colors</h3>
-                        {secondaryFringeAssets.filter(asset => asset.includes(selectedSecondaryFringeLinework.match(/Fringe-\d+/)[0]) && asset.includes('Hair-Color'))
-                            .map((fringeColor, index) => (
-                                <button key={index} onClick={() => handleSecondaryFringeColorChange(fringeColor)}>
-                                    <img src={fringeColor} alt={`Secondary Fringe Color ${index}`} className='secondary-fringe-color' />
-                                </button>
-                            ))}
-                    </div>
-                )}
+    <div className="option-category">
+        <h3>Secondary Fringe Colors</h3>
+        {hairColorSwatches.map((swatch, index) => (
+            <button key={index} onClick={() => handleSecondaryFringeColorChange(swatch)}>
+                <img src={swatch} alt={`Secondary Fringe Color ${index}`} className='secondary-fringe-color' />
+            </button>
+        ))}
+    </div>
+)}
 
 
 

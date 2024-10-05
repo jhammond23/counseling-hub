@@ -248,15 +248,64 @@ export const loadLipAssets = (context) => {
     const values = keys.map(context);
     return values; // Return the array directly
 };
-
-// Load the color swatches
-const colorSwatchesContext = require.context(
+// Load hair color swatches
+const hairColorContext = require.context(
     '../media/Tasia-Pixel-Project-Revision-1056x1056/14-Color-Swatches', 
     false, 
-    /\.(png|jpe?g|svg)$/
-  );
-  
-  const colorSwatches = colorSwatchesContext.keys().map(colorSwatchesContext);
-  
-  export { colorSwatches };
-  
+    /Hair-Color-\d+\.(png|jpe?g|svg)$/  // Adjust the regex to include png, jpeg, jpg, and svg file extensions
+);
+
+// Load Front Layer Fringe Assets
+export const frontFringeAssets = {
+    linework: require.context(
+        '../media/Tasia-Pixel-Project-Revision-1056x1056/2-Fringe/FrontLayerFringe', 
+        false, 
+        /Fringe-\d+\.png$/  // Load linework for the front fringe
+    ),
+    colors: hairColorContext  // Reuse the previously defined hair color swatches context
+};
+
+// Load Secondary Layer Fringe Assets
+export const secondaryFringeAssets = {
+    linework: require.context(
+        '../media/Tasia-Pixel-Project-Revision-1056x1056/2-Fringe/SecondaryFringe', 
+        false, 
+        /Fringe-\d+\.png$/  // Load linework for the secondary fringe
+    ),
+    colors: hairColorContext  // Reuse the same hair color swatches
+};
+
+// Export the hair color swatches for other components if needed
+export const hairColorSwatches = hairColorContext.keys().map(hairColorContext); 
+
+// Load skin tone swatches from the swatch folder
+const skinToneContext = require.context(
+    '../media/Tasia-Pixel-Project-Revision-1056x1056/14-Color-Swatches', 
+    false, 
+    /Skin-Tone-\d+\.(png|jpe?g|svg)$/  // Adjust the regex to include png, jpeg, jpg, and svg file extensions
+);
+
+export const skinToneSwatches = skinToneContext.keys().map(skinToneContext);
+
+// Load shirt color swatches
+const shirtColorContext = require.context(
+    '../media/Tasia-Pixel-Project-Revision-1056x1056/14-Color-Swatches', 
+    false, 
+    /Clothes-Color-\d+\.(png|jpe?g|svg)$/  // Regex to match shirt color swatches
+);
+
+// Export shirt color swatches
+export const shirtColorSwatches = shirtColorContext.keys().map(shirtColorContext);
+
+
+// Load shirt assets (linework and colors)
+export const shirtAssets = {
+    linework: {
+        thin: require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/9-Thin-Shoulder-Tops', false, /Top-\d+\.png$/),
+        broad: require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/8-Broad-Shoulder-Tops', false, /Top-\d+\.png$/),
+        narrow: require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/10-Narrow-Shoulder-Tops', false, /Top-\d+\.png$/),
+    },
+    colors: shirtColorContext  // Shirt color swatches
+};
+
+
