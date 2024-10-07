@@ -87,19 +87,6 @@ export const loadAccessoryAssets = (context) => {
     return assets;
 };
 
-export const loadMustacheAssets = (context) => {
-    const keys = context.keys();
-    const values = keys.map(context);
-    return values; // Return array of assets
-};
-
-export const loadBeardAssets = (context) => {
-    const keys = context.keys();
-    const values = keys.map(context);
-    return values; // Return array of assets
-};
-
-
 export const loadCheekboneAssets = (context) => {
     const keys = context.keys();
     const values = keys.map(context);
@@ -317,4 +304,34 @@ export const loadEyeMakeupAssets = (context) => {
         })),
     };
     return assets;
+};
+
+// loadAssets.js
+
+export const loadMustacheAssets = (context) => {
+    const keys = context.keys();
+    const values = keys.map(context);
+    return values.map((asset, index) => ({
+        asset,
+        key: keys[index],
+    }));
+};
+
+export const loadBeardAssets = (context) => {
+    const keys = context.keys();
+    const values = keys.map(context);
+    return values.map((asset, index) => ({
+        asset,
+        key: keys[index],
+    }));
+};
+
+export const loadClothesColorSwatches = (context) => {
+    const keys = context.keys();
+    const values = keys.map(context);
+    const swatches = values.map((asset, index) => ({
+        asset,
+        key: keys[index],
+    }));
+    return swatches;
 };

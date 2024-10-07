@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { loadMakeupColorSwatches, loadLipShapeAssets, skinToneSwatches, hairColorSwatches, loadFrontLayerFringeAssets, loadSecondaryFringeAssets, loadMouthExpressionAssets, loadLipAssets, loadNoseApexAssets, loadNoseBridgeAssets, loadShirtAssets, loadShoulderAssets, loadChestVolumeAssets, loadEyeballAssets, loadEyeShapeAssets, loadEyeMakeupAssets, loadEyeSocketShadowAssets, loadHeadAssets, loadChinAssets, loadEarAssets, loadHairAssets, loadFaceScarAssets, loadBodyScarAssets, loadBackgroundAssets, loadAccessoryAssets, loadBeardAssets, loadMustacheAssets, loadCheekboneAssets, loadEyelashAssets, loadEyeColorAssets } from '../utilities/loadAssets';
+import { loadClothesColorSwatches, loadMakeupColorSwatches, loadLipShapeAssets, skinToneSwatches, hairColorSwatches, loadFrontLayerFringeAssets, loadSecondaryFringeAssets, loadMouthExpressionAssets, loadLipAssets, loadNoseApexAssets, loadNoseBridgeAssets, loadShirtAssets, loadShoulderAssets, loadChestVolumeAssets, loadEyeballAssets, loadEyeShapeAssets, loadEyeMakeupAssets, loadEyeSocketShadowAssets, loadHeadAssets, loadChinAssets, loadEarAssets, loadHairAssets, loadFaceScarAssets, loadBodyScarAssets, loadBackgroundAssets, loadAccessoryAssets, loadBeardAssets, loadMustacheAssets, loadCheekboneAssets, loadEyelashAssets, loadEyeColorAssets } from '../utilities/loadAssets';
 import './SafeSpace.css'; // Assuming you're using the provided CSS
 
 const SafeSpace = () => {
@@ -124,16 +124,23 @@ const SafeSpace = () => {
     // Load lip shape assets
     const lipShapeAssets = loadLipShapeAssets(require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/3-Face-Parts/Mouth/Lip-Shape', true, /\.(png|jpe?g|svg)$/));
 
-// Load makeup color swatches
-const makeupColorSwatches = loadMakeupColorSwatches(
+    // Load makeup color swatches
+    const makeupColorSwatches = loadMakeupColorSwatches(
+        require.context(
+            '../media/Tasia-Pixel-Project-Revision-1056x1056/14-Color-Swatches',
+            false,
+            /Makeup-Color-\d+\.(png|jpe?g|svg)$/
+        )
+    );
+
+// Load clothes color swatches
+const clothesColorSwatches = loadClothesColorSwatches(
     require.context(
         '../media/Tasia-Pixel-Project-Revision-1056x1056/14-Color-Swatches',
         false,
-        /Makeup-Color-\d+\.(png|jpe?g|svg)$/
+        /Clothes-Color-\d+\.(png|jpe?g|svg)$/
     )
 );
-
-
 
     // Set the default chin to 'Chin-1' when the component mounts
     useEffect(() => {
@@ -348,55 +355,132 @@ const makeupColorSwatches = loadMakeupColorSwatches(
         setSelectedAccessory(accessory);
     };
 
-    const handleMustacheLineworkChange = (mustacheLinework) => {
-        const currentColorNumber = selectedMustacheColor?.match(/Color-(\d+)/)?.[1]; // Extract current color number if any
+    const handleMustacheLineworkChange = ({ asset, key }) => {
+        setSelectedMustacheLinework({ asset, key });
+    
+        const currentColorNumberMatch = selectedMustacheColor?.key.match(/Hair-Color-(\d+)/);
+        const currentColorNumber = currentColorNumberMatch ? currentColorNumberMatch[1] : null;
+    
+        if (currentColorNumber) {
+            const mustacheNumberMatch = key.match(/Face-Hair-\d+/);
+            if (mustacheNumberMatch) {
+                const mustacheNumber = mustacheNumberMatch[0];
+    
+                const matchingMustacheColor = mustacheAssets.find(({ key }) =>
+                    key.includes(mustacheNumber) && key.includes(`Hair-Color-${currentColorNumber}`)
+                );
+    
+                if (matchingMustacheColor) {
+                    setSelectedMustacheColor(matchingMustacheColor);
+                } else {
+                    setSelectedMustacheColor(null);
+                }
+            } else {
+                console.warn('Could not extract mustache number from key');
+                setSelectedMustacheColor(null);
+            }
+        } else {
+            setSelectedMustacheColor(null);
+        }
+    };
+    
 
-        setSelectedMustacheLinework(mustacheLinework);
 
-        // Find the matching color for the new mustache linework
-        const matchingMustacheColor = mustacheAssets.find(asset =>
-            asset.includes(mustacheLinework.match(/Face-Hair-\d+/)[0]) &&
-            asset.includes(`Color-${currentColorNumber}`)
+    const handleMustacheColorChange = (swatch) => {
+        const colorNumberMatch = swatch.match(/Hair-Color-(\d+)/);
+        if (!colorNumberMatch) {
+            console.warn('Could not extract color number from swatch');
+            return;
+        }
+        const colorNumber = colorNumberMatch[1];
+    
+        if (!selectedMustacheLinework) {
+            console.warn('No mustache linework selected');
+            return;
+        }
+    
+        const mustacheNumberMatch = selectedMustacheLinework.key.match(/Face-Hair-\d+/);
+        if (!mustacheNumberMatch) {
+            console.warn('Could not extract mustache number from selectedMustacheLinework');
+            return;
+        }
+        const mustacheNumber = mustacheNumberMatch[0];
+    
+        const matchingMustacheColor = mustacheAssets.find(({ key }) =>
+            key.includes(mustacheNumber) && key.includes(`Hair-Color-${colorNumber}`)
         );
-
-        // If matching color found, apply it
+    
         if (matchingMustacheColor) {
             setSelectedMustacheColor(matchingMustacheColor);
         } else {
-            setSelectedMustacheColor(null); // Clear color if no matching color found
+            console.warn(`No matching mustache color found for ${mustacheNumber} and Hair-Color-${colorNumber}`);
+            setSelectedMustacheColor(null);
         }
     };
-
-
-    // Handle mustache color change
-    const handleMustacheColorChange = (mustacheColor) => {
-        setSelectedMustacheColor(mustacheColor);
+    
+    const handleBeardLineworkChange = ({ asset, key }) => {
+        setSelectedBeardLinework({ asset, key });
+    
+        const currentColorNumberMatch = selectedBeardColor?.key.match(/Hair-Color-(\d+)/);
+        const currentColorNumber = currentColorNumberMatch ? currentColorNumberMatch[1] : null;
+    
+        if (currentColorNumber) {
+            const beardNumberMatch = key.match(/Face-Hair-\d+/);
+            if (beardNumberMatch) {
+                const beardNumber = beardNumberMatch[0];
+    
+                const matchingBeardColor = beardAssets.find(({ key }) =>
+                    key.includes(beardNumber) && key.includes(`Hair-Color-${currentColorNumber}`)
+                );
+    
+                if (matchingBeardColor) {
+                    setSelectedBeardColor(matchingBeardColor);
+                } else {
+                    setSelectedBeardColor(null);
+                }
+            } else {
+                console.warn('Could not extract beard number from key');
+                setSelectedBeardColor(null);
+            }
+        } else {
+            setSelectedBeardColor(null);
+        }
     };
+    
 
-    const handleBeardLineworkChange = (beardLinework) => {
-        const currentColorNumber = selectedBeardColor?.match(/Color-(\d+)/)?.[1]; // Extract current color number if any
-
-        setSelectedBeardLinework(beardLinework);
-
-        // Find the matching color for the new beard linework
-        const matchingBeardColor = beardAssets.find(asset =>
-            asset.includes(beardLinework.match(/Face-Hair-\d+/)[0]) &&
-            asset.includes(`Color-${currentColorNumber}`)
+    // Handle beard color change
+    const handleBeardColorChange = (swatch) => {
+        const colorNumberMatch = swatch.match(/Hair-Color-(\d+)/);
+        if (!colorNumberMatch) {
+            console.warn('Could not extract color number from swatch');
+            return;
+        }
+        const colorNumber = colorNumberMatch[1];
+    
+        if (!selectedBeardLinework) {
+            console.warn('No beard linework selected');
+            return;
+        }
+    
+        const beardNumberMatch = selectedBeardLinework.key.match(/Face-Hair-\d+/);
+        if (!beardNumberMatch) {
+            console.warn('Could not extract beard number from selectedBeardLinework');
+            return;
+        }
+        const beardNumber = beardNumberMatch[0];
+    
+        const matchingBeardColor = beardAssets.find(({ key }) =>
+            key.includes(beardNumber) && key.includes(`Hair-Color-${colorNumber}`)
         );
-
-        // If matching color found, apply it
+    
         if (matchingBeardColor) {
             setSelectedBeardColor(matchingBeardColor);
         } else {
-            setSelectedBeardColor(null); // Clear color if no matching color found
+            console.warn(`No matching beard color found for ${beardNumber} and Hair-Color-${colorNumber}`);
+            setSelectedBeardColor(null);
         }
     };
-
-
-    // Handle beard color change
-    const handleBeardColorChange = (beardColor) => {
-        setSelectedBeardColor(beardColor);
-    };
+    
 
 
     const handleCheekboneChange = (cheekbone) => {
@@ -427,7 +511,7 @@ const makeupColorSwatches = loadMakeupColorSwatches(
         const matchingEyeMakeup = eyeMakeupAssets.makeup.find(({ key }) =>
             key.includes(`Makeup-Color-${colorNumber}`)
         );
-    
+
         if (matchingEyeMakeup) {
             setSelectedEyeMakeup(matchingEyeMakeup);
         } else {
@@ -435,7 +519,7 @@ const makeupColorSwatches = loadMakeupColorSwatches(
             setSelectedEyeMakeup(null);
         }
     };
-    
+
 
     const handleEyeSocketShadowChange = (eyeSocketShadow) => {
         setSelectedEyeSocketShadow(eyeSocketShadow);
@@ -455,84 +539,79 @@ const makeupColorSwatches = loadMakeupColorSwatches(
 
 
     const handleShoulderLineworkChange = (linework) => {
-        // Step 1: Set the selected shoulder linework first
         setSelectedShoulderLinework(linework);
-
-        // Step 2: Extract the shoulder type (Thin, Broad, Narrow) from the linework and capitalize the first letter
-        let shoulderType = linework.match(/(Thin|Broad|Narrow)-Shoulder/)?.[1]; // e.g., "Broad"
-        if (shoulderType) {
-            shoulderType = shoulderType.charAt(0).toUpperCase() + shoulderType.slice(1).toLowerCase(); // Ensure proper case
-        }
-
-        // Ensure shoulderType is defined
-        if (!shoulderType) {
-            console.warn("No shoulder type found in the linework.");
-            return;
-        }
-
-        // Step 3: Update the skin color size for the new shoulder size
-        if (selectedShoulderSkinTone) {
-            // Extract the skin tone number from the current skin tone (e.g., Skin-Tone-3)
-            const selectedToneNumber = selectedShoulderSkinTone.match(/Skin-Tone-(\d+)/)?.[1];
-
-            if (selectedToneNumber) {
-                // Find the corresponding skin tone for the new shoulder size
-                const matchingShoulderSkinTone = shoulderAssets.colors.find(file =>
-                    file.includes(`${shoulderType}-Shoulder-Skin-Tone-${selectedToneNumber}`)
-                );
-
-                // Log the matching skin tone path
-                console.log("Matching Shoulder Skin Tone Path:", matchingShoulderSkinTone);
-
-                // If a matching skin tone is found, update the state
-                if (matchingShoulderSkinTone) {
-                    setSelectedShoulderSkinTone(matchingShoulderSkinTone);
-                } else {
-                    console.warn(`No matching shoulder skin tone found for ${shoulderType} and skin tone ${selectedToneNumber}`);
-                }
-            } else {
-                console.warn("No skin tone number found in selectedShoulderSkinTone.");
-            }
-        }
-
-        // Step 4: Update the shirt linework and color based on the new shoulder type
-        const shirtNumber = selectedShirtLinework?.match(/Top-(\d+)/)?.[1]; // e.g., "Top-8"
-
-        if (shirtNumber) {
-            // Find the corresponding shirt linework for the new shoulder size
-            const matchingShirtLinework = shirtAssets.linework[shoulderType.toLowerCase()]?.find(
-                (shirt) => shirt.includes(`Top-${shirtNumber}`)
-            );
-
-            // Log the new shirt linework path
-            console.log("New Shirt Linework Path:", matchingShirtLinework);
-
-            if (matchingShirtLinework) {
-                setSelectedShirtLinework(matchingShirtLinework); // Update the shirt linework
-
-                // Extract the current shirt color number (if any)
-                const currentColorNumber = selectedShirtColor?.match(/Color-(\d+)/)?.[1]; // e.g., "3"
-
-                if (currentColorNumber) {
-                    // Find the corresponding shirt color for the new shoulder size
-                    const matchingShirtColor = shirtAssets.colors[shoulderType.toLowerCase()]?.find(
-                        (color) => color.includes(`Top-${shirtNumber}`) && color.includes(`Color-${currentColorNumber}`)
+    
+        // Extract shoulder type from linework
+        const shoulderTypeMatch = linework.match(/(Thin|Broad|Narrow)-Shoulder/);
+        if (shoulderTypeMatch) {
+            const shoulderType = shoulderTypeMatch[1];
+            const shoulderTypeLower = shoulderType.toLowerCase();
+            setSelectedShoulderType(shoulderTypeLower);
+    
+            // Update shoulder skin tone to match the new shoulder type
+            if (selectedHeadSkinTone) {
+                const selectedToneNumberMatch = selectedHeadSkinTone.match(/Skin-Tone-(\d+)/);
+                if (selectedToneNumberMatch) {
+                    const selectedToneNumber = selectedToneNumberMatch[1];
+    
+                    // Find the matching shoulder skin tone asset
+                    const matchingShoulderSkinTone = shoulderAssets.colors.find(
+                        (file) => file.includes(`${shoulderType}-Shoulder-Skin-Tone-${selectedToneNumber}`)
                     );
-
-                    // Log the new shirt color path
-                    console.log("New Shirt Color Path:", matchingShirtColor);
-
-                    if (matchingShirtColor) {
-                        setSelectedShirtColor(matchingShirtColor); // Update the shirt color
+    
+                    if (matchingShoulderSkinTone) {
+                        setSelectedShoulderSkinTone(matchingShoulderSkinTone);
                     } else {
-                        console.warn(`No matching shirt color found for ${shoulderType}-Shoulder with Top-${shirtNumber} and Color-${currentColorNumber}`);
+                        console.warn(`No matching shoulder skin tone found for ${shoulderType}-Shoulder-Skin-Tone-${selectedToneNumber}`);
                     }
                 }
-            } else {
-                console.warn(`No matching shirt linework found for ${shoulderType}-Shoulder with Top-${shirtNumber}`);
             }
+    
+            // Update shirt linework and color to match the new shoulder type
+            if (selectedShirtLinework) {
+                const shirtNumberMatch = selectedShirtLinework.match(/Top-(\d+)/);
+                if (shirtNumberMatch) {
+                    const shirtNumber = shirtNumberMatch[1];
+    
+                    // Find matching shirt linework for the new shoulder type
+                    const matchingShirtLinework = shirtAssets.linework[shoulderTypeLower]?.find(
+                        (shirt) => shirt.includes(`Top-${shirtNumber}`)
+                    );
+    
+                    if (matchingShirtLinework) {
+                        setSelectedShirtLinework(matchingShirtLinework);
+    
+                        // Try to maintain the same shirt color
+                        const currentColorNumberMatch = selectedShirtColor?.match(/Color-(\d+)/);
+                        const currentColorNumber = currentColorNumberMatch ? currentColorNumberMatch[1] : null;
+    
+                        if (currentColorNumber) {
+                            const matchingShirtColor = shirtAssets.colors[shoulderTypeLower]?.find(
+                                (color) => color.includes(`Top-${shirtNumber}`) && color.includes(`Color-${currentColorNumber}`)
+                            );
+    
+                            if (matchingShirtColor) {
+                                setSelectedShirtColor(matchingShirtColor);
+                            } else {
+                                setSelectedShirtColor(null);
+                            }
+                        } else {
+                            setSelectedShirtColor(null);
+                        }
+                    } else {
+                        setSelectedShirtLinework(null);
+                        setSelectedShirtColor(null);
+                    }
+                } else {
+                    setSelectedShirtLinework(null);
+                    setSelectedShirtColor(null);
+                }
+            }
+        } else {
+            console.warn('Could not extract shoulder type from linework');
         }
     };
+    
 
 
 
@@ -601,13 +680,41 @@ const makeupColorSwatches = loadMakeupColorSwatches(
 
 
 
-    const handleShirtColorChange = (shirtColor) => {
-        // Step 1: Log the shirt color file path
-        console.log("Shirt Color Path (on click):", shirtColor);
-
-        // Step 2: Set the selected shirt color
-        setSelectedShirtColor(shirtColor);
+    const handleShirtColorChange = (swatchKey) => {
+        const colorNumberMatch = swatchKey.match(/Clothes-Color-(\d+)/);
+        if (!colorNumberMatch) {
+            console.warn('Could not extract color number from swatch key');
+            return;
+        }
+        const colorNumber = colorNumberMatch[1];
+    
+        if (!selectedShirtLinework) {
+            console.warn('No shirt linework selected');
+            return;
+        }
+    
+        const shirtNumberMatch = selectedShirtLinework.match(/Top-(\d+)/);
+        if (!shirtNumberMatch) {
+            console.warn('Could not extract shirt number from selectedShirtLinework');
+            return;
+        }
+        const shirtNumber = shirtNumberMatch[1];
+    
+        const shoulderType = selectedShoulderLinework.match(/(Thin|Broad|Narrow)-Shoulder/)[1].toLowerCase();
+    
+        // Find the matching shirt color asset
+        const matchingShirtColor = shirtAssets.colors[shoulderType]?.find(colorAsset =>
+            colorAsset.includes(`Top-${shirtNumber}`) && colorAsset.includes(`Color-${colorNumber}`)
+        );
+    
+        if (matchingShirtColor) {
+            setSelectedShirtColor(matchingShirtColor);
+        } else {
+            console.warn(`No matching shirt color found for shirtNumber ${shirtNumber}, colorNumber ${colorNumber}, shoulderType ${shoulderType}`);
+            setSelectedShirtColor(null);
+        }
     };
+    
 
     useEffect(() => {
         // Automatically update shirt linework and color when shoulder linework changes
@@ -659,7 +766,7 @@ const makeupColorSwatches = loadMakeupColorSwatches(
     const handleLipColorChange = (colorNumber) => {
         if (selectedLipShape) {
             const selectedLipNumber = selectedLipShape.key.match(/Lip-Shape-(\d+)/)[1];
-    
+
             // Find the lip color asset corresponding to the selected lip number and color number
             const matchingLipColor = lipAssets.find(({ key }) => {
                 const lipNumberMatch = key.match(/Lip-(\d+)\//);
@@ -671,7 +778,7 @@ const makeupColorSwatches = loadMakeupColorSwatches(
                     colorNumberMatch[1] === colorNumber
                 );
             });
-    
+
             if (matchingLipColor) {
                 setSelectedLipColor(matchingLipColor);
             } else {
@@ -680,24 +787,24 @@ const makeupColorSwatches = loadMakeupColorSwatches(
             }
         }
     };
-    
+
 
 
     const handleLipShapeChange = ({ asset, key }) => {
         setSelectedLipShape({ asset, key });
-    
+
         // Check if a lip color is already selected
         if (selectedLipColor) {
             // Extract the color number from the previously selected lip color
             const prevColorNumberMatch = selectedLipColor.key.match(/Color-(\d+)/);
             if (prevColorNumberMatch) {
                 const colorNumber = prevColorNumberMatch[1];
-    
+
                 // Extract the new lip number from the selected lip shape
                 const newLipNumberMatch = key.match(/Lip-Shape-(\d+)/);
                 if (newLipNumberMatch) {
                     const newLipNumber = newLipNumberMatch[1];
-    
+
                     // Find the matching lip color for the new lip shape with the same color number
                     const matchingLipColor = lipAssets.find(({ asset, key }) => {
                         const lipNumberMatch = key.match(/Lip-(\d+)\//);
@@ -709,7 +816,7 @@ const makeupColorSwatches = loadMakeupColorSwatches(
                         }
                         return false;
                     });
-    
+
                     // If a matching lip color is found, apply it
                     if (matchingLipColor) {
                         setSelectedLipColor(matchingLipColor);
@@ -730,7 +837,7 @@ const makeupColorSwatches = loadMakeupColorSwatches(
             setSelectedLipColor(null);
         }
     };
-    
+
 
 
 
@@ -875,14 +982,14 @@ const makeupColorSwatches = loadMakeupColorSwatches(
                     />
                 )}
 
-{/* Render selected eye makeup */}
-{selectedEyeMakeup && (
-    <img
-        src={selectedEyeMakeup.asset}
-        alt="Selected Eye Makeup"
-        className="character-layer eye-makeup"
-    />
-)}
+                {/* Render selected eye makeup */}
+                {selectedEyeMakeup && (
+                    <img
+                        src={selectedEyeMakeup.asset}
+                        alt="Selected Eye Makeup"
+                        className="character-layer eye-makeup"
+                    />
+                )}
 
 
                 {/* Render selected eye socket shadow */}
@@ -982,25 +1089,25 @@ const makeupColorSwatches = loadMakeupColorSwatches(
                 {/* Render selected mustache linework */}
                 {selectedMustacheLinework && (
                     <img
-                        src={selectedMustacheLinework}
+                        src={selectedMustacheLinework.asset}
                         alt="Selected Mustache Linework"
                         className="character-layer mustache-linework"
                     />
                 )}
 
                 {/* Render selected mustache color */}
-                {selectedMustacheColor && (
-                    <img
-                        src={selectedMustacheColor}
-                        alt="Selected Mustache Color"
-                        className="character-layer mustache-color"
-                    />
-                )}
+{selectedMustacheColor && (
+    <img
+        src={selectedMustacheColor.asset}
+        alt="Selected Mustache Color"
+        className="character-layer mustache-color"
+    />
+)}
 
                 {/* Render selected beard linework */}
                 {selectedBeardLinework && (
                     <img
-                        src={selectedBeardLinework}
+                        src={selectedBeardLinework.asset}
                         alt="Selected Beard Linework"
                         className="character-layer beard-linework"
                     />
@@ -1008,12 +1115,12 @@ const makeupColorSwatches = loadMakeupColorSwatches(
 
                 {/* Render selected beard color */}
                 {selectedBeardColor && (
-                    <img
-                        src={selectedBeardColor}
-                        alt="Selected Beard Color"
-                        className="character-layer beard-color"
-                    />
-                )}
+    <img
+        src={selectedBeardColor.asset}
+        alt="Selected Beard Color"
+        className="character-layer beard-color"
+    />
+)}
 
 
                 {/* Render shoulder linework */}
@@ -1049,13 +1156,13 @@ const makeupColorSwatches = loadMakeupColorSwatches(
                         className="character-layer shirt-linework" />
                 )}
 
-                {selectedShirtColor && (
-                    <img
-                        src={selectedShirtColor}
-                        alt="Shirt Color"
-                        className="character-layer shirt-color" />
-                )}
-
+{selectedShirtColor && (
+    <img
+        src={selectedShirtColor}
+        alt="Shirt Color"
+        className="character-layer shirt-color"
+    />
+)}
 
 
                 {/* Render selected background */}
@@ -1254,39 +1361,39 @@ const makeupColorSwatches = loadMakeupColorSwatches(
                     </button>
                 </div>
 
-{/* Eye Makeup Options */}
-<div className="option-category">
-    <h3>Eye Makeup</h3>
-    {(() => {
-        // Get available eye makeup color numbers
-        const availableEyeMakeupColorNumbers = Array.from(
-            new Set(
-                eyeMakeupAssets.makeup
-                    .map(({ key }) => {
-                        const colorNumberMatch = key.match(/Makeup-Color-(\d+)/);
-                        return colorNumberMatch ? colorNumberMatch[1] : null;
-                    })
-                    .filter(Boolean)
-            )
-        );
+                {/* Eye Makeup Options */}
+                <div className="option-category">
+                    <h3>Eye Makeup</h3>
+                    {(() => {
+                        // Get available eye makeup color numbers
+                        const availableEyeMakeupColorNumbers = Array.from(
+                            new Set(
+                                eyeMakeupAssets.makeup
+                                    .map(({ key }) => {
+                                        const colorNumberMatch = key.match(/Makeup-Color-(\d+)/);
+                                        return colorNumberMatch ? colorNumberMatch[1] : null;
+                                    })
+                                    .filter(Boolean)
+                            )
+                        );
 
-        // Render swatches for available colors
-        return availableEyeMakeupColorNumbers.map((colorNumber) => {
-            // Find the swatch with this color number
-            const swatch = makeupColorSwatches.find(({ key }) =>
-                key.includes(`Makeup-Color-${colorNumber}`)
-            );
-            if (swatch) {
-                return (
-                    <button key={colorNumber} onClick={() => handleEyeMakeupChange(colorNumber)}>
-                        <img src={swatch.asset} alt={`Eye Makeup Color ${colorNumber}`} />
-                    </button>
-                );
-            }
-            return null;
-        });
-    })()}
-</div>
+                        // Render swatches for available colors
+                        return availableEyeMakeupColorNumbers.map((colorNumber) => {
+                            // Find the swatch with this color number
+                            const swatch = makeupColorSwatches.find(({ key }) =>
+                                key.includes(`Makeup-Color-${colorNumber}`)
+                            );
+                            if (swatch) {
+                                return (
+                                    <button key={colorNumber} onClick={() => handleEyeMakeupChange(colorNumber)}>
+                                        <img src={swatch.asset} alt={`Eye Makeup Color ${colorNumber}`} />
+                                    </button>
+                                );
+                            }
+                            return null;
+                        });
+                    })()}
+                </div>
 
 
 
@@ -1322,50 +1429,50 @@ const makeupColorSwatches = loadMakeupColorSwatches(
 
 
 
-{/* Lip Color Options */}
-{selectedLipShape && (
-    <div className="option-category">
-        <h3>Lip Colors</h3>
-        {(() => {
-            // Get the selected lip number
-            const selectedLipNumber = selectedLipShape.key.match(/Lip-Shape-(\d+)/)[1];
+                {/* Lip Color Options */}
+                {selectedLipShape && (
+                    <div className="option-category">
+                        <h3>Lip Colors</h3>
+                        {(() => {
+                            // Get the selected lip number
+                            const selectedLipNumber = selectedLipShape.key.match(/Lip-Shape-(\d+)/)[1];
 
-            // Get available lip colors for the selected lip shape
-            const availableLipColors = lipAssets.filter(({ key }) => {
-                const lipNumberMatch = key.match(/Lip-(\d+)\//);
-                return lipNumberMatch && lipNumberMatch[1] === selectedLipNumber;
-            });
+                            // Get available lip colors for the selected lip shape
+                            const availableLipColors = lipAssets.filter(({ key }) => {
+                                const lipNumberMatch = key.match(/Lip-(\d+)\//);
+                                return lipNumberMatch && lipNumberMatch[1] === selectedLipNumber;
+                            });
 
-            // Get unique color numbers
-            const availableColorNumbers = Array.from(
-                new Set(
-                    availableLipColors
-                        .map(({ key }) => {
-                            const colorNumberMatch = key.match(/Color-(\d+)/);
-                            return colorNumberMatch ? colorNumberMatch[1] : null;
-                        })
-                        .filter(Boolean)
-                )
-            );
+                            // Get unique color numbers
+                            const availableColorNumbers = Array.from(
+                                new Set(
+                                    availableLipColors
+                                        .map(({ key }) => {
+                                            const colorNumberMatch = key.match(/Color-(\d+)/);
+                                            return colorNumberMatch ? colorNumberMatch[1] : null;
+                                        })
+                                        .filter(Boolean)
+                                )
+                            );
 
-            // Render swatches for available colors
-            return availableColorNumbers.map((colorNumber) => {
-                // Find the swatch with this color number
-                const swatch = makeupColorSwatches.find(({ key }) =>
-                    key.includes(`Makeup-Color-${colorNumber}`)
-                );
-                if (swatch) {
-                    return (
-                        <button key={colorNumber} onClick={() => handleLipColorChange(colorNumber)}>
-                            <img src={swatch.asset} alt={`Lip Color ${colorNumber}`} />
-                        </button>
-                    );
-                }
-                return null;
-            });
-        })()}
-    </div>
-)}
+                            // Render swatches for available colors
+                            return availableColorNumbers.map((colorNumber) => {
+                                // Find the swatch with this color number
+                                const swatch = makeupColorSwatches.find(({ key }) =>
+                                    key.includes(`Makeup-Color-${colorNumber}`)
+                                );
+                                if (swatch) {
+                                    return (
+                                        <button key={colorNumber} onClick={() => handleLipColorChange(colorNumber)}>
+                                            <img src={swatch.asset} alt={`Lip Color ${colorNumber}`} />
+                                        </button>
+                                    );
+                                }
+                                return null;
+                            });
+                        })()}
+                    </div>
+                )}
 
 
 
@@ -1458,55 +1565,56 @@ const makeupColorSwatches = loadMakeupColorSwatches(
 
 
                 {/* Mustache Linework Options */}
-                <div className="option-category">
-                    <h3>Mustaches</h3>
-                    {mustacheAssets.filter(asset => !asset.includes('Hair-Color')).map((mustacheLinework, index) => (
-                        <button key={index} onClick={() => handleMustacheLineworkChange(mustacheLinework)}>
-                            <img src={mustacheLinework} alt={`Mustache Linework ${index}`} />
-                        </button>
-                    ))}
-                </div>
+<div className="option-category">
+    <h3>Mustaches</h3>
+    {mustacheAssets
+        .filter(({ key }) => !key.includes('Hair-Color'))
+        .map(({ asset, key }, index) => (
+            <button key={index} onClick={() => handleMustacheLineworkChange({ asset, key })}>
+                <img src={asset} alt={`Mustache Linework ${index}`} />
+            </button>
+        ))}
+</div>
+
 
                 {/* Mustache Color Options */}
                 {selectedMustacheLinework && (
-                    <div className="option-category">
-                        <h3>Mustache Colors</h3>
-                        {mustacheAssets
-                            .filter(asset => asset.includes(selectedMustacheLinework.match(/Face-Hair-\d+/)[0])) // Match by linework type
-                            .filter(asset => asset.includes('Hair-Color')) // Only include files with 'Hair-Color' in their names
-                            .map((mustacheColor, index) => (
-                                <button key={index} onClick={() => handleMustacheColorChange(mustacheColor)}>
-                                    <img src={mustacheColor} alt={`Mustache Color ${index}`} />
-                                </button>
-                            ))}
-                    </div>
-                )}
+    <div className="option-category">
+        <h3>Mustache Colors</h3>
+        {hairColorSwatches.map((swatch, index) => (
+            <button key={index} onClick={() => handleMustacheColorChange(swatch)}>
+                <img src={swatch} alt={`Mustache Color ${index}`} />
+            </button>
+        ))}
+    </div>
+)}
 
 
                 {/* Beard Linework Options */}
-                <div className="option-category">
-                    <h3>Beards</h3>
-                    {beardAssets.filter(asset => !asset.includes('Hair-Color')).map((beardLinework, index) => (
-                        <button key={index} onClick={() => handleBeardLineworkChange(beardLinework)}>
-                            <img src={beardLinework} alt={`Beard Linework ${index}`} />
-                        </button>
-                    ))}
-                </div>
+<div className="option-category">
+    <h3>Beards</h3>
+    {beardAssets
+        .filter(({ key }) => !key.includes('Hair-Color'))
+        .map(({ asset, key }, index) => (
+            <button key={index} onClick={() => handleBeardLineworkChange({ asset, key })}>
+                <img src={asset} alt={`Beard Linework ${index}`} />
+            </button>
+        ))}
+</div>
+
 
                 {/* Beard Color Options */}
-                {selectedBeardLinework && (
-                    <div className="option-category">
-                        <h3>Beard Colors</h3>
-                        {beardAssets
-                            .filter(asset => asset.includes(selectedBeardLinework.match(/Face-Hair-\d+/)[0])) // Match by linework type
-                            .filter(asset => asset.includes('Hair-Color')) // Only include files with 'Hair-Color' in their names
-                            .map((beardColor, index) => (
-                                <button key={index} onClick={() => handleBeardColorChange(beardColor)}>
-                                    <img src={beardColor} alt={`Beard Color ${index}`} />
-                                </button>
-                            ))}
-                    </div>
-                )}
+{selectedBeardLinework && (
+    <div className="option-category">
+        <h3>Beard Colors</h3>
+        {hairColorSwatches.map((swatch, index) => (
+            <button key={index} onClick={() => handleBeardColorChange(swatch)}>
+                <img src={swatch} alt={`Beard Color ${index}`} />
+            </button>
+        ))}
+    </div>
+)}
+
 
 
                 {/* Ear Linework Options */}
@@ -1530,17 +1638,17 @@ const makeupColorSwatches = loadMakeupColorSwatches(
                     ))}
                 </div>
 
-                {selectedShirtLinework && (
-                    <div className="option-category">
-                        <h3>Shirt Colors</h3>
-                        {shirtAssets.colors[selectedShoulderType]?.filter(colorAsset => colorAsset.includes(selectedShirtLinework.match(/Top-\d+/)[0])) // Match colors to selected linework
-                            .map((colorAsset, index) => (
-                                <button key={index} onClick={() => handleShirtColorChange(colorAsset)}>
-                                    <img src={colorAsset} alt={`Shirt Color ${index}`} />
-                                </button>
-                            ))}
-                    </div>
-                )}
+{selectedShirtLinework && (
+    <div className="option-category">
+        <h3>Shirt Colors</h3>
+        {clothesColorSwatches.map(({ asset, key }, index) => (
+            <button key={index} onClick={() => handleShirtColorChange(key)}>
+                <img src={asset} alt={`Shirt Color ${index}`} />
+            </button>
+        ))}
+    </div>
+)}
+
 
 
                 {/* Background Options */}
