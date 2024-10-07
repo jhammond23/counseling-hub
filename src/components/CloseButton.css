@@ -1,0 +1,34 @@
+/* CloseButton.css */
+.close-button {
+    position: absolute;
+    background: transparent !important;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1000;
+    box-shadow: 10px 10px 30px #00000090;
+    aspect-ratio: 1/1;
+    height: 150px;
+    width: 150px;;
+}
+
+.close-button:hover {
+    color: darkred;
+}
+
+  
+  /* Adjustments for UI options */
+  .UI-tile .close-button {
+    top: 0px;
+    right: 0px;
+    font-size: 3rem;
+    color: #000;
+    transition: all 0.3s;
+  }
+  
+  .UI-tile .close-button:hover {
+    color: #f00;
+    font-size: 5rem;
+
+  }
