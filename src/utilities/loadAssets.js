@@ -335,3 +335,15 @@ export const loadClothesColorSwatches = (context) => {
     }));
     return swatches;
 };
+
+export const loadEyebrowAssets = (context) => {
+    const keys = context.keys();
+    const values = keys.map(context);
+    const assets = {
+        linework: values.map((asset, index) => ({
+            asset,
+            key: keys[index],
+        })),
+    };
+    return assets;
+};

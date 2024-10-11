@@ -47,7 +47,7 @@
     color: #418663;
     font-size: 2rem;
     text-align: center;
-    font-family: 'Rubik Bubbles', sans-serif;
+    font-family: 'VT323', sans-serif;
   }
   
   /* Style for input fields */
@@ -79,7 +79,7 @@
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s ease;
-    font-family: 'Rubik Bubbles', sans-serif;
+    font-family: 'VT323', sans-serif;
   }
   
   /* Hover state for buttons */

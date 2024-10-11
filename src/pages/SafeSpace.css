@@ -63,43 +63,97 @@
 /* Customization Options Panel */
 .customization-options {
     width: max-content; /* Adjust width to balance with the larger preview */
-    background: url('../media/crumpled-paper.jpg') no-repeat center center/cover;
-    background-size: 130%;
-    box-shadow: 0px 4px 18px #000;
-    border-radius: 12px;
+    background: url('../media/boarders/boardSafeSpaceNoBG-removebg-preview.png') no-repeat center center/cover;
     overflow-y: auto;
-    height: 100%;
-    border: 8px solid #3e2000;
+    height: 90%;
+    padding: 60px;
 }
 
+/* no visible scroll bar */
+
+.customization-options::-webkit-scrollbar {
+    display: none;
+}
+
+
 .customization-options h2 {
-    font-size: 24px;
-    color: #333;
+    font-size: 2.5rem;
+    color: #fff;
+    text-shadow: 2px 2px 4px #000;
     margin-bottom: 20px;
     text-align: center;
 }
 
+.customization-options h3 {
+    font-size: 1.75rem;
+    color: #fff;
+    text-shadow: 2px 2px 4px #000;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.options-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    flex-direction: column;
+}
+
+/* 70% width for the category buttons */
 .option-category {
     text-align: center;
+    width: 100%;
 
+}
+
+/* 30% width for the quick menu buttons */
+
+.option-quick-menu {
+    text-align: center;
+    width: 15%;
+}
+
+.option-quick-menu button {
+    display: inline-block;
+    color: #ffffff;
+    padding: 8px 8px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    height: 150px;
+    width: fit-content;
+    border: 4px solid #3e2000;
 }
 
 /* UI Tile adjustments */
-.UI-tile {
+.UI-tile, .UI-swatch {
     position: relative;
     display: inline-block;
     margin: 5px;
-    height: 150px;
-    width: 150px;
 
 }
 
+.UI-tile {
+    height: 150px;
+    width: 150px;
+}
+
+.UI-swatch {
+    height: 75px;
+    width: 75px;
+}
+
+/* Common button styles */
 .UI-tile-button {
     position: relative;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    height: 150px;
-    width: 150px;
+    padding: 0;
+    border: none;
+    background: #f9f9f9;
+    color: #000;
+    aspect-ratio: 1/1;
+    font-size: 1.5rem;
 }
 
 .UI-tile-button img {
@@ -108,14 +162,35 @@
     object-fit: contain;
 }
 
-/* Selected Tiles */
-.UI-tile.selected .UI-tile-button {
-    background-color: #8aea97;
-    border: none;
-
+/* Specific sizes for tiles and swatches */
+.UI-tile .UI-tile-button {
+    height: 150px;
+    width: 150px;
 }
 
-.UI-tile.selected .UI-tile-button:hover {
+.UI-swatch .UI-tile-button {
+    height: 75px;
+    width: 75px;
+    border-radius: 50%; /* Make swatches circular */
+    background-color: #f9f9f9;
+}
+
+/* Image styles */
+.UI-tile-button img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: inherit; /* Inherit border-radius from parent */
+}
+
+/* Selected Tiles */
+.UI-tile.selected .UI-tile-button,
+.UI-swatch.selected .UI-tile-button {
+    background-color: #8aea97;
+}
+
+.UI-tile.selected .UI-tile-button:hover,
+.UI-swatch.selected .UI-tile-button:hover {
     background-color: rgb(255, 151, 151);
 }
 
@@ -124,7 +199,7 @@
     position: absolute;
     top: 5px;
     right: 5px;
-    background: transparent;
+    background: transparent !important;
     border: none;
     font-size: 20px;
     cursor: pointer;
@@ -134,21 +209,17 @@
 }
 
 .close-button:hover {
-    color: #f00;
+    color: darkred;
 }
 
-
-
-.option-category h3 {
-    font-size: 20px;
-    color: #2F855A;
-    margin-bottom: 10px;
+/* Adjustments for UI options */
+.UI-tile .close-button {
+    font-size: 1.5rem;
 }
 
-.option-category button {
+.UI-tile-button, .UI-swatch {
     display: inline-block;
-    color: #ffffff;
-    padding: 8px 8px;
+    color: #3e2000;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -158,23 +229,41 @@
 }
 
 .option-category button img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+
 }
 
-.option-category button:hover {
-    background-color: #8aea97;
+
+.option-category .UI-swatch {
+    transition: all 0.15s ease;
 }
 
-.option-category button:focus {
+.option-category button:focus, .option-category .UI-swatch:focus {
     outline: none;
 }
 
-.option-category button:disabled {
+.option-category button:disabled, .option-category .UI-swatch:disabled {
     background-color: #a0aec0;
     cursor: not-allowed;
 }
+
+.color-swatch {
+    width: 75px !important; /* Set the desired width */
+    height: 75px !important; /* Set the desired height */
+    padding: 0px; /* Optional padding for spacing */
+    border-radius: 50% !important; /* Optional: make the swatches circular */
+}
+
+.color-swatch img {
+    width: 100%; /* Ensure the image scales within the button */
+    height: 100%; /* Ensure the image scales within the button */
+    object-fit: cover; /* Ensure the image fits inside the button properly */
+    border-radius: 50% !important; /* Optional: make the swatches circular */
+}
+
 
 /* Scrollbar Styling */
 .customization-options::-webkit-scrollbar {
@@ -190,6 +279,37 @@
     background-color: #2F855A;
     border-radius: 12px;
 }
+
+/* Green outline for hovered color swatches */
+.color-swatch:hover {
+    border: 4px solid #8aea97;
+}
+
+/* Green background for hovered attribute tiles */
+.UI-tile-button:hover {
+    background-color: #8aea97;
+}
+
+/* Green outline for selected color swatches */
+.color-swatch.selected {
+    border: 4px solid #8aea97;
+}
+
+/* Green background for selected attribute tiles */
+.UI-tile-button.selected {
+    background-color: #8aea97;
+}
+
+/* Red outline on hover when selected color swatch*/
+.color-swatch.selected.removeable:hover {
+    border: 4px solid red;
+}
+
+/* Red outline on hover when selected tile */
+.UI-tile-button.selected.removeable:hover {
+    background-color: red;
+}
+
 
 /* SafeSpace.css */
 

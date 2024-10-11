@@ -5,7 +5,7 @@ const About = () => {
   return (
     <main className='aboutPage cozyBackground'>
         <header className='aboutHeader'>
-            <h1 className='cozyTitle'>About Mirandus Hub</h1>
+            <h1 className='cozyTitle'>About Counseling Hub</h1>
         </header>
         <div className='aboutContentCont'>
             <p>

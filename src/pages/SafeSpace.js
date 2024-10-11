@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { loadClothesColorSwatches, loadMakeupColorSwatches, loadLipShapeAssets, skinToneSwatches, hairColorSwatches, loadFrontLayerFringeAssets, loadSecondaryFringeAssets, loadMouthExpressionAssets, loadLipAssets, loadNoseApexAssets, loadNoseBridgeAssets, loadShirtAssets, loadShoulderAssets, loadChestVolumeAssets, loadEyeballAssets, loadEyeShapeAssets, loadEyeMakeupAssets, loadEyeSocketShadowAssets, loadHeadAssets, loadChinAssets, loadEarAssets, loadHairAssets, loadFaceScarAssets, loadBodyScarAssets, loadBackgroundAssets, loadAccessoryAssets, loadBeardAssets, loadMustacheAssets, loadCheekboneAssets, loadEyelashAssets, loadEyeColorAssets } from '../utilities/loadAssets';
+import { loadEyebrowAssets, loadClothesColorSwatches, loadMakeupColorSwatches, loadLipShapeAssets, skinToneSwatches, hairColorSwatches, loadFrontLayerFringeAssets, loadSecondaryFringeAssets, loadMouthExpressionAssets, loadLipAssets, loadNoseApexAssets, loadNoseBridgeAssets, loadShirtAssets, loadShoulderAssets, loadChestVolumeAssets, loadEyeballAssets, loadEyeShapeAssets, loadEyeMakeupAssets, loadEyeSocketShadowAssets, loadHeadAssets, loadChinAssets, loadEarAssets, loadHairAssets, loadFaceScarAssets, loadBodyScarAssets, loadBackgroundAssets, loadAccessoryAssets, loadBeardAssets, loadMustacheAssets, loadCheekboneAssets, loadEyelashAssets, loadEyeColorAssets } from '../utilities/loadAssets';
 import './SafeSpace.css'; // Assuming you're using the provided CSS
 import CloseButton from '../components/CloseButton';
 
@@ -51,6 +51,9 @@ const SafeSpace = () => {
     const [selectedLipColor, setSelectedLipColor] = useState(null);
 
     const [selectedLipShape, setSelectedLipShape] = useState(null);
+    const [selectedEyebrow, setSelectedEyebrow] = useState(null);
+    const [selectedSkinToneSwatch, setSelectedSkinToneSwatch] = useState(null);
+
 
 
     useEffect(() => {
@@ -125,6 +128,8 @@ const SafeSpace = () => {
     // Load lip shape assets
     const lipShapeAssets = loadLipShapeAssets(require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/3-Face-Parts/Mouth/Lip-Shape', true, /\.(png|jpe?g|svg)$/));
 
+    const eyebrowAssets = loadEyebrowAssets(require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/3-Face-Parts/Eyebrows', true, /\.(png|jpe?g|svg)$/));
+
     // Load makeup color swatches
     const makeupColorSwatches = loadMakeupColorSwatches(
         require.context(
@@ -143,6 +148,13 @@ const SafeSpace = () => {
         )
     );
 
+
+    // Handle skin tone change
+    const handleSkinToneClick = (swatch) => {
+        setSelectedSkinToneSwatch(swatch);  // Set the clicked swatch as selected
+        handleSkinToneChange(swatch);  // Call your existing function to handle the skin tone change
+    };
+
     // Set the default chin to 'Chin-1' when the component mounts
     useEffect(() => {
         if (!selectedChinLinework) {
@@ -153,39 +165,39 @@ const SafeSpace = () => {
 
     // ... existing imports and code ...
 
-// Ensure default shoulder linework and shoulder type are set
-useEffect(() => {
-    if (!selectedShoulderLinework && shoulderAssets.linework.length > 0) {
-        const defaultLinework = shoulderAssets.linework.find(linework => linework.includes('Thin-Shoulder-1'));
-        if (defaultLinework) {
-            setSelectedShoulderLinework(defaultLinework);
-            setSelectedShoulderType('thin');
-        }
-    }
-}, [selectedShoulderLinework, shoulderAssets.linework]);
-
-
-
-// Set default shirt color to color 1
-useEffect(() => {
-    if (selectedShirtLinework && !selectedShirtColor && shirtAssets.colors[selectedShoulderType]?.length > 0) {
-        const shirtNumberMatch = selectedShirtLinework.match(/Top-(\d+)/);
-        if (shirtNumberMatch) {
-            const shirtNumber = shirtNumberMatch[1];
-            const colorNumber = '2'; // Default color number
-
-            const matchingShirtColor = shirtAssets.colors[selectedShoulderType]?.find(colorAsset =>
-                colorAsset.includes(`Top-${shirtNumber}`) && colorAsset.includes(`Color-${colorNumber}`)
-            );
-
-            if (matchingShirtColor) {
-                setSelectedShirtColor(matchingShirtColor);
-            } else {
-                console.warn(`No matching shirt color found for shirtNumber ${shirtNumber}, colorNumber ${colorNumber}, shoulderType ${selectedShoulderType}`);
+    // Ensure default shoulder linework and shoulder type are set
+    useEffect(() => {
+        if (!selectedShoulderLinework && shoulderAssets.linework.length > 0) {
+            const defaultLinework = shoulderAssets.linework.find(linework => linework.includes('Thin-Shoulder-1'));
+            if (defaultLinework) {
+                setSelectedShoulderLinework(defaultLinework);
+                setSelectedShoulderType('thin');
             }
         }
-    }
-}, [selectedShirtLinework, selectedShirtColor, shirtAssets.colors, selectedShoulderType]);
+    }, [selectedShoulderLinework, shoulderAssets.linework]);
+
+
+
+    // Set default shirt color to color 1
+    useEffect(() => {
+        if (selectedShirtLinework && !selectedShirtColor && shirtAssets.colors[selectedShoulderType]?.length > 0) {
+            const shirtNumberMatch = selectedShirtLinework.match(/Top-(\d+)/);
+            if (shirtNumberMatch) {
+                const shirtNumber = shirtNumberMatch[1];
+                const colorNumber = '2'; // Default color number
+
+                const matchingShirtColor = shirtAssets.colors[selectedShoulderType]?.find(colorAsset =>
+                    colorAsset.includes(`Top-${shirtNumber}`) && colorAsset.includes(`Color-${colorNumber}`)
+                );
+
+                if (matchingShirtColor) {
+                    setSelectedShirtColor(matchingShirtColor);
+                } else {
+                    console.warn(`No matching shirt color found for shirtNumber ${shirtNumber}, colorNumber ${colorNumber}, shoulderType ${selectedShoulderType}`);
+                }
+            }
+        }
+    }, [selectedShirtLinework, selectedShirtColor, shirtAssets.colors, selectedShoulderType]);
 
 
     // Update the skin tone when selecting
@@ -792,6 +804,12 @@ useEffect(() => {
         setSelectedNoseApex(apex);
     };
 
+    // Function to handle the change of eyebrow
+    const handleEyebrowChange = (eyebrow) => {
+        setSelectedEyebrow(eyebrow);
+    };
+
+
     const handleNoseBridgeChange = (bridge) => {
         setSelectedNoseBridge(bridge);
     };
@@ -972,7 +990,7 @@ useEffect(() => {
     const handleRemoveLowerEyelash = () => {
         setSelectedLowerEyelash(null);
     };
-    
+
     // nose apex
     const handleRemoveNoseApex = () => {
         setSelectedNoseApex(null);
@@ -1029,102 +1047,107 @@ useEffect(() => {
         setIsCleft(false);
     };
 
+    // eyebrow
+    const handleRemoveEyebrow = () => {
+        setSelectedEyebrow(null);
+    };
+
     // Utility function to select a random item from an array
-const getRandomElement = (arr) => arr[Math.floor(Math.random() * arr.length)];
+    const getRandomElement = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
-// Set default chin linework
-useEffect(() => {
-    if (!selectedChinLinework && chinAssets.linework.length > 0) {
-        const defaultChin = chinAssets.linework.find(file => file.includes('Chin-1') && !file.includes('Cleft'));
-        setSelectedChinLinework(defaultChin);
-    }
-}, [selectedChinLinework, chinAssets.linework]);
-
-// Set default ear linework
-useEffect(() => {
-    if (!selectedEarLinework && earAssets.linework.length > 0) {
-        const defaultEar = earAssets.linework.find(file => file.includes('Ear-7'));
-        setSelectedEarLinework(defaultEar);
-    }
-}, [selectedEarLinework, earAssets.linework]);
-
-// Ensure default shoulder linework and shoulder type are set
-useEffect(() => {
-    if (!selectedShoulderLinework && shoulderAssets.linework.length > 0) {
-        const defaultLinework = shoulderAssets.linework.find(linework => linework.includes('Thin-Shoulder-1'));
-        if (defaultLinework) {
-            setSelectedShoulderLinework(defaultLinework);
-            setSelectedShoulderType('thin');
+    // Set default chin linework
+    useEffect(() => {
+        if (!selectedChinLinework && chinAssets.linework.length > 0) {
+            const defaultChin = chinAssets.linework.find(file => file.includes('Chin-1') && !file.includes('Cleft'));
+            setSelectedChinLinework(defaultChin);
         }
-    }
-}, [selectedShoulderLinework, shoulderAssets.linework]);
+    }, [selectedChinLinework, chinAssets.linework]);
 
-// Set head skin tone to tone number 22
-useEffect(() => {
-    if (!selectedHeadSkinTone && headAssets.colors.length > 0) {
-        const toneNumber = '22'; // Set the skin tone number to 22
+    // Set default ear linework
+    useEffect(() => {
+        if (!selectedEarLinework && earAssets.linework.length > 0) {
+            const defaultEar = earAssets.linework.find(file => file.includes('Ear-7'));
+            setSelectedEarLinework(defaultEar);
+        }
+    }, [selectedEarLinework, earAssets.linework]);
 
-        // Update skin tone for the head
-        const matchingHeadSkinTone = headAssets.colors.find(file =>
-            file.includes(`Skin-Tone-${toneNumber}`)
-        );
-        setSelectedHeadSkinTone(matchingHeadSkinTone);
-    }
-}, [selectedHeadSkinTone, headAssets.colors]);
-
-// Update chin skin tone when chin linework or head skin tone changes
-useEffect(() => {
-    if (selectedChinLinework && selectedHeadSkinTone) {
-        const toneNumberMatch = selectedHeadSkinTone.match(/Skin-Tone-(\d+)/);
-        if (toneNumberMatch) {
-            const toneNumber = toneNumberMatch[1];
-            const chinNumberMatch = selectedChinLinework.match(/Chin-(\d+)/);
-            if (chinNumberMatch) {
-                const chinNumber = chinNumberMatch[1];
-                const matchingChinSkinTone = chinAssets.colors.find(file =>
-                    file.includes(`Chin-${chinNumber}-Skin-Tone-${toneNumber}`)
-                );
-                setSelectedChinSkinTone(matchingChinSkinTone);
+    // Ensure default shoulder linework and shoulder type are set
+    useEffect(() => {
+        if (!selectedShoulderLinework && shoulderAssets.linework.length > 0) {
+            const defaultLinework = shoulderAssets.linework.find(linework => linework.includes('Thin-Shoulder-1'));
+            if (defaultLinework) {
+                setSelectedShoulderLinework(defaultLinework);
+                setSelectedShoulderType('thin');
             }
         }
-    }
-}, [selectedChinLinework, selectedHeadSkinTone, chinAssets.colors]);
+    }, [selectedShoulderLinework, shoulderAssets.linework]);
 
-// Update ear skin tone when ear linework or head skin tone changes
-useEffect(() => {
-    if (selectedEarLinework && selectedHeadSkinTone) {
-        const toneNumberMatch = selectedHeadSkinTone.match(/Skin-Tone-(\d+)/);
-        if (toneNumberMatch) {
-            const toneNumber = toneNumberMatch[1];
-            const earNumberMatch = selectedEarLinework.match(/Ear-(\d+)/);
-            if (earNumberMatch) {
-                const earNumber = earNumberMatch[1];
-                const matchingEarSkinTone = earAssets.colors.find(file =>
-                    file.includes(`Ear-${earNumber}-Skin-Tone-${toneNumber}`)
-                );
-                setSelectedEarSkinTone(matchingEarSkinTone);
+    // Set head skin tone to tone number 22
+    useEffect(() => {
+        if (!selectedHeadSkinTone && headAssets.colors.length > 0) {
+            const toneNumber = '22'; // Set the skin tone number to 22
+
+            // Update skin tone for the head
+            const matchingHeadSkinTone = headAssets.colors.find(file =>
+                file.includes(`Skin-Tone-${toneNumber}`)
+            );
+            setSelectedHeadSkinTone(matchingHeadSkinTone);
+        }
+    }, [selectedHeadSkinTone, headAssets.colors]);
+
+    // Update chin skin tone when chin linework or head skin tone changes
+    useEffect(() => {
+        if (selectedChinLinework && selectedHeadSkinTone) {
+            const toneNumberMatch = selectedHeadSkinTone.match(/Skin-Tone-(\d+)/);
+            if (toneNumberMatch) {
+                const toneNumber = toneNumberMatch[1];
+                const chinNumberMatch = selectedChinLinework.match(/Chin-(\d+)/);
+                if (chinNumberMatch) {
+                    const chinNumber = chinNumberMatch[1];
+                    const matchingChinSkinTone = chinAssets.colors.find(file =>
+                        file.includes(`Chin-${chinNumber}-Skin-Tone-${toneNumber}`)
+                    );
+                    setSelectedChinSkinTone(matchingChinSkinTone);
+                }
             }
         }
-    }
-}, [selectedEarLinework, selectedHeadSkinTone, earAssets.colors]);
+    }, [selectedChinLinework, selectedHeadSkinTone, chinAssets.colors]);
 
-// Update shoulder skin tone when shoulder linework or head skin tone changes
-useEffect(() => {
-    if (selectedShoulderLinework && selectedHeadSkinTone) {
-        const toneNumberMatch = selectedHeadSkinTone.match(/Skin-Tone-(\d+)/);
-        if (toneNumberMatch) {
-            const toneNumber = toneNumberMatch[1];
-            const shoulderTypeMatch = selectedShoulderLinework.match(/(Thin|Broad|Narrow)-Shoulder/);
-            if (shoulderTypeMatch) {
-                const shoulderType = shoulderTypeMatch[1];
-                const matchingShoulderSkinTone = shoulderAssets.colors.find(file =>
-                    file.includes(`${shoulderType}-Shoulder-Skin-Tone-${toneNumber}`)
-                );
-                setSelectedShoulderSkinTone(matchingShoulderSkinTone);
+    // Update ear skin tone when ear linework or head skin tone changes
+    useEffect(() => {
+        if (selectedEarLinework && selectedHeadSkinTone) {
+            const toneNumberMatch = selectedHeadSkinTone.match(/Skin-Tone-(\d+)/);
+            if (toneNumberMatch) {
+                const toneNumber = toneNumberMatch[1];
+                const earNumberMatch = selectedEarLinework.match(/Ear-(\d+)/);
+                if (earNumberMatch) {
+                    const earNumber = earNumberMatch[1];
+                    const matchingEarSkinTone = earAssets.colors.find(file =>
+                        file.includes(`Ear-${earNumber}-Skin-Tone-${toneNumber}`)
+                    );
+                    setSelectedEarSkinTone(matchingEarSkinTone);
+                }
             }
         }
-    }
-}, [selectedShoulderLinework, selectedHeadSkinTone, shoulderAssets.colors]);
+    }, [selectedEarLinework, selectedHeadSkinTone, earAssets.colors]);
+
+    // Update shoulder skin tone when shoulder linework or head skin tone changes
+    useEffect(() => {
+        if (selectedShoulderLinework && selectedHeadSkinTone) {
+            const toneNumberMatch = selectedHeadSkinTone.match(/Skin-Tone-(\d+)/);
+            if (toneNumberMatch) {
+                const toneNumber = toneNumberMatch[1];
+                const shoulderTypeMatch = selectedShoulderLinework.match(/(Thin|Broad|Narrow)-Shoulder/);
+                if (shoulderTypeMatch) {
+                    const shoulderType = shoulderTypeMatch[1];
+                    const matchingShoulderSkinTone = shoulderAssets.colors.find(file =>
+                        file.includes(`${shoulderType}-Shoulder-Skin-Tone-${toneNumber}`)
+                    );
+                    setSelectedShoulderSkinTone(matchingShoulderSkinTone);
+                }
+            }
+        }
+    }, [selectedShoulderLinework, selectedHeadSkinTone, shoulderAssets.colors]);
 
 
     return (
@@ -1475,23 +1498,32 @@ useEffect(() => {
                         />
                     )}
 
-{selectedLipShape && (
-    <img
-        src={selectedLipShape.asset}
-        alt="Selected Lip Shape"
-        className="character-layer lip-linework"
-        style={{ zIndex: selectedLipColor ? 0 : 36 }}
-    />
-)}
+                    {selectedLipShape && (
+                        <img
+                            src={selectedLipShape.asset}
+                            alt="Selected Lip Shape"
+                            className="character-layer lip-linework"
+                            style={{ zIndex: selectedLipColor ? 0 : 36 }}
+                        />
+                    )}
 
-{selectedLipColor && (
-    <img
-        src={selectedLipColor.asset}
-        alt="Selected Lip Color"
-        className="character-layer lip-color"
-        style={{ zIndex: 34 }}
-    />
-)}
+                    {selectedLipColor && (
+                        <img
+                            src={selectedLipColor.asset}
+                            alt="Selected Lip Color"
+                            className="character-layer lip-color"
+                            style={{ zIndex: 34 }}
+                        />
+                    )}
+
+                    {selectedEyebrow && (
+                        <img
+                            src={selectedEyebrow}
+                            alt="Selected Eyebrow"
+                            className="character-layer eyebrows"
+                        />
+                    )}
+
 
 
 
@@ -1499,380 +1531,343 @@ useEffect(() => {
 
                 <div className="customization-options">
                     <h2>Customize Your Character</h2>
+                    <div className='options-container'>
 
-                    {/* Skin Tone Options */}
-                    <div className="option-category">
-                        <h3>Skin Tone Options</h3>
-                        {skinToneSwatches.map((swatch, index) => (
-                            <button key={index} onClick={() => handleSkinToneChange(swatch)}>
-                                <img src={swatch} alt={`Skin Tone ${index}`} />
-                            </button>
-                        ))}
-                    </div>
-
-
-                    {/* UI for Shoulder Linework */}
-                    <div className="option-category">
-                        <h3>Shoulders</h3>
-                        <div>
-                            {shoulderAssets.linework.map((linework, index) => (
-                                <button key={index} onClick={() => handleShoulderLineworkChange(linework)}>
-                                    <img src={linework} alt={`Shoulder Linework ${index}`} className={selectedShoulderLinework === linework ? 'selected' : ''} />
+                        {/* Skin Tone Options */}
+                        <div className="option-category">
+                            <h3>Skin Tone Options</h3>
+                            {skinToneSwatches.map((swatch, index) => (
+                                <button
+                                    key={index}
+                                    className={`UI-tile-button color-swatch ${selectedSkinToneSwatch === swatch ? 'selected' : ''}`}
+                                    onClick={() => handleSkinToneClick(swatch)}
+                                >
+                                    <img src={swatch} alt={`Skin Tone ${index}`} />
                                 </button>
                             ))}
                         </div>
-                    </div>
+
+                        {/* UI for Shoulder Linework */}
+                        <div className="option-category">
+                            <h3>Shoulders</h3>
+                            <div>
+                                {shoulderAssets.linework.map((linework, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => handleShoulderLineworkChange(linework)}
+                                        className={`UI-tile-button ${selectedShoulderLinework === linework ? 'selected' : ''}`}
+                                    >
+                                        <img src={linework} alt={`Shoulder Linework ${index}`} />
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
 
 
-                    {/* UI for Chest Volume */}
-                    <div className="option-category">
-                        <h3>Chest Volume</h3>
-                        <button onClick={toggleChestVolume}>
-                            {showChestVolume ? 'Hide Chest Volume' : 'Show Chest Volume'}
-                        </button>
-                    </div>
 
-                    {/* Chin Linework Options (excluding cleft linework) */}
-                    <div className="option-category">
-                        <h3>Chin Linework</h3>
-                        {chinAssets.linework
-                            .filter(lineworkAsset => !lineworkAsset.includes('Cleft')) // Exclude cleft options
-                            .map((lineworkAsset, index) => (
-                                <button key={index} onClick={() => handleChinLineworkChange(lineworkAsset)}>
-                                    <img src={lineworkAsset} alt={`Chin Linework ${index}`} />
-                                </button>
-                            ))}
-                    </div>
+                        {/* UI for Chest Volume */}
+                        <div className="option-category">
+                            <h3>Chest Volume</h3>
+                            <button
+                            onClick={toggleChestVolume}
+                            className={`UI-tile-button removeable ${showChestVolume === true ? 'selected' : ''}`}
+                            >
+                                {showChestVolume ? 'Chest Volume Added' : 'Add Chest Volume'}
+                            </button>
+                        </div>
 
-{/* Cleft Option */}
-<div className="option-category">
-    <h3>Cleft Chin</h3>
-    <button onClick={handleCleftToggle}>
-        {isCleft ? 'Remove Cleft' : 'Add Cleft'}
-    </button>
-</div>
+                        {/* UI for Chin Linework */}
+                        <div className="option-category">
+                            <h3>Chin Linework</h3>
+                            {chinAssets.linework
+                                .filter(lineworkAsset => !lineworkAsset.includes('Cleft')) // Exclude cleft options
+                                .sort((a, b) => {
+                                    const chinNumberA = parseInt(a.match(/Chin-(\d+)/)[1], 10);
+                                    const chinNumberB = parseInt(b.match(/Chin-(\d+)/)[1], 10);
+                                    return chinNumberA - chinNumberB;
+                                })
+                                .map((lineworkAsset, index) => (
+                                    <button
+                                    key={index}
+                                    onClick={() => handleChinLineworkChange(lineworkAsset)}
+                                    className={`UI-tile-button ${selectedChinLinework === lineworkAsset ? 'selected' : ''}`}>
+                                        <img src={lineworkAsset} alt={`Chin Linework ${index}`} />
+                                    </button>
+                                ))}
+                        </div>
 
-{/* Nose Apex Options */}
+
+                        {/* Cleft Option */}
+                        <div className="option-category">
+                            <h3>Cleft Chin</h3>
+                            <button
+                            onClick={handleCleftToggle}
+                            className={`UI-tile-button removeable ${ isCleft === true ? 'selected' : ''}`}>
+                                {isCleft ? 'Cleft Added' : 'Add Cleft'}
+                            </button>
+                        </div>
+
+{/* UI for Nose Apex */}  
 <div className="option-category">
     <h3>Nose Apex</h3>
-    {noseApexAssets.apex.map((apex, index) => {
-        const isSelected = selectedNoseApex === apex;
-
-        return (
-            <div className={`UI-tile ${isSelected ? 'selected' : ''}`} key={index}>
-                <button onClick={() => handleNoseApexChange(apex)} className="UI-tile-button">
-                    <img src={apex} alt={`Nose Apex ${index}`} />
-                    {/* Conditionally render CloseButton if this nose apex is selected */}
-                    {isSelected && (
-                        <CloseButton onClick={() => handleRemoveNoseApex()} />
-                    )}
-                </button>
-            </div>
-        );
-    })}
+    <div>
+        {noseApexAssets.apex.map((apex, index) => (
+            <button
+                key={index}
+                onClick={() => {
+                    if (selectedNoseApex === apex) {
+                        handleRemoveNoseApex(); // Remove nose apex if it's already selected
+                    } else {
+                        handleNoseApexChange(apex); // Change to the newly selected nose apex
+                    }
+                }}
+                className={`UI-tile-button removeable ${selectedNoseApex === apex ? 'selected' : ''}`}
+            >
+                <img src={apex} alt={`Nose Apex ${index}`} />
+            </button>
+        ))}
+    </div>
 </div>
 
-{/* Nose Bridge Options */}
+
+
+{/* UI for Nose Bridge */}  
 <div className="option-category">
     <h3>Nose Bridge</h3>
-    {noseBridgeAssets.bridge.map((bridge, index) => {
-        const isSelected = selectedNoseBridge === bridge;
-
-        return (
-            <div className={`UI-tile ${isSelected ? 'selected' : ''}`} key={index}>
-                <button onClick={() => handleNoseBridgeChange(bridge)} className="UI-tile-button">
-                    <img src={bridge} alt={`Nose Bridge ${index}`} />
-                    {/* Conditionally render CloseButton if this nose bridge is selected */}
-                    {isSelected && (
-                        <CloseButton onClick={() => handleRemoveNoseBridge()} />
-                    )}
-                </button>
-            </div>
-        );
-    })}
+    <div>
+        {noseBridgeAssets.bridge.map((bridge, index) => (
+            <button
+                key={index}
+                onClick={() => {
+                    if (selectedNoseBridge === bridge) {
+                        handleRemoveNoseBridge(); // Remove nose bridge if it's already selected
+                    } else {
+                        handleNoseBridgeChange(bridge); // Change to the newly selected nose bridge
+                    }
+                }}
+                className={`UI-tile-button removeable ${selectedNoseBridge === bridge ? 'selected' : ''}`}
+            >
+                <img src={bridge} alt={`Nose Bridge ${index}`} />
+            </button>
+        ))}
+    </div>
 </div>
 
 
-{/* Face Scar Options */}
+
+{/* UI for Face Scars */}  
 <div className="option-category">
     <h3>Face Scars</h3>
-    {faceScarAssets.scars.map((scarAsset, index) => {
-        const isSelected = selectedFaceScar === scarAsset;
-
-        return (
-            <div className={`UI-tile ${isSelected ? 'selected' : ''}`} key={index}>
-                <button onClick={() => handleFaceScarChange(scarAsset)} className="UI-tile-button">
-                    <img src={scarAsset} alt={`Face Scar ${index}`} />
-                    {/* Conditionally render CloseButton if this face scar is selected */}
-                    {isSelected && (
-                        <CloseButton onClick={() => handleRemoveFaceScar()} />
-                    )}
-                </button>
-            </div>
-        );
-    })}
+    <div>
+        {faceScarAssets.scars.map((scarAsset, index) => (
+            <button
+                key={index}
+                onClick={() => {
+                    if (selectedFaceScar === scarAsset) {
+                        handleRemoveFaceScar(); // Remove face scar if it's already selected
+                    } else {
+                        handleFaceScarChange(scarAsset); // Change to the newly selected face scar
+                    }
+                }}
+                className={`UI-tile-button removeable ${selectedFaceScar === scarAsset ? 'selected' : ''}`}
+            >
+                <img src={scarAsset} alt={`Face Scar ${index}`} />
+            </button>
+        ))}
+    </div>
 </div>
 
-{/* Body Scar Options */}
+
+{/* UI for Body Scars */}  
 <div className="option-category">
     <h3>Body Scars</h3>
-    {bodyScarAssets.scars.map((scarAsset, index) => {
-        const isSelected = selectedBodyScar === scarAsset;
-
-        return (
-            <div className={`UI-tile ${isSelected ? 'selected' : ''}`} key={index}>
-                <button onClick={() => handleBodyScarChange(scarAsset)} className="UI-tile-button">
-                    <img src={scarAsset} alt={`Body Scar ${index}`} />
-                    {/* Conditionally render CloseButton if this body scar is selected */}
-                    {isSelected && (
-                        <CloseButton onClick={() => handleRemoveBodyScar()} />
-                    )}
-                </button>
-            </div>
-        );
-    })}
+    <div>
+        {bodyScarAssets.scars.map((scarAsset, index) => (
+            <button
+                key={index}
+                onClick={() => {
+                    if (selectedBodyScar === scarAsset) {
+                        handleRemoveBodyScar(); // Remove body scar if it's already selected
+                    } else {
+                        handleBodyScarChange(scarAsset); // Change to the newly selected body scar
+                    }
+                }}
+                className={`UI-tile-button removeable ${selectedBodyScar === scarAsset ? 'selected' : ''}`}
+            >
+                <img src={scarAsset} alt={`Body Scar ${index}`} />
+            </button>
+        ))}
+    </div>
 </div>
 
 
 
-                    {/* Eyeball Options */}
-                    <div className="option-category">
-                        <h3>Eyeballs</h3>
-                        {eyeballAssets.eyeballs.map((eyeballAsset, index) => (
-                            <button key={index} onClick={() => handleEyeballChange(eyeballAsset)}>
-                                <img src={eyeballAsset} alt={`Eyeball ${index}`} />
-                            </button>
-                        ))}
-                    </div>
 
-                    {/* Eye Shape Options */}
-                    <div className="option-category">
-                        <h3>Eye Shapes</h3>
-                        {eyeShapeAssets.shapes.map((eyeShapeAsset, index) => (
-                            <button key={index} onClick={() => handleEyeShapeChange(eyeShapeAsset)}>
-                                <img src={eyeShapeAsset} alt={`Eye Shape ${index}`} />
-                            </button>
-                        ))}
-                    </div>
+                        {/* Eyeball Options */}
+                        <div className="option-category">
+                            <h3>Eyeballs</h3>
+                            {eyeballAssets.eyeballs.map((eyeballAsset, index) => (
+                                <button key={index} onClick={() => handleEyeballChange(eyeballAsset)} className='UI-tile-button'>
+                                    <img src={eyeballAsset} alt={`Eyeball ${index}`} />
+                                </button>
+                            ))}
+                        </div>
 
-                    {/* Eye Color Options */}
-                    <div className="option-category">
-                        <h3>Eye Colors</h3>
-                        {eyeColorAssets.colors.map((eyeColorAsset, index) => (
-                            <button key={index} onClick={() => handleEyeColorChange(eyeColorAsset)}>
-                                <img src={eyeColorAsset} alt={`Eye Color ${index}`} />
-                            </button>
-                        ))}
-                    </div>
+{/* UI for Eye Shapes */}  
+<div className="option-category">
+    <h3>Eye Shapes</h3>
+    <div>
+        {eyeShapeAssets.shapes.map((eyeShapeAsset, index) => (
+            <button
+                key={index}
+                onClick={() => {
+                    if (selectedEyeShape === eyeShapeAsset) {
+                        handleRemoveEyeShape(); // Remove eye shape if it's already selected
+                    } else {
+                        handleEyeShapeChange(eyeShapeAsset); // Change to the newly selected eye shape
+                    }
+                }}
+                className={`UI-tile-button removeable ${selectedEyeShape === eyeShapeAsset ? 'selected' : ''}`}
+            >
+                <img src={eyeShapeAsset} alt={`Eye Shape ${index}`} />
+            </button>
+        ))}
+    </div>
+</div>
 
-{/* Upper Eyelash Options */}
+
+{/* UI for Eye Colors */}  
+<div className="option-category">
+    <h3>Eye Colors</h3>
+    <div>
+        {eyeColorAssets.colors.map((eyeColorAsset, index) => (
+            <button
+                key={index}
+                onClick={() => {
+                    if (selectedEyeColor === eyeColorAsset) {
+                        handleRemoveEyeColor(); // Remove eye color if it's already selected
+                    } else {
+                        handleEyeColorChange(eyeColorAsset); // Change to the newly selected eye color
+                    }
+                }}
+                className={`UI-tile-button removeable ${selectedEyeColor === eyeColorAsset ? 'selected' : ''}`}
+            >
+                <img src={eyeColorAsset} alt={`Eye Color ${index}`} />
+            </button>
+        ))}
+    </div>
+</div>
+
+{/* UI for Upper Eyelashes */}  
 <div className="option-category">
     <h3>Upper Eyelashes</h3>
-    {eyelashAssets.eyelashes
-        .filter(asset => asset.includes('Upper-Eyelash'))
-        .map((upperEyelashAsset, index) => {
-            const isSelected = selectedUpperEyelash === upperEyelashAsset;
-
-            return (
-                <div className={`UI-tile ${isSelected ? 'selected' : ''}`} key={index}>
-                    <button onClick={() => handleUpperEyelashChange(upperEyelashAsset)} className="UI-tile-button">
-                        <img src={upperEyelashAsset} alt={`Upper Eyelash ${index}`} />
-                        {/* Conditionally render CloseButton if this upper eyelash is selected */}
-                        {isSelected && (
-                            <CloseButton onClick={() => handleRemoveUpperEyelash()} />
-                        )}
-                    </button>
-                </div>
-            );
-        })}
+    <div>
+        {eyelashAssets.eyelashes
+            .filter(asset => asset.includes('Upper-Eyelash'))
+            .map((upperEyelashAsset, index) => (
+                <button
+                    key={index}
+                    onClick={() => {
+                        if (selectedUpperEyelash === upperEyelashAsset) {
+                            handleRemoveUpperEyelash(); // Remove upper eyelash if it's already selected
+                        } else {
+                            handleUpperEyelashChange(upperEyelashAsset); // Change to the newly selected upper eyelash
+                        }
+                    }}
+                    className={`UI-tile-button removeable ${selectedUpperEyelash === upperEyelashAsset ? 'selected' : ''}`}
+                >
+                    <img src={upperEyelashAsset} alt={`Upper Eyelash ${index}`} />
+                </button>
+            ))}
+    </div>
 </div>
 
 
-{/* Lower Eyelash Options */}
+
+{/* UI for Lower Eyelashes */}  
 <div className="option-category">
     <h3>Lower Eyelashes</h3>
-    {eyelashAssets.eyelashes
-        .filter(asset => asset.includes('Lower-Eyelash'))
-        .map((lowerEyelashAsset, index) => {
-            const isSelected = selectedLowerEyelash === lowerEyelashAsset;
-
-            return (
-                <div className={`UI-tile ${isSelected ? 'selected' : ''}`} key={index}>
-                    <button onClick={() => handleLowerEyelashChange(lowerEyelashAsset)} className="UI-tile-button">
-                        <img src={lowerEyelashAsset} alt={`Lower Eyelash ${index}`} />
-                        {/* Conditionally render CloseButton if this lower eyelash is selected */}
-                        {isSelected && (
-                            <CloseButton onClick={() => handleRemoveLowerEyelash()} />
-                        )}
-                    </button>
-                </div>
-            );
-        })}
+    <div>
+        {eyelashAssets.eyelashes
+            .filter(asset => asset.includes('Lower-Eyelash'))
+            .map((lowerEyelashAsset, index) => (
+                <button
+                    key={index}
+                    onClick={() => {
+                        if (selectedLowerEyelash === lowerEyelashAsset) {
+                            handleRemoveLowerEyelash(); // Remove lower eyelash if it's already selected
+                        } else {
+                            handleLowerEyelashChange(lowerEyelashAsset); // Change to the newly selected lower eyelash
+                        }
+                    }}
+                    className={`UI-tile-button removeable ${selectedLowerEyelash === lowerEyelashAsset ? 'selected' : ''}`}
+                >
+                    <img src={lowerEyelashAsset} alt={`Lower Eyelash ${index}`} />
+                </button>
+            ))}
+    </div>
 </div>
 
-
-
-{/* Eye Socket Shadow Options */}
+{/* UI for Eye Socket Shadows */}  
 <div className="option-category">
     <h3>Eye Socket Shadows</h3>
-    {eyeSocketShadowAssets.socketShadows.map((socketShadow, index) => {
-        const isSelected = selectedEyeSocketShadow === socketShadow;
-
-        return (
-            <div className={`UI-tile ${isSelected ? 'selected' : ''}`} key={index}>
-                <button onClick={() => handleEyeSocketShadowChange(socketShadow)} className="UI-tile-button">
-                    <img src={socketShadow} alt={`Eye Socket Shadow ${index}`} />
-                    {/* Conditionally render CloseButton if this eye socket shadow is selected */}
-                    {isSelected && (
-                        <CloseButton onClick={() => handleRemoveEyeSocketShadow()} />
-                    )}
-                </button>
-            </div>
-        );
-    })}
+    <div>
+        {eyeSocketShadowAssets.socketShadows.map((socketShadow, index) => (
+            <button
+                key={index}
+                onClick={() => {
+                    if (selectedEyeSocketShadow === socketShadow) {
+                        handleRemoveEyeSocketShadow(); // Remove eye socket shadow if it's already selected
+                    } else {
+                        handleEyeSocketShadowChange(socketShadow); // Change to the newly selected eye socket shadow
+                    }
+                }}
+                className={`UI-tile-button removeable ${selectedEyeSocketShadow === socketShadow ? 'selected' : ''}`}
+            >
+                <img src={socketShadow} alt={`Eye Socket Shadow ${index}`} />
+            </button>
+        ))}
+    </div>
 </div>
 
 
+ {/* UI for Eyebrows */}  
+<div className="option-category">
+    <h3>Eyebrows</h3>
+    <div>
+        {eyebrowAssets.linework.map((eyebrowAsset, index) => {
+            const isSelected = selectedEyebrow === eyebrowAsset.asset;
+
+            return (
+                <button
+                    key={index}
+                    onClick={() => {
+                        if (isSelected) {
+                            handleRemoveEyebrow(); // Remove eyebrow if it's already selected
+                        } else {
+                            handleEyebrowChange(eyebrowAsset.asset); // Change to the newly selected eyebrow
+                        }
+                    }}
+                    className={`UI-tile-button removeable ${isSelected ? 'selected' : ''}`}
+                >
+                    <img src={eyebrowAsset.asset} alt={`Eyebrow ${index}`} />
+                </button>
+            );
+        })}
+    </div>
+</div>
+
+{/* UI for Eye Makeup */}  
 <div className="option-category">
     <h3>Eye Makeup</h3>
-    {(() => {
-        // Get available eye makeup color numbers
-        const availableEyeMakeupColorNumbers = Array.from(
-            new Set(
-                eyeMakeupAssets.makeup
-                    .map(({ key }) => {
-                        const colorNumberMatch = key.match(/Makeup-Color-(\d+)/);
-                        return colorNumberMatch ? colorNumberMatch[1] : null;
-                    })
-                    .filter(Boolean)
-            )
-        );
-
-        // Render swatches for available colors
-        return availableEyeMakeupColorNumbers.map((colorNumber) => {
-            // Find the swatch with this color number
-            const swatch = makeupColorSwatches.find(({ key }) =>
-                key.includes(`Makeup-Color-${colorNumber}`)
-            );
-
-            // Determine if this colorNumber is selected
-            const isSelected = selectedEyeMakeup && selectedEyeMakeup.key.includes(`Makeup-Color-${colorNumber}`);
-
-            if (swatch) {
-                return (
-                    <div className={`UI-tile ${isSelected ? 'selected' : ''}`} key={colorNumber}>
-                        <button onClick={() => handleEyeMakeupChange(colorNumber)} className='UI-tile-button'>
-                            <img src={swatch.asset} alt={`Eye Makeup Color ${colorNumber}`} />
-                            {isSelected && (
-                                <CloseButton onClick={() => handleRemoveEyeMakeup()} />
-                            )}
-                        </button>
-                    </div>
-                );
-            }
-            return null;
-        });
-    })()}
-</div>
-
-
-
-
-
-{/* Accessory Options */}
-<div className="option-category">
-    <h3>Accessories</h3>
-    {accessoryAssets.accessories.map((accessoryAsset, index) => {
-        const isSelected = selectedAccessory === accessoryAsset;
-
-        return (
-            <div className={`UI-tile ${isSelected ? 'selected' : ''}`} key={index}>
-                <button
-                    onClick={() => handleAccessoryChange(accessoryAsset)}
-                    className='UI-tile-button'
-                >
-                    <img src={accessoryAsset} alt={`Accessory ${index}`} />
-                    {/* Conditionally render CloseButton if this accessory is selected */}
-                    {isSelected && (
-                        <CloseButton onClick={() => handleRemoveAccessory()} />
-                    )}
-                </button>
-            </div>
-        );
-    })}
-</div>
-
-
-{/* Mouth Expression Options */}
-<div className="option-category">
-    <h3>Mouth Expressions</h3>
-    {mouthExpressionAssets.map((expression, index) => {
-        const isSelected = selectedMouthExpression === expression;
-
-        return (
-            <div className={`UI-tile ${isSelected ? 'selected' : ''}`} key={index}>
-                <button
-                    onClick={() => handleMouthExpressionChange(expression)}
-                    className='UI-tile-button'
-                >
-                    <img src={expression} alt={`Mouth Expression ${index}`} />
-                    {/* Conditionally render CloseButton if this mouth expression is selected */}
-                    {isSelected && (
-                        <CloseButton onClick={() => handleRemoveMouthExpression()} />
-                    )}
-                </button>
-            </div>
-        );
-    })}
-</div>
-
-
-{/* Lip Shape Options */}
-<div className="option-category">
-    <h3>Lip Shapes</h3>
-    {lipShapeAssets.map(({ asset, key }, index) => {
-        const isSelected = selectedLipShape?.key === key;
-
-        return (
-            <div className={`UI-tile ${isSelected ? 'selected' : ''}`} key={index}>
-                <button
-                    onClick={() => handleLipShapeChange({ asset, key })}
-                    className='UI-tile-button'
-                >
-                    <img src={asset} alt={`Lip Shape ${index}`} />
-                    {/* Conditionally render CloseButton if this lip shape is selected */}
-                    {isSelected && (
-                        <CloseButton onClick={() => handleRemoveLipShape()} />
-                    )}
-                </button>
-            </div>
-        );
-    })}
-</div>
-
-
-
-
-{/* Lip Color Options */}
-{selectedLipShape && (
-    <div className="option-category">
-        <h3>Lip Colors</h3>
+    <div>
         {(() => {
-            // Get the selected lip number
-            const selectedLipNumber = selectedLipShape.key.match(/Lip-Shape-(\d+)/)[1];
-
-            // Get available lip colors for the selected lip shape
-            const availableLipColors = lipAssets.filter(({ key }) => {
-                const lipNumberMatch = key.match(/Lip-(\d+)\//);
-                return lipNumberMatch && lipNumberMatch[1] === selectedLipNumber;
-            });
-
-            // Get unique color numbers
-            const availableColorNumbers = Array.from(
+            // Get available eye makeup color numbers
+            const availableEyeMakeupColorNumbers = Array.from(
                 new Set(
-                    availableLipColors
+                    eyeMakeupAssets.makeup
                         .map(({ key }) => {
-                            const colorNumberMatch = key.match(/Color-(\d+)/);
+                            const colorNumberMatch = key.match(/Makeup-Color-(\d+)/);
                             return colorNumberMatch ? colorNumberMatch[1] : null;
                         })
                         .filter(Boolean)
@@ -1880,342 +1875,551 @@ useEffect(() => {
             );
 
             // Render swatches for available colors
-            return availableColorNumbers.map((colorNumber) => {
+            return availableEyeMakeupColorNumbers.map((colorNumber) => {
                 // Find the swatch with this color number
                 const swatch = makeupColorSwatches.find(({ key }) =>
                     key.includes(`Makeup-Color-${colorNumber}`)
                 );
 
                 // Determine if this colorNumber is selected
-                const isSelected = selectedLipColor && selectedLipColor.key.includes(`Color-${colorNumber}`);
+                const isSelected = selectedEyeMakeup && selectedEyeMakeup.key.includes(`Makeup-Color-${colorNumber}`);
 
                 if (swatch) {
                     return (
-                        <div className={`UI-tile ${isSelected ? 'selected' : ''}`} key={colorNumber}>
-                            <button onClick={() => handleLipColorChange(colorNumber)} className='UI-tile-button'>
-                                <img src={swatch.asset} alt={`Lip Color ${colorNumber}`} />
-                                {isSelected && (
-                                    <CloseButton onClick={() => handleRemoveLipColor()} />
-                                )}
-                            </button>
-                        </div>
+                        <button
+                            key={colorNumber}
+                            onClick={() => {
+                                if (isSelected) {
+                                    handleRemoveEyeMakeup(); // Remove eye makeup if it's already selected
+                                } else {
+                                    handleEyeMakeupChange(colorNumber); // Change to the newly selected eye makeup color
+                                }
+                            }}
+                            className={`UI-tile-button removeable color-swatch ${isSelected ? 'selected' : ''}`}
+                        >
+                            <img src={swatch.asset} alt={`Eye Makeup Color ${colorNumber}`} />
+                        </button>
                     );
                 }
                 return null;
             });
         })()}
     </div>
+</div>
+
+
+
+
+
+
+
+{/* UI for Accessories */}  
+<div className="option-category">
+    <h3>Accessories</h3>
+    <div>
+        {accessoryAssets.accessories.map((accessoryAsset, index) => {
+            const isSelected = selectedAccessory === accessoryAsset;
+
+            return (
+                <button
+                    key={index}
+                    onClick={() => {
+                        if (isSelected) {
+                            handleRemoveAccessory(); // Remove accessory if it's already selected
+                        } else {
+                            handleAccessoryChange(accessoryAsset); // Change to the newly selected accessory
+                        }
+                    }}
+                    className={`UI-tile-button removeable ${isSelected ? 'selected' : ''}`}
+                >
+                    <img src={accessoryAsset} alt={`Accessory ${index}`} />
+                </button>
+            );
+        })}
+    </div>
+</div>
+
+{/* UI for Mouth Expressions */}  
+<div className="option-category">
+    <h3>Mouth Expressions</h3>
+    <div>
+        {mouthExpressionAssets.map((expression, index) => {
+            const isSelected = selectedMouthExpression === expression;
+
+            return (
+                <button
+                    key={index}
+                    onClick={() => {
+                        if (isSelected) {
+                            handleRemoveMouthExpression(); // Remove mouth expression if it's already selected
+                        } else {
+                            handleMouthExpressionChange(expression); // Change to the newly selected mouth expression
+                        }
+                    }}
+                    className={`UI-tile-button removeable ${isSelected ? 'selected' : ''}`}
+                >
+                    <img src={expression} alt={`Mouth Expression ${index}`} />
+                </button>
+            );
+        })}
+    </div>
+</div>
+
+
+ {/* UI for Lip Shapes */}  
+<div className="option-category">
+    <h3>Lip Shapes</h3>
+    <div>
+        {lipShapeAssets.map(({ asset, key }, index) => {
+            const isSelected = selectedLipShape?.key === key;
+
+            return (
+                <button
+                    key={index}
+                    onClick={() => {
+                        if (isSelected) {
+                            handleRemoveLipShape(); // Remove lip shape if it's already selected
+                        } else {
+                            handleLipShapeChange({ asset, key }); // Change to the newly selected lip shape
+                        }
+                    }}
+                    className={`UI-tile-button removeable ${isSelected ? 'selected' : ''}`}
+                >
+                    <img src={asset} alt={`Lip Shape ${index}`} />
+                </button>
+            );
+        })}
+    </div>
+</div>
+
+{/* UI for Lip Colors */}  
+{selectedLipShape && (
+    <div className="option-category">
+        <h3>Lip Colors</h3>
+        <div>
+            {(() => {
+                // Get the selected lip number
+                const selectedLipNumber = selectedLipShape.key.match(/Lip-Shape-(\d+)/)[1];
+
+                // Get available lip colors for the selected lip shape
+                const availableLipColors = lipAssets.filter(({ key }) => {
+                    const lipNumberMatch = key.match(/Lip-(\d+)\//);
+                    return lipNumberMatch && lipNumberMatch[1] === selectedLipNumber;
+                });
+
+                // Get unique color numbers
+                const availableColorNumbers = Array.from(
+                    new Set(
+                        availableLipColors
+                            .map(({ key }) => {
+                                const colorNumberMatch = key.match(/Color-(\d+)/);
+                                return colorNumberMatch ? colorNumberMatch[1] : null;
+                            })
+                            .filter(Boolean)
+                    )
+                );
+
+                // Render swatches for available colors
+                return availableColorNumbers.map((colorNumber) => {
+                    // Find the swatch with this color number
+                    const swatch = makeupColorSwatches.find(({ key }) =>
+                        key.includes(`Makeup-Color-${colorNumber}`)
+                    );
+
+                    // Determine if this colorNumber is selected
+                    const isSelected = selectedLipColor && selectedLipColor.key.includes(`Color-${colorNumber}`);
+
+                    if (swatch) {
+                        return (
+                            <button
+                                key={colorNumber}
+                                onClick={() => {
+                                    if (isSelected) {
+                                        handleRemoveLipColor(); // Remove lip color if it's already selected
+                                    } else {
+                                        handleLipColorChange(colorNumber); // Change to the newly selected lip color
+                                    }
+                                }}
+                                className={`UI-tile-button removeable color-swatch ${isSelected ? 'selected' : ''}`}
+                            >
+                                <img src={swatch.asset} alt={`Lip Color ${colorNumber}`} />
+                            </button>
+                        );
+                    }
+                    return null;
+                });
+            })()}
+        </div>
+    </div>
+)}
+
+
+{/* UI for Cheekbones */}  
+<div className="option-category">
+    <h3>Cheekbones</h3>
+    <div>
+        {cheekboneAssets.cheekbones.map((cheekboneAsset, index) => {
+            const isSelected = selectedCheekbone === cheekboneAsset;
+
+            return (
+                <button
+                    key={index}
+                    onClick={() => {
+                        if (isSelected) {
+                            handleRemoveCheekbone(); // Remove cheekbone if it's already selected
+                        } else {
+                            handleCheekboneChange(cheekboneAsset); // Change to the newly selected cheekbone
+                        }
+                    }}
+                    className={`UI-tile-button removeable ${isSelected ? 'selected' : ''}`}
+                >
+                    <img src={cheekboneAsset} alt={`Cheekbone ${index}`} />
+                </button>
+            );
+        })}
+    </div>
+</div>
+
+{/* UI for Hair Linework */}  
+<div className="option-category">
+    <h3>Hair Linework</h3>
+    <div>
+        {hairAssets && hairAssets.linework.map((hairLinework, index) => {
+            const isSelected = selectedHairLinework === hairLinework;
+
+            return (
+                <button
+                    key={index}
+                    onClick={() => {
+                        if (isSelected) {
+                            handleRemoveHairLinework(); // Remove hair linework if it's already selected
+                        } else {
+                            handleHairLineworkChange(hairLinework); // Change to the newly selected hair linework
+                        }
+                    }}
+                    className={`UI-tile-button removeable ${isSelected ? 'selected' : ''}`}
+                >
+                    <img src={hairLinework} alt={`Hair Linework ${index}`} />
+                </button>
+            );
+        })}
+    </div>
+</div>
+
+
+
+<div className="option-category">
+    <h3>Hair Color Options</h3>
+    <div>
+        {hairColorSwatches.map((swatch, index) => {
+            const isSelected = selectedHairColor === swatch;
+
+            return (
+                <button
+                    key={index}
+                    onClick={() => handleHairColorChange(swatch)}
+                    className={`UI-tile-button color-swatch ${isSelected ? 'selected' : ''}`}
+                >
+                    <img src={swatch} alt={`Hair Color ${index}`} />
+                </button>
+            );
+        })}
+    </div>
+</div>
+
+
+
+
+{/* UI for Front Layer Fringe */}  
+<div className="option-category">
+    <h3>Front Layer Fringe</h3>
+    <div>
+        {frontLayerFringeAssets && frontLayerFringeAssets
+            .filter(asset => !asset.includes('Hair-Color')) // Ensure only linework assets are shown
+            .map((fringeLinework, index) => {
+                const isSelected = selectedFrontLayerFringeLinework === fringeLinework;
+
+                return (
+                    <button
+                        key={index}
+                        onClick={() => {
+                            if (isSelected) {
+                                handleRemoveFrontLayerFringeLinework(); // Remove fringe linework if it's already selected
+                            } else {
+                                handleFrontLayerFringeLineworkChange(fringeLinework); // Change to the newly selected fringe linework
+                            }
+                        }}
+                        className={`UI-tile-button removeable ${isSelected ? 'selected' : ''}`}
+                    >
+                        <img src={fringeLinework} alt={`Front Layer Fringe Linework ${index}`} />
+                    </button>
+                );
+            })}
+    </div>
+</div>
+
+{/* UI for Front Layer Fringe Colors */}  
+{selectedFrontLayerFringeLinework && (
+    <div className="option-category">
+        <h3>Front Layer Fringe Colors</h3>
+        <div>
+            {hairColorSwatches.map((swatch, index) => (
+                <button
+                    key={index}
+                    className='UI-tile-button color-swatch removeable'
+                    onClick={() => handleFrontLayerFringeColorChange(swatch)}
+                >
+                    <img src={swatch} alt={`Front Fringe Color ${index}`} className='fringe-color' />
+                </button>
+            ))}
+        </div>
+    </div>
+)}
+
+{/* UI for Secondary Fringe Linework */}  
+<div className="option-category">
+    <h3>Secondary Fringe</h3>
+    <div>
+        {secondaryFringeAssets && secondaryFringeAssets
+            .filter(asset => !asset.includes('Hair-Color')) // Ensure only linework assets are shown
+            .map((fringeLinework, index) => {
+                const isSelected = selectedSecondaryFringeLinework === fringeLinework;
+
+                return (
+                    <button
+                        key={index}
+                        onClick={() => {
+                            if (isSelected) {
+                                handleRemoveSecondaryFringeLinework(); // Remove fringe linework if it's already selected
+                            } else {
+                                handleSecondaryFringeLineworkChange(fringeLinework); // Change to the newly selected fringe linework
+                            }
+                        }}
+                        className={`UI-tile-button removeable ${isSelected ? 'selected' : ''}`}
+                    >
+                        <img src={fringeLinework} alt={`Secondary Fringe Linework ${index}`} />
+                    </button>
+                );
+            })}
+    </div>
+</div>
+
+{/* UI for Secondary Fringe Colors */}  
+{selectedSecondaryFringeLinework && (
+    <div className="option-category">
+        <h3>Secondary Fringe Colors</h3>
+        <div>
+            {hairColorSwatches.map((swatch, index) => (
+                <button
+                    key={index}
+                    onClick={() => handleSecondaryFringeColorChange(swatch)}
+                    className='UI-tile-button color-swatch'
+                >
+                    <img src={swatch} alt={`Secondary Fringe Color ${index}`} className='secondary-fringe-color' />
+                </button>
+            ))}
+        </div>
+    </div>
 )}
 
 
 
-
-
-{/* Cheekbone Options */}
-<div className="option-category">
-    <h3>Cheekbones</h3>
-    {cheekboneAssets.cheekbones.map((cheekboneAsset, index) => {
-        const isSelected = selectedCheekbone === cheekboneAsset;
-
-        return (
-            <div className={`UI-tile ${isSelected ? 'selected' : ''}`} key={index}>
-                <button
-                    onClick={() => handleCheekboneChange(cheekboneAsset)}
-                    className='UI-tile-button'
-                >
-                    <img src={cheekboneAsset} alt={`Cheekbone ${index}`} />
-                    {/* Conditionally render CloseButton if this cheekbone is selected */}
-                    {isSelected && (
-                        <CloseButton onClick={() => handleRemoveCheekbone()} />
-                    )}
-                </button>
-            </div>
-        );
-    })}
-</div>
-
-
-
-                    {/* Hair Linework Options */}
-                    <div className="option-category">
-                        <h3>Hair Linework</h3>
-                        {hairAssets && hairAssets.linework.map((hairLinework, index) => {
-                            const isSelected = selectedHairLinework === hairLinework;
-
-                            return (
-                                <div className={`UI-tile ${isSelected ? 'selected' : ''}`} key={index}>
-                                    <button
-                                        onClick={() => handleHairLineworkChange(hairLinework)}
-                                        className='UI-tile-button'
-                                    >
-                                        <img src={hairLinework} alt={`Hair Linework ${index}`} />
-                                        {/* Conditionally render CloseButton if this hairLinework is selected */}
-                                        {isSelected && (
-                                            <CloseButton onClick={() => handleRemoveHairLinework()} />
-                                        )}
-                                    </button>
-                                </div>
-                            );
-                        })}
-                    </div>
-
-
-
-
-                    {/* Hair Color Options */}
-                    {selectedHairLinework && (
-                        <div className="option-category">
-                            <h3>Hair Color Options</h3>
-                            {hairColorSwatches.map((swatch, index) => (
-                                <button key={index} onClick={() => handleHairColorChange(swatch)}>
-                                    <img src={swatch} alt={`Hair Color ${index}`} />
-                                </button>
-                            ))}
-                        </div>
-                    )}
-
-{/* Front Layer Fringe Options */}
-<div className="option-category">
-    <h3>Front Layer Fringe</h3>
-    {frontLayerFringeAssets && frontLayerFringeAssets
-        .filter(asset => !asset.includes('Hair-Color')) // Ensure only linework assets are shown
-        .map((fringeLinework, index) => {
-            const isSelected = selectedFrontLayerFringeLinework === fringeLinework;
-
-            return (
-                <div className={`UI-tile ${isSelected ? 'selected' : ''}`} key={index}>
-                    <button
-                        onClick={() => handleFrontLayerFringeLineworkChange(fringeLinework)}
-                        className='UI-tile-button'
-                    >
-                        <img src={fringeLinework} alt={`Front Layer Fringe Linework ${index}`} />
-                        {/* Conditionally render CloseButton if this fringe linework is selected */}
-                        {isSelected && (
-                            <CloseButton onClick={() => handleRemoveFrontLayerFringeLinework()} />
-                        )}
-                    </button>
-                </div>
-            );
-        })}
-</div>
-
-
-
-                    {selectedFrontLayerFringeLinework && (
-                        <div className="option-category">
-                            <h3>Front Layer Fringe Colors</h3>
-                            {hairColorSwatches.map((swatch, index) => (
-                                <button key={index} onClick={() => handleFrontLayerFringeColorChange(swatch)}>
-                                    <img src={swatch} alt={`Front Fringe Color ${index}`} className='fringe-color' />
-                                </button>
-                            ))}
-                        </div>
-                    )}
-
-
-{/* Secondary Fringe Linework Options */}
-<div className="option-category">
-    <h3>Secondary Fringe</h3>
-    {secondaryFringeAssets && secondaryFringeAssets
-        .filter(asset => !asset.includes('Hair-Color')) // Ensure only linework assets are shown
-        .map((fringeLinework, index) => {
-            const isSelected = selectedSecondaryFringeLinework === fringeLinework;
-
-            return (
-                <div className={`UI-tile ${isSelected ? 'selected' : ''}`} key={index}>
-                    <button
-                        onClick={() => handleSecondaryFringeLineworkChange(fringeLinework)}
-                        className='UI-tile-button'
-                    >
-                        <img src={fringeLinework} alt={`Secondary Fringe Linework ${index}`} />
-                        {/* Conditionally render CloseButton if this fringe linework is selected */}
-                        {isSelected && (
-                            <CloseButton onClick={() => handleRemoveSecondaryFringeLinework()} />
-                        )}
-                    </button>
-                </div>
-            );
-        })}
-</div>
-
-
-
-                    {/* Secondary Fringe Color Options */}
-                    {selectedSecondaryFringeLinework && (
-                        <div className="option-category">
-                            <h3>Secondary Fringe Colors</h3>
-                            {hairColorSwatches.map((swatch, index) => (
-                                <button key={index} onClick={() => handleSecondaryFringeColorChange(swatch)}>
-                                    <img src={swatch} alt={`Secondary Fringe Color ${index}`} className='secondary-fringe-color' />
-                                </button>
-                            ))}
-                        </div>
-                    )}
-
-
-
-{/* Mustache Linework Options */}
+{/* UI for Mustache Linework */}  
 <div className="option-category">
     <h3>Mustaches</h3>
-    {mustacheAssets
-        .filter(({ key }) => !key.includes('Hair-Color'))
-        .map(({ asset, key }, index) => {
-            const isSelected = selectedMustacheLinework?.key === key;
+    <div>
+        {mustacheAssets
+            .filter(({ key }) => !key.includes('Hair-Color')) // Ensure only linework assets are shown
+            .map(({ asset, key }, index) => {
+                const isSelected = selectedMustacheLinework?.key === key;
 
-            return (
-                <div className={`UI-tile ${isSelected ? 'selected' : ''}`} key={index}>
+                return (
                     <button
-                        onClick={() => handleMustacheLineworkChange({ asset, key })}
-                        className='UI-tile-button'
+                        key={index}
+                        onClick={() => {
+                            if (isSelected) {
+                                handleRemoveMustacheLinework(); // Remove mustache linework if it's already selected
+                            } else {
+                                handleMustacheLineworkChange({ asset, key }); // Change to the newly selected mustache linework
+                            }
+                        }}
+                        className={`UI-tile-button removeable ${isSelected ? 'selected' : ''}`}
                     >
                         <img src={asset} alt={`Mustache Linework ${index}`} />
-                        {/* Conditionally render CloseButton if this mustache is selected */}
-                        {isSelected && (
-                            <CloseButton onClick={() => handleRemoveMustacheLinework()} />
-                        )}
                     </button>
-                </div>
-            );
-        })}
+                );
+            })}
+    </div>
 </div>
 
+{/* UI for Mustache Colors */}  
+{selectedMustacheLinework && (
+    <div className="option-category">
+        <h3>Mustache Colors</h3>
+        <div>
+            {hairColorSwatches.map((swatch, index) => (
+                <button
+                    key={index}
+                    onClick={() => handleMustacheColorChange(swatch)}
+                    className='UI-tile-button color-swatch'
+                >
+                    <img src={swatch} alt={`Mustache Color ${index}`} />
+                </button>
+            ))}
+        </div>
+    </div>
+)}
 
 
-                    {/* Mustache Color Options */}
-                    {selectedMustacheLinework && (
-                        <div className="option-category">
-                            <h3>Mustache Colors</h3>
-                            {hairColorSwatches.map((swatch, index) => (
-                                <button key={index} onClick={() => handleMustacheColorChange(swatch)}>
-                                    <img src={swatch} alt={`Mustache Color ${index}`} />
-                                </button>
-                            ))}
-                        </div>
-                    )}
-
-
-{/* Beard Linework Options */}
+ {/* UI for Beard Linework */}  
 <div className="option-category">
     <h3>Beards</h3>
-    {beardAssets
-        .filter(({ key }) => !key.includes('Hair-Color'))
-        .map(({ asset, key }, index) => {
-            const isSelected = selectedBeardLinework?.key === key;
+    <div>
+        {beardAssets
+            .filter(({ key }) => !key.includes('Hair-Color')) // Ensure only linework assets are shown
+            .map(({ asset, key }, index) => {
+                const isSelected = selectedBeardLinework?.key === key;
 
-            return (
-                <div className={`UI-tile ${isSelected ? 'selected' : ''}`} key={index}>
+                return (
                     <button
-                        onClick={() => handleBeardLineworkChange({ asset, key })}
-                        className='UI-tile-button'
+                        key={index}
+                        onClick={() => {
+                            if (isSelected) {
+                                handleRemoveBeardLinework(); // Remove beard linework if it's already selected
+                            } else {
+                                handleBeardLineworkChange({ asset, key }); // Change to the newly selected beard linework
+                            }
+                        }}
+                        className={`UI-tile-button removeable character-background ${isSelected ? 'selected' : ''}`}
                     >
                         <img src={asset} alt={`Beard Linework ${index}`} />
-                        {/* Conditionally render CloseButton if this beard is selected */}
-                        {isSelected && (
-                            <CloseButton onClick={() => handleRemoveBeardLinework()} />
-                        )}
+                    </button>
+                );
+            })}
+    </div>
+</div>
+
+{/* UI for Beard Colors */}  
+{selectedBeardLinework && (
+    <div className="option-category">
+        <h3>Beard Colors</h3>
+        <div>
+            {hairColorSwatches.map((swatch, index) => (
+                <button
+                    key={index}
+                    onClick={() => handleBeardColorChange(swatch)}
+                    className='UI-tile-button color-swatch'
+                >
+                    <img src={swatch} alt={`Beard Color ${index}`} />
+                </button>
+            ))}
+        </div>
+    </div>
+)}
+
+
+
+{/* UI for Ear Linework */}  
+<div className="option-category">
+    <h3>Ear Linework</h3>
+    <div>
+        {earAssets.linework
+            .filter(lineworkAsset => lineworkAsset.includes('Ear') && !lineworkAsset.includes('Skin-Color')) // Exclude skin-tone options
+            .map((lineworkAsset, index) => (
+                <button key={index} onClick={() => handleEarLineworkChange(lineworkAsset)} className='UI-tile-button'>
+                    <img src={lineworkAsset} alt={`Ear Linework ${index}`} />
+                </button>
+            ))}
+    </div>
+</div>
+
+{/* UI for Shirt Linework */}  
+<div className="option-category">
+    <h3>Shirt Linework</h3>
+    <div>
+        {shirtAssets.linework[selectedShoulderType]?.map((linework, index) => {
+            // Extract shirt number from the linework filename
+            const lineworkShirtNumberMatch = linework.match(/Top-(\d+)/);
+            const lineworkShirtNumber = lineworkShirtNumberMatch ? lineworkShirtNumberMatch[1] : null;
+
+            // Extract shirt number from the selected shirt linework
+            const selectedShirtNumberMatch = selectedShirtLinework?.match(/Top-(\d+)/);
+            const selectedShirtNumber = selectedShirtNumberMatch ? selectedShirtNumberMatch[1] : null;
+
+            const isSelected = lineworkShirtNumber === selectedShirtNumber;
+
+            return (
+                <div className={`UI-tile ${isSelected ? 'selected' : ''}`} key={lineworkShirtNumber || index}>
+                    <button
+                        onClick={() => {
+                            if (isSelected) {
+                                handleRemoveShirtLinework(); // Deselect if already selected
+                            } else {
+                                handleShirtLineworkChange(linework); // Select a new shirt linework
+                            }
+                        }}
+                        className={`UI-tile-button removeable ${isSelected ? 'selected' : ''}`}
+                    >
+                        <img src={linework} alt={`Shirt Linework ${lineworkShirtNumber}`} />
                     </button>
                 </div>
             );
         })}
+    </div>
 </div>
 
-
-                    {/* Beard Color Options */}
-                    {selectedBeardLinework && (
-                        <div className="option-category">
-                            <h3>Beard Colors</h3>
-                            {hairColorSwatches.map((swatch, index) => (
-                                <button key={index} onClick={() => handleBeardColorChange(swatch)}>
-                                    <img src={swatch} alt={`Beard Color ${index}`} />
-                                </button>
-                            ))}
-                        </div>
-                    )}
-
-
-
-                    {/* Ear Linework Options */}
-                    <div className="option-category">
-                        <h3>Ear Linework</h3>
-                        {earAssets.linework
-                            .filter(lineworkAsset => lineworkAsset.includes('Ear') && !lineworkAsset.includes('Skin-Color')) // Exclude skin-tone options
-                            .map((lineworkAsset, index) => (
-                                <button key={index} onClick={() => handleEarLineworkChange(lineworkAsset)}>
-                                    <img src={lineworkAsset} alt={`Ear Linework ${index}`} />
-                                </button>
-                            ))}
-                    </div>
-
-                    <div className="option-category">
-    <h3>Shirt Linework</h3>
-    {shirtAssets.linework[selectedShoulderType]?.map((linework, index) => {
-        // Extract shirt number from the linework filename
-        const lineworkShirtNumberMatch = linework.match(/Top-(\d+)/);
-        const lineworkShirtNumber = lineworkShirtNumberMatch ? lineworkShirtNumberMatch[1] : null;
-
-        // Extract shirt number from the selected shirt linework
-        const selectedShirtNumberMatch = selectedShirtLinework?.match(/Top-(\d+)/);
-        const selectedShirtNumber = selectedShirtNumberMatch ? selectedShirtNumberMatch[1] : null;
-
-        const isSelected = lineworkShirtNumber === selectedShirtNumber;
-
-        return (
-            <div className={`UI-tile ${isSelected ? 'selected' : ''}`} key={lineworkShirtNumber || index}>
+{/* UI for Shirt Colors */}  
+{selectedShirtLinework && (
+    <div className="option-category">
+        <h3>Shirt Colors</h3>
+        <div>
+            {clothesColorSwatches.map(({ asset, key }, index) => (
                 <button
-                    onClick={() => handleShirtLineworkChange(linework)}
-                    className='UI-tile-button'
+                    key={index}
+                    onClick={() => handleShirtColorChange(key)}
+                    className='UI-tile-button color-swatch'
                 >
-                    <img src={linework} alt={`Shirt Linework ${lineworkShirtNumber}`} />
-                    {/* Conditionally render CloseButton if this shirt linework is selected */}
-                    {isSelected && (
-                        <CloseButton onClick={() => handleRemoveShirtLinework()} />
-                    )}
+                    <img src={asset} alt={`Shirt Color ${index}`} />
                 </button>
-            </div>
-        );
-    })}
-</div>
+            ))}
+        </div>
+    </div>
+)}
 
 
 
-
-                    {selectedShirtLinework && (
-                        <div className="option-category">
-                            <h3>Shirt Colors</h3>
-                            {clothesColorSwatches.map(({ asset, key }, index) => (
-                                <button key={index} onClick={() => handleShirtColorChange(key)}>
-                                    <img src={asset} alt={`Shirt Color ${index}`} />
-                                </button>
-                            ))}
-                        </div>
-                    )}
-
-
-
-{/* Background Options */}
+{/* UI for Backgrounds */}  
 <div className="option-category">
     <h3>Backgrounds</h3>
-    {backgroundAssets.backgrounds.map((backgroundAsset, index) => {
-        const isSelected = selectedBackground === backgroundAsset;
+    <div>
+        {backgroundAssets.backgrounds.map((backgroundAsset, index) => {
+            const isSelected = selectedBackground === backgroundAsset;
 
-        return (
-            <div className={`UI-tile ${isSelected ? 'selected' : ''}`} key={index}>
+            return (
                 <button
-                    onClick={() => handleBackgroundChange(backgroundAsset)}
-                    className='UI-tile-button'
+                    key={index}
+                    onClick={() => {
+                        if (isSelected) {
+                            handleRemoveBackground(); // Deselect if already selected
+                        } else {
+                            handleBackgroundChange(backgroundAsset); // Change to the newly selected background
+                        }
+                    }}
+                    className={`UI-tile-button ${isSelected ? 'selected' : ''}`}
                 >
                     <img src={backgroundAsset} alt={`Background ${index}`} />
-                    {/* Conditionally render CloseButton if this background is selected */}
-                    {isSelected && (
-                        <CloseButton onClick={() => handleRemoveBackground()} />
-                    )}
                 </button>
-            </div>
-        );
-    })}
+            );
+        })}
+    </div>
 </div>
 
+                        <div className='option-quick-menu'>
+                            <button>Reset Character</button>
+                            <button>Randomize Character</button>
 
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

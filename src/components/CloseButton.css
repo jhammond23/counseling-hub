@@ -1,16 +1,27 @@
 /* CloseButton.css */
 .close-button {
     position: absolute;
-    background: transparent !important;
     border: none;
     font-size: 16px;
     cursor: pointer;
     padding: 0;
     z-index: 1000;
-    box-shadow: 10px 10px 30px #00000090;
-    aspect-ratio: 1/1;
     height: 150px;
-    width: 150px;;
+    width: 150px;
+    top: 0px;
+    right: 0px;
+}
+
+.UI-tile-button .close-button{
+    height: 150px;
+    width: 150px;
+}
+
+.UI-swatch .close-button {
+    height: 75px;
+    width: 75px;
+    border-radius: 50%;
+    border: none;
 }
 
 .close-button:hover {
@@ -32,3 +43,4 @@
     font-size: 5rem;
 
   }
+
