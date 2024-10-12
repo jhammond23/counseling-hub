@@ -12,14 +12,14 @@ const SafeSpace = () => {
     const [selectedEarSkinTone, setSelectedEarSkinTone] = useState(null);
     const [selectedHairLinework, setSelectedHairLinework] = useState(null);
     const [selectedHairColor, setSelectedHairColor] = useState(null);
-    const [selectedFaceScar, setSelectedFaceScar] = useState(null);
+const [selectedFaceScars, setSelectedFaceScars] = useState([]);
     const [selectedFrontLayerFringeLinework, setSelectedFrontLayerFringeLinework] = useState(null);
     const [selectedFrontLayerFringeColor, setSelectedFrontLayerFringeColor] = useState(null);
 
     const [selectedSecondaryFringeLinework, setSelectedSecondaryFringeLinework] = useState(null);
     const [selectedSecondaryFringeColor, setSelectedSecondaryFringeColor] = useState(null);
 
-    const [selectedBodyScar, setSelectedBodyScar] = useState(null);
+    const [selectedBodyScars, setSelectedBodyScars] = useState([]);
     const [selectedBackground, setSelectedBackground] = useState(null);
     const [selectedAccessory, setSelectedAccessory] = useState(null);
 
@@ -310,8 +310,17 @@ const SafeSpace = () => {
     };
 
     const handleFaceScarChange = (faceScar) => {
-        setSelectedFaceScar(faceScar);
+        setSelectedFaceScars(prevScars => {
+            if (prevScars.includes(faceScar)) {
+                // Remove the scar if it's already selected
+                return prevScars.filter(scar => scar !== faceScar);
+            } else {
+                // Add the scar if it's not selected
+                return [...prevScars, faceScar];
+            }
+        });
     };
+    
 
     // Handle Front Layer Fringe Linework
     const handleFrontLayerFringeLineworkChange = (fringeLinework) => {
@@ -391,11 +400,18 @@ const SafeSpace = () => {
         }
     };
 
-
-
     const handleBodyScarChange = (bodyScar) => {
-        setSelectedBodyScar(bodyScar);
+        setSelectedBodyScars((prevScars) => {
+            if (prevScars.includes(bodyScar)) {
+                // Remove the scar if it's already selected
+                return prevScars.filter((scar) => scar !== bodyScar);
+            } else {
+                // Add the scar if it's not selected
+                return [...prevScars, bodyScar];
+            }
+        });
     };
+    
 
     const handleBackgroundChange = (backgroundAsset) => {
         setSelectedBackground(backgroundAsset);
@@ -945,10 +961,11 @@ const SafeSpace = () => {
         setSelectedEarSkinTone(null);
     };
 
-    // Face Scar
-    const handleRemoveFaceScar = () => {
-        setSelectedFaceScar(null);
-    };
+// Remove all face scars (if you want a button to clear all scars)
+const handleRemoveAllFaceScars = () => {
+    setSelectedFaceScars([]);
+};
+
 
     // Front Layer Fringe
     const handleRemoveFrontLayerFringeLinework = () => {
@@ -963,9 +980,10 @@ const SafeSpace = () => {
     };
 
     // Body Scar
-    const handleRemoveBodyScar = () => {
-        setSelectedBodyScar(null);
+    const handleRemoveSpecificBodyScar = (bodyScar) => {
+        setSelectedBodyScars((prevScars) => prevScars.filter((scar) => scar !== bodyScar));
     };
+    
 
     // Background
     const handleRemoveBackground = () => {
@@ -1339,14 +1357,16 @@ const SafeSpace = () => {
 
 
 
-                    {/* Render selected face scar */}
-                    {selectedFaceScar && (
-                        <img
-                            src={selectedFaceScar}
-                            alt="Selected Face Scar"
-                            className="character-layer face-scars"
-                        />
-                    )}
+{/* Render selected face scars */}
+{selectedFaceScars.map((faceScar, index) => (
+    <img
+        key={index}
+        src={faceScar}
+        alt={`Selected Face Scar ${index}`}
+        className="character-layer face-scars"
+    />
+))}
+
 
                     {/* Render selected Front Layer Fringe Linework */}
                     {selectedFrontLayerFringeLinework && (
@@ -1385,14 +1405,17 @@ const SafeSpace = () => {
                     )}
 
 
-                    {/* Render selected body scar */}
-                    {selectedBodyScar && (
-                        <img
-                            src={selectedBodyScar}
-                            alt="Selected Body Scar"
-                            className="character-layer body-scars"
-                        />
-                    )}
+{/* Render selected body scars */}
+{selectedBodyScars.map((bodyScar, index) => (
+        <img
+            key={index}
+            src={bodyScar}
+            alt={`Selected Body Scar ${index}`}
+            className="character-layer body-scars"
+        />
+
+))}
+
 
                     {/* Render selected accessory */}
                     {selectedAccessory && (
@@ -1648,49 +1671,47 @@ const SafeSpace = () => {
 
 
 {/* UI for Face Scars */}  
+{/* UI for Face Scars */}  
 <div className="option-category">
     <h3>Face Scars</h3>
     <div>
-        {faceScarAssets.scars.map((scarAsset, index) => (
-            <button
-                key={index}
-                onClick={() => {
-                    if (selectedFaceScar === scarAsset) {
-                        handleRemoveFaceScar(); // Remove face scar if it's already selected
-                    } else {
-                        handleFaceScarChange(scarAsset); // Change to the newly selected face scar
-                    }
-                }}
-                className={`UI-tile-button removeable ${selectedFaceScar === scarAsset ? 'selected' : ''}`}
-            >
-                <img src={scarAsset} alt={`Face Scar ${index}`} />
-            </button>
-        ))}
+        {faceScarAssets.scars.map((scarAsset, index) => {
+            const isSelected = selectedFaceScars.includes(scarAsset);
+            return (
+                <button
+                    key={index}
+                    onClick={() => handleFaceScarChange(scarAsset)}
+                    className={`UI-tile-button removeable ${isSelected ? 'selected' : ''}`}
+                >
+                    <img src={scarAsset} alt={`Face Scar ${index}`} />
+                </button>
+            );
+        })}
     </div>
 </div>
+
 
 
 {/* UI for Body Scars */}  
 <div className="option-category">
     <h3>Body Scars</h3>
     <div>
-        {bodyScarAssets.scars.map((scarAsset, index) => (
-            <button
-                key={index}
-                onClick={() => {
-                    if (selectedBodyScar === scarAsset) {
-                        handleRemoveBodyScar(); // Remove body scar if it's already selected
-                    } else {
-                        handleBodyScarChange(scarAsset); // Change to the newly selected body scar
-                    }
-                }}
-                className={`UI-tile-button removeable ${selectedBodyScar === scarAsset ? 'selected' : ''}`}
-            >
-                <img src={scarAsset} alt={`Body Scar ${index}`} />
-            </button>
-        ))}
+        {bodyScarAssets.scars.map((scarAsset, index) => {
+            const isSelected = selectedBodyScars.includes(scarAsset);
+            return (
+                <button
+                    key={index}
+                    onClick={() => handleBodyScarChange(scarAsset)}
+                    className={`UI-tile-button removeable ${isSelected ? 'selected' : ''}`}
+                >
+                    <img src={scarAsset} alt={`Body Scar ${index}`} />
+                </button>
+            );
+        })}
     </div>
 </div>
+
+
 
 
 
