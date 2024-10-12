@@ -32,7 +32,6 @@ const [selectedFaceScars, setSelectedFaceScars] = useState([]);
     const [selectedUpperEyelash, setSelectedUpperEyelash] = useState(null);
     const [selectedLowerEyelash, setSelectedLowerEyelash] = useState(null);
     const [selectedEyeColor, setSelectedEyeColor] = useState(null);
-    const [selectedEyeball, setSelectedEyeball] = useState(null);
     const [selectedEyeShape, setSelectedEyeShape] = useState(null);
     const [selectedEyeMakeup, setSelectedEyeMakeup] = useState(null);
     const [selectedEyeSocketShadow, setSelectedEyeSocketShadow] = useState(null);
@@ -53,7 +52,6 @@ const [selectedFaceScars, setSelectedFaceScars] = useState([]);
     const [selectedLipShape, setSelectedLipShape] = useState(null);
     const [selectedEyebrow, setSelectedEyebrow] = useState(null);
     const [selectedSkinToneSwatch, setSelectedSkinToneSwatch] = useState(null);
-
 
 
     useEffect(() => {
@@ -562,12 +560,15 @@ const [selectedFaceScars, setSelectedFaceScars] = useState([]);
         setSelectedLowerEyelash(lowerEyelash);
     };
 
-    const handleEyeColorChange = (eyeColor) => {
-        setSelectedEyeColor(eyeColor);
+    const handleEyeColorChange = (eyeColorAsset) => {
+        if (selectedEyeColor === eyeColorAsset) {
+            // If the same eye color is selected, remove it
+            setSelectedEyeColor(null);
+        } else {
+            setSelectedEyeColor(eyeColorAsset);
+        }
     };
-    const handleEyeballChange = (eyeball) => {
-        setSelectedEyeball(eyeball);
-    };
+    
 
     const handleEyeShapeChange = (eyeShape) => {
         setSelectedEyeShape(eyeShape);
@@ -911,6 +912,27 @@ const [selectedFaceScars, setSelectedFaceScars] = useState([]);
         }
     };
 
+    const getEyeballForEyeColor = (eyeColorAsset) => {
+        const eyeColorNumberMatch = eyeColorAsset.match(/Eye-Color-(\d+)/);
+        if (eyeColorNumberMatch) {
+            const eyeColorNumber = eyeColorNumberMatch[1];
+            
+            const matchingEyeball = eyeballAssets.eyeballs.find((asset) =>
+                asset.includes(`Eyeball-${eyeColorNumber}`)
+            );
+    
+            if (matchingEyeball) {
+                return matchingEyeball;
+            } else {
+                console.warn(`No matching eyeball found for Eye-Color-${eyeColorNumber}`);
+                return null;
+            }
+        } else {
+            console.warn('Could not extract eye color number from eyeColorAsset');
+            return null;
+        }
+    };
+    
 
     // removal section
 
@@ -1024,13 +1046,10 @@ const handleRemoveAllFaceScars = () => {
     // eye color
     const handleRemoveEyeColor = () => {
         setSelectedEyeColor(null);
+        // Remove this line if present:
+        // setSelectedEyeball(null);
     };
-
-    // eyeball
-    const handleRemoveEyeball = () => {
-        setSelectedEyeball(null);
-    };
-
+    
     // eye shape
     const handleRemoveEyeShape = () => {
         setSelectedEyeShape(null);
@@ -1290,23 +1309,25 @@ const handleRemoveAllFaceScars = () => {
                         />
                     )}
 
-                    {/* Render selected eye color */}
-                    {selectedEyeColor && (
-                        <img
-                            src={selectedEyeColor}
-                            alt="Selected Eye Color"
-                            className="character-layer eye-color"
-                        />
-                    )}
+{/* Render eyeball and selected eye color */}
+{selectedEyeColor && (
+    <>
+        {/* Render eyeball */}
+        <img
+            src={eyeballAssets.eyeballs[0]}  // Access the single eyeball asset
+            alt="Eyeball"
+            className="character-layer eyeballs"
+        />
+        {/* Render eye color */}
+        <img
+            src={selectedEyeColor}
+            alt="Selected Eye Color"
+            className="character-layer eye-color"
+        />
+    </>
+)}
 
-                    {/* Render selected eyeball */}
-                    {selectedEyeball && (
-                        <img
-                            src={selectedEyeball}
-                            alt="Selected Eyeball"
-                            className="character-layer eyeballs"
-                        />
-                    )}
+
 
                     {/* Render selected eye shape */}
                     {selectedEyeShape && (
@@ -1710,21 +1731,6 @@ const handleRemoveAllFaceScars = () => {
         })}
     </div>
 </div>
-
-
-
-
-
-
-                        {/* Eyeball Options */}
-                        <div className="option-category">
-                            <h3>Eyeballs</h3>
-                            {eyeballAssets.eyeballs.map((eyeballAsset, index) => (
-                                <button key={index} onClick={() => handleEyeballChange(eyeballAsset)} className='UI-tile-button'>
-                                    <img src={eyeballAsset} alt={`Eyeball ${index}`} />
-                                </button>
-                            ))}
-                        </div>
 
 {/* UI for Eye Shapes */}  
 <div className="option-category">
