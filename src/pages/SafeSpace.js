@@ -397,8 +397,9 @@ const SafeSpace = () => {
         setSelectedBodyScar(bodyScar);
     };
 
-    const handleBackgroundChange = (background) => {
-        setSelectedBackground(background);
+    const handleBackgroundChange = (backgroundAsset) => {
+        setSelectedBackground(backgroundAsset);
+        document.querySelector('.character-preview').style.backgroundImage = `url(${backgroundAsset})`;
     };
 
     const handleAccessoryChange = (accessory) => {
@@ -968,7 +969,8 @@ const SafeSpace = () => {
 
     // Background
     const handleRemoveBackground = () => {
-        setSelectedBackground(null);
+        setSelectedBackground('/path-to-your-default-background-image.jpg'); // Reset to default
+        document.querySelector('.character-preview').style.backgroundImage = `url(/path-to-your-default-background-image.jpg)`; // Set to default background
     };
 
     // Accessory
@@ -1476,16 +1478,6 @@ const SafeSpace = () => {
                             src={selectedShirtColor}
                             alt="Shirt Color"
                             className="character-layer shirt-color"
-                        />
-                    )}
-
-
-                    {/* Render selected background */}
-                    {selectedBackground && (
-                        <img
-                            src={selectedBackground}
-                            alt="Selected Background"
-                            className="character-layer colorSwatches"
                         />
                     )}
 
@@ -2290,7 +2282,7 @@ const SafeSpace = () => {
                                 handleBeardLineworkChange({ asset, key }); // Change to the newly selected beard linework
                             }
                         }}
-                        className={`UI-tile-button removeable character-background ${isSelected ? 'selected' : ''}`}
+                        className={`UI-tile-button removeable ${isSelected ? 'selected' : ''}`}
                     >
                         <img src={asset} alt={`Beard Linework ${index}`} />
                     </button>
@@ -2388,7 +2380,7 @@ const SafeSpace = () => {
 
 
 
-{/* UI for Backgrounds */}  
+{/* Background Options */}
 <div className="option-category">
     <h3>Backgrounds</h3>
     <div>
@@ -2400,12 +2392,12 @@ const SafeSpace = () => {
                     key={index}
                     onClick={() => {
                         if (isSelected) {
-                            handleRemoveBackground(); // Deselect if already selected
+                            handleRemoveBackground(); // Deselect background, fallback to default
                         } else {
-                            handleBackgroundChange(backgroundAsset); // Change to the newly selected background
+                            handleBackgroundChange(backgroundAsset); // Change background
                         }
                     }}
-                    className={`UI-tile-button ${isSelected ? 'selected' : ''}`}
+                    className={`UI-tile-button character-background ${isSelected ? 'selected' : ''}`}
                 >
                     <img src={backgroundAsset} alt={`Background ${index}`} />
                 </button>
