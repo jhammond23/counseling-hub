@@ -43,7 +43,7 @@ const [selectedFaceScars, setSelectedFaceScars] = useState([]);
     // shirt states
     const [selectedShirtLinework, setSelectedShirtLinework] = useState(null);
     const [selectedShirtColor, setSelectedShirtColor] = useState(null);
-    const [shirtAssets, setShirtAssets] = useState({ linework: {}, colors: {} });
+    const [shirtAssets, setShirtAssets] = useState({});
     const [selectedNoseApex, setSelectedNoseApex] = useState(null);
     const [selectedNoseBridge, setSelectedNoseBridge] = useState(null);
     const [selectedMouthExpression, setSelectedMouthExpression] = useState(null);
@@ -52,6 +52,19 @@ const [selectedFaceScars, setSelectedFaceScars] = useState([]);
     const [selectedLipShape, setSelectedLipShape] = useState(null);
     const [selectedEyebrow, setSelectedEyebrow] = useState(null);
     const [selectedSkinToneSwatch, setSelectedSkinToneSwatch] = useState(null);
+
+    // Base Layer Shirt
+const [selectedBaseShirtLinework, setSelectedBaseShirtLinework] = useState(null);
+const [selectedBaseShirtColor, setSelectedBaseShirtColor] = useState(null);
+
+// Mid Layer Shirt
+const [selectedMidShirtLinework, setSelectedMidShirtLinework] = useState(null);
+const [selectedMidShirtColor, setSelectedMidShirtColor] = useState(null);
+
+// Outer Layer Shirt
+const [selectedOuterShirtLinework, setSelectedOuterShirtLinework] = useState(null);
+const [selectedOuterShirtColor, setSelectedOuterShirtColor] = useState(null);
+
 
 
     useEffect(() => {
@@ -680,9 +693,282 @@ const [selectedFaceScars, setSelectedFaceScars] = useState([]);
         }
     };
 
+// shirt logic
+
+const handleBaseShirtLineworkChange = (linework) => {
+    setSelectedBaseShirtLinework(linework);
+
+    // Update base shirt color to match the new linework and current color
+    const shoulderType = selectedShoulderType;
+    const shirtNumberMatch = linework.match(/Top-(\d+)/);
+    if (shirtNumberMatch) {
+        const shirtNumber = shirtNumberMatch[1];
+        const currentColorNumberMatch = selectedBaseShirtColor?.match(/Color-(\d+)/);
+        const currentColorNumber = currentColorNumberMatch ? currentColorNumberMatch[1] : null;
+        if (currentColorNumber) {
+            const matchingShirtColor = shirtAssets[shoulderType]['base-layer'].colors.find(
+                (color) => color.includes(`Top-${shirtNumber}`) && color.includes(`Color-${currentColorNumber}`)
+            );
+            if (matchingShirtColor) {
+                setSelectedBaseShirtColor(matchingShirtColor);
+            } else {
+                setSelectedBaseShirtColor(null);
+            }
+        } else {
+            setSelectedBaseShirtColor(null);
+        }
+    } else {
+        setSelectedBaseShirtColor(null);
+    }
+};
+
+const handleBaseShirtColorChange = (swatchKey) => {
+    const colorNumberMatch = swatchKey.match(/Clothes-Color-(\d+)/);
+    if (!colorNumberMatch) {
+        console.warn('Could not extract color number from swatch key');
+        return;
+    }
+    const colorNumber = colorNumberMatch[1];
+
+    if (!selectedBaseShirtLinework) {
+        console.warn('No base shirt linework selected');
+        return;
+    }
+
+    const shirtNumberMatch = selectedBaseShirtLinework.match(/Top-(\d+)/);
+    if (!shirtNumberMatch) {
+        console.warn('Could not extract shirt number from selectedBaseShirtLinework');
+        return;
+    }
+    const shirtNumber = shirtNumberMatch[1];
+
+    const shoulderType = selectedShoulderType;
+
+    const matchingShirtColor = shirtAssets[shoulderType]['base-layer'].colors.find(colorAsset =>
+        colorAsset.includes(`Top-${shirtNumber}`) && colorAsset.includes(`Color-${colorNumber}`)
+    );
+
+    if (matchingShirtColor) {
+        setSelectedBaseShirtColor(matchingShirtColor);
+    } else {
+        console.warn(`No matching base shirt color found for shirtNumber ${shirtNumber}, colorNumber ${colorNumber}, shoulderType ${shoulderType}`);
+        setSelectedBaseShirtColor(null);
+    }
+};
+
+const handleMidShirtLineworkChange = (linework) => {
+    setSelectedMidShirtLinework(linework);
+  
+    // Update mid shirt color to match the new linework and current color
+    const shoulderType = selectedShoulderType;
+    const shirtNumberMatch = linework.match(/Top-(\d+)/);
+    if (shirtNumberMatch) {
+      const shirtNumber = shirtNumberMatch[1];
+      const currentColorNumberMatch = selectedMidShirtColor?.match(/Color-(\d+)/);
+      const currentColorNumber = currentColorNumberMatch ? currentColorNumberMatch[1] : null;
+      if (currentColorNumber) {
+        const matchingShirtColor = shirtAssets[shoulderType]['mid-layer'].colors.find(
+          (color) => color.includes(`Top-${shirtNumber}`) && color.includes(`Color-${currentColorNumber}`)
+        );
+        if (matchingShirtColor) {
+          setSelectedMidShirtColor(matchingShirtColor);
+        } else {
+          setSelectedMidShirtColor(null);
+        }
+      } else {
+        setSelectedMidShirtColor(null);
+      }
+    } else {
+      setSelectedMidShirtColor(null);
+    }
+  };
+  
 
 
+  const handleMidShirtColorChange = (swatchKey) => {
+    const colorNumberMatch = swatchKey.match(/Clothes-Color-(\d+)/);
+    if (!colorNumberMatch) {
+      console.warn('Could not extract color number from swatch key');
+      return;
+    }
+    const colorNumber = colorNumberMatch[1];
+  
+    if (!selectedMidShirtLinework) {
+      console.warn('No mid shirt linework selected');
+      return;
+    }
+  
+    const shirtNumberMatch = selectedMidShirtLinework.match(/Top-(\d+)/);
+    if (!shirtNumberMatch) {
+      console.warn('Could not extract shirt number from selectedMidShirtLinework');
+      return;
+    }
+    const shirtNumber = shirtNumberMatch[1];
+  
+    const shoulderType = selectedShoulderType;
+  
+    const matchingShirtColor = shirtAssets[shoulderType]['mid-layer'].colors.find((colorAsset) =>
+      colorAsset.includes(`Top-${shirtNumber}`) && colorAsset.includes(`Color-${colorNumber}`)
+    );
+  
+    if (matchingShirtColor) {
+      setSelectedMidShirtColor(matchingShirtColor);
+    } else {
+      console.warn(
+        `No matching mid shirt color found for shirtNumber ${shirtNumber}, colorNumber ${colorNumber}, shoulderType ${shoulderType}`
+      );
+      setSelectedMidShirtColor(null);
+    }
+  };
+  
 
+
+  const handleOuterShirtLineworkChange = (linework) => {
+    setSelectedOuterShirtLinework(linework);
+  
+    // Update outer shirt color to match the new linework and current color
+    const shoulderType = selectedShoulderType;
+    const shirtNumberMatch = linework.match(/Top-(\d+)/);
+    if (shirtNumberMatch) {
+      const shirtNumber = shirtNumberMatch[1];
+      const currentColorNumberMatch = selectedOuterShirtColor?.match(/Color-(\d+)/);
+      const currentColorNumber = currentColorNumberMatch ? currentColorNumberMatch[1] : null;
+      if (currentColorNumber) {
+        const matchingShirtColor = shirtAssets[shoulderType]['outer-layer'].colors.find(
+          (color) => color.includes(`Top-${shirtNumber}`) && color.includes(`Color-${currentColorNumber}`)
+        );
+        if (matchingShirtColor) {
+          setSelectedOuterShirtColor(matchingShirtColor);
+        } else {
+          setSelectedOuterShirtColor(null);
+        }
+      } else {
+        setSelectedOuterShirtColor(null);
+      }
+    } else {
+      setSelectedOuterShirtColor(null);
+    }
+  };
+  
+
+
+  const handleOuterShirtColorChange = (swatchKey) => {
+    const colorNumberMatch = swatchKey.match(/Clothes-Color-(\d+)/);
+    if (!colorNumberMatch) {
+      console.warn('Could not extract color number from swatch key');
+      return;
+    }
+    const colorNumber = colorNumberMatch[1];
+  
+    if (!selectedOuterShirtLinework) {
+      console.warn('No outer shirt linework selected');
+      return;
+    }
+  
+    const shirtNumberMatch = selectedOuterShirtLinework.match(/Top-(\d+)/);
+    if (!shirtNumberMatch) {
+      console.warn('Could not extract shirt number from selectedOuterShirtLinework');
+      return;
+    }
+    const shirtNumber = shirtNumberMatch[1];
+  
+    const shoulderType = selectedShoulderType;
+  
+    const matchingShirtColor = shirtAssets[shoulderType]['outer-layer'].colors.find((colorAsset) =>
+      colorAsset.includes(`Top-${shirtNumber}`) && colorAsset.includes(`Color-${colorNumber}`)
+    );
+  
+    if (matchingShirtColor) {
+      setSelectedOuterShirtColor(matchingShirtColor);
+    } else {
+      console.warn(
+        `No matching outer shirt color found for shirtNumber ${shirtNumber}, colorNumber ${colorNumber}, shoulderType ${shoulderType}`
+      );
+      setSelectedOuterShirtColor(null);
+    }
+  };
+  
+
+
+  useEffect(() => {
+    const shoulderType = selectedShoulderType; // 'thin', 'broad', or 'narrow'
+  
+    // Update Base Layer Shirt
+    if (selectedBaseShirtLinework) {
+      const shirtNumberMatch = selectedBaseShirtLinework.match(/Top-(\d+)/);
+      if (shirtNumberMatch) {
+        const shirtNumber = shirtNumberMatch[1];
+        const matchingLinework = shirtAssets[shoulderType]['base-layer'].linework.find((linework) =>
+          linework.includes(`Top-${shirtNumber}`)
+        );
+        setSelectedBaseShirtLinework(matchingLinework || null);
+  
+        const currentColorNumberMatch = selectedBaseShirtColor?.match(/Color-(\d+)/);
+        const currentColorNumber = currentColorNumberMatch ? currentColorNumberMatch[1] : null;
+  
+        if (currentColorNumber) {
+          const matchingColor = shirtAssets[shoulderType]['base-layer'].colors.find(
+            (color) => color.includes(`Top-${shirtNumber}`) && color.includes(`Color-${currentColorNumber}`)
+          );
+          setSelectedBaseShirtColor(matchingColor || null);
+        }
+      }
+    }
+  
+    // Update Mid Layer Shirt
+    if (selectedMidShirtLinework) {
+      const shirtNumberMatch = selectedMidShirtLinework.match(/Top-(\d+)/);
+      if (shirtNumberMatch) {
+        const shirtNumber = shirtNumberMatch[1];
+        const matchingLinework = shirtAssets[shoulderType]['mid-layer'].linework.find((linework) =>
+          linework.includes(`Top-${shirtNumber}`)
+        );
+        setSelectedMidShirtLinework(matchingLinework || null);
+  
+        const currentColorNumberMatch = selectedMidShirtColor?.match(/Color-(\d+)/);
+        const currentColorNumber = currentColorNumberMatch ? currentColorNumberMatch[1] : null;
+  
+        if (currentColorNumber) {
+          const matchingColor = shirtAssets[shoulderType]['mid-layer'].colors.find(
+            (color) => color.includes(`Top-${shirtNumber}`) && color.includes(`Color-${currentColorNumber}`)
+          );
+          setSelectedMidShirtColor(matchingColor || null);
+        }
+      }
+    }
+  
+    // Update Outer Layer Shirt
+    if (selectedOuterShirtLinework) {
+      const shirtNumberMatch = selectedOuterShirtLinework.match(/Top-(\d+)/);
+      if (shirtNumberMatch) {
+        const shirtNumber = shirtNumberMatch[1];
+        const matchingLinework = shirtAssets[shoulderType]['outer-layer'].linework.find((linework) =>
+          linework.includes(`Top-${shirtNumber}`)
+        );
+        setSelectedOuterShirtLinework(matchingLinework || null);
+  
+        const currentColorNumberMatch = selectedOuterShirtColor?.match(/Color-(\d+)/);
+        const currentColorNumber = currentColorNumberMatch ? currentColorNumberMatch[1] : null;
+  
+        if (currentColorNumber) {
+          const matchingColor = shirtAssets[shoulderType]['outer-layer'].colors.find(
+            (color) => color.includes(`Top-${shirtNumber}`) && color.includes(`Color-${currentColorNumber}`)
+          );
+          setSelectedOuterShirtColor(matchingColor || null);
+        }
+      }
+    }
+  }, [
+    selectedShoulderType,
+    selectedBaseShirtLinework,
+    selectedBaseShirtColor,
+    selectedMidShirtLinework,
+    selectedMidShirtColor,
+    selectedOuterShirtLinework,
+    selectedOuterShirtColor,
+    shirtAssets,
+  ]);
+  
 
 
 
@@ -705,118 +991,6 @@ const [selectedFaceScars, setSelectedFaceScars] = useState([]);
         }
         return null;
     };
-
-    const handleShirtLineworkChange = (shirtLinework) => {
-        // Step 1: Set the selected shirt linework
-        setSelectedShirtLinework(shirtLinework);
-
-        // Step 2: Extract the shoulder type (Thin, Broad, Narrow) from the currently selected shoulder linework
-        const shoulderType = selectedShoulderLinework.match(/(Thin|Broad|Narrow)-Shoulder/)?.[1];
-
-        if (!shoulderType) {
-            console.warn("No shoulder type found.");
-            return;
-        }
-
-        // Ensure correct casing for shoulder type (capitalize the first letter)
-        const formattedShoulderType = shoulderType.charAt(0).toUpperCase() + shoulderType.slice(1).toLowerCase();
-
-        // Step 3: Extract the shirt number from the linework
-        const shirtNumber = shirtLinework.match(/Top-(\d+)/)?.[1];
-
-        // Step 4: Log the shirt linework file path
-        console.log("Shirt Linework Path:", shirtLinework);
-
-        // Step 5: Apply the current shirt color to the new shirt linework (using the current color)
-        if (selectedShirtColor) {
-            const currentColorNumber = selectedShirtColor.match(/Color-(\d+)/)?.[1]; // Extract the color number
-            const matchingShirtColor = shirtAssets.colors[formattedShoulderType.toLowerCase()]?.find(
-                (color) => color.includes(`Top-${shirtNumber}`) && color.includes(`Color-${currentColorNumber}`)
-            );
-
-            // Log the matching shirt color file path
-            console.log("Shirt Color Path:", matchingShirtColor);
-
-            if (matchingShirtColor) {
-                setSelectedShirtColor(matchingShirtColor);
-            } else {
-                console.warn(`No matching shirt color found for ${formattedShoulderType}-Shoulder with Top-${shirtNumber} and Color-${currentColorNumber}`);
-            }
-        }
-    };
-
-
-
-
-    const handleShirtColorChange = (swatchKey) => {
-        const colorNumberMatch = swatchKey.match(/Clothes-Color-(\d+)/);
-        if (!colorNumberMatch) {
-            console.warn('Could not extract color number from swatch key');
-            return;
-        }
-        const colorNumber = colorNumberMatch[1];
-
-        if (!selectedShirtLinework) {
-            console.warn('No shirt linework selected');
-            return;
-        }
-
-        const shirtNumberMatch = selectedShirtLinework.match(/Top-(\d+)/);
-        if (!shirtNumberMatch) {
-            console.warn('Could not extract shirt number from selectedShirtLinework');
-            return;
-        }
-        const shirtNumber = shirtNumberMatch[1];
-
-        const shoulderType = selectedShoulderLinework.match(/(Thin|Broad|Narrow)-Shoulder/)[1].toLowerCase();
-
-        // Find the matching shirt color asset
-        const matchingShirtColor = shirtAssets.colors[shoulderType]?.find(colorAsset =>
-            colorAsset.includes(`Top-${shirtNumber}`) && colorAsset.includes(`Color-${colorNumber}`)
-        );
-
-        if (matchingShirtColor) {
-            setSelectedShirtColor(matchingShirtColor);
-        } else {
-            console.warn(`No matching shirt color found for shirtNumber ${shirtNumber}, colorNumber ${colorNumber}, shoulderType ${shoulderType}`);
-            setSelectedShirtColor(null);
-        }
-    };
-
-
-    useEffect(() => {
-        // Automatically update shirt linework and color when shoulder linework changes
-        const shoulderType = selectedShoulderLinework?.match(/(Thin|Broad|Narrow)-Shoulder/)?.[1]?.toLowerCase();
-
-        if (shoulderType) {
-            const shirtNumber = selectedShirtLinework?.match(/Top-(\d+)/)?.[1]; // Extract the shirt number if one is selected
-
-            if (shirtNumber) {
-                // Update shirt linework to match the new shoulder size
-                const matchingShirtLinework = shirtAssets.linework[shoulderType]?.find(
-                    (shirt) => shirt.includes(`Top-${shirtNumber}`)
-                );
-
-                if (matchingShirtLinework) {
-                    setSelectedShirtLinework(matchingShirtLinework); // Update the shirt linework
-
-                    // Extract the color number from the currently selected color (if any)
-                    const currentColorNumber = selectedShirtColor?.match(/Color-(\d+)/)?.[1];
-
-                    if (currentColorNumber) {
-                        // Update shirt color to match the new shoulder size
-                        const matchingShirtColor = shirtAssets.colors[shoulderType]?.find(
-                            (color) => color.includes(`Top-${shirtNumber}`) && color.includes(`Color-${currentColorNumber}`)
-                        );
-
-                        if (matchingShirtColor) {
-                            setSelectedShirtColor(matchingShirtColor); // Update the shirt color
-                        }
-                    }
-                }
-            }
-        }
-    }, [selectedShoulderLinework, selectedShirtLinework, selectedShirtColor, shirtAssets.linework, shirtAssets.colors]); // Add all dependencies
 
     const handleNoseApexChange = (apex) => {
         setSelectedNoseApex(apex);
@@ -1510,20 +1684,54 @@ const handleRemoveAllFaceScars = () => {
                         </div>
                     )}
 
-                    {selectedShirtLinework && (
-                        <img
-                            src={selectedShirtLinework}
-                            alt="Shirt Linework"
-                            className="character-layer shirt-linework" />
-                    )}
+{/* Base Layer Shirt */}
+{selectedBaseShirtLinework && (
+    <img
+        src={selectedBaseShirtLinework}
+        alt="Base Shirt Linework"
+        className="character-layer base-layer-linework"
+    />
+)}
+{selectedBaseShirtColor && (
+    <img
+        src={selectedBaseShirtColor}
+        alt="Base Shirt Color"
+        className="character-layer base-layer-tops-color"
+    />
+)}
 
-                    {selectedShirtColor && (
-                        <img
-                            src={selectedShirtColor}
-                            alt="Shirt Color"
-                            className="character-layer shirt-color"
-                        />
-                    )}
+{/* Mid Layer Shirt */}
+{selectedMidShirtLinework && (
+    <img
+        src={selectedMidShirtLinework}
+        alt="Mid Shirt Linework"
+        className="character-layer mid-layer-tops-linework"
+    />
+)}
+{selectedMidShirtColor && (
+    <img
+        src={selectedMidShirtColor}
+        alt="Mid Shirt Color"
+        className="character-layer mid-layer-tops-color"
+    />
+)}
+
+{/* Outer Layer Shirt */}
+{selectedOuterShirtLinework && (
+    <img
+        src={selectedOuterShirtLinework}
+        alt="Outer Shirt Linework"
+        className="character-layer outer-layer-tops-linework"
+    />
+)}
+{selectedOuterShirtColor && (
+    <img
+        src={selectedOuterShirtColor}
+        alt="Outer Shirt Color"
+        className="character-layer outer-layer-tops-color"
+    />
+)}
+
 
                     {/* Render selected mouth expression */}
                     {selectedMouthExpression && (
@@ -2352,58 +2560,157 @@ const handleRemoveAllFaceScars = () => {
     </div>
 </div>
 
-{/* UI for Shirt Linework */}  
-<div className="option-category">
-    <h3>Shirt Linework</h3>
-    <div>
-        {shirtAssets.linework[selectedShoulderType]?.map((linework, index) => {
-            // Extract shirt number from the linework filename
-            const lineworkShirtNumberMatch = linework.match(/Top-(\d+)/);
-            const lineworkShirtNumber = lineworkShirtNumberMatch ? lineworkShirtNumberMatch[1] : null;
-
-            // Extract shirt number from the selected shirt linework
-            const selectedShirtNumberMatch = selectedShirtLinework?.match(/Top-(\d+)/);
-            const selectedShirtNumber = selectedShirtNumberMatch ? selectedShirtNumberMatch[1] : null;
-
-            const isSelected = lineworkShirtNumber === selectedShirtNumber;
-
-            return (
-                <div className={`UI-tile ${isSelected ? 'selected' : ''}`} key={lineworkShirtNumber || index}>
-                    <button
-                        onClick={() => {
-                            if (isSelected) {
-                                handleRemoveShirtLinework(); // Deselect if already selected
-                            } else {
-                                handleShirtLineworkChange(linework); // Select a new shirt linework
-                            }
-                        }}
-                        className={`UI-tile-button removeable ${isSelected ? 'selected' : ''}`}
-                    >
-                        <img src={linework} alt={`Shirt Linework ${lineworkShirtNumber}`} />
-                    </button>
-                </div>
-            );
-        })}
-    </div>
-</div>
-
-{/* UI for Shirt Colors */}  
-{selectedShirtLinework && (
+{/* Base Layer Shirt Linework Selection */}
+{shirtAssets &&
+  shirtAssets[selectedShoulderType] &&
+  shirtAssets[selectedShoulderType]['base-layer'] &&
+  shirtAssets[selectedShoulderType]['base-layer'].linework &&
+  shirtAssets[selectedShoulderType]['base-layer'].linework.length > 0 && (
     <div className="option-category">
-        <h3>Shirt Colors</h3>
+      <h3>Base Layer Shirts</h3>
+      <div>
+        {shirtAssets[selectedShoulderType]['base-layer'].linework.map((linework, index) => {
+          const isSelected = selectedBaseShirtLinework === linework;
+          return (
+            <button
+              key={index}
+              onClick={() => {
+                if (isSelected) {
+                  setSelectedBaseShirtLinework(null);
+                  setSelectedBaseShirtColor(null);
+                } else {
+                  handleBaseShirtLineworkChange(linework);
+                }
+              }}
+              className={`UI-tile-button removeable ${isSelected ? 'selected' : ''}`}
+            >
+              <img src={linework} alt={`Base Shirt Linework ${index}`} />
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  )}
+
+
+{/* Base Layer Shirt Colors */}
+{selectedBaseShirtLinework && (
+    <div className="option-category">
+        <h3>Base Shirt Colors</h3>
         <div>
             {clothesColorSwatches.map(({ asset, key }, index) => (
                 <button
                     key={index}
-                    onClick={() => handleShirtColorChange(key)}
+                    onClick={() => handleBaseShirtColorChange(key)}
                     className='UI-tile-button color-swatch'
                 >
-                    <img src={asset} alt={`Shirt Color ${index}`} />
+                    <img src={asset} alt={`Base Shirt Color ${index}`} />
                 </button>
             ))}
         </div>
     </div>
 )}
+
+{/* Mid Layer Shirt Linework Selection */}
+{shirtAssets &&
+  shirtAssets[selectedShoulderType] &&
+  shirtAssets[selectedShoulderType]['mid-layer'] &&
+  shirtAssets[selectedShoulderType]['mid-layer'].linework &&
+  shirtAssets[selectedShoulderType]['mid-layer'].linework.length > 0 && (
+    <div className="option-category">
+      <h3>Mid Layer Shirts</h3>
+      <div>
+        {shirtAssets[selectedShoulderType]['mid-layer'].linework.map((linework, index) => {
+          const isSelected = selectedMidShirtLinework === linework;
+          return (
+            <button
+              key={index}
+              onClick={() => {
+                if (isSelected) {
+                  setSelectedMidShirtLinework(null);
+                  setSelectedMidShirtColor(null);
+                } else {
+                  handleMidShirtLineworkChange(linework);
+                }
+              }}
+              className={`UI-tile-button removeable ${isSelected ? 'selected' : ''}`}
+            >
+              <img src={linework} alt={`Mid Shirt Linework ${index}`} />
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  )}
+
+{/* Mid Layer Shirt Colors */}
+{selectedMidShirtLinework && (
+  <div className="option-category">
+    <h3>Mid Shirt Colors</h3>
+    <div>
+      {clothesColorSwatches.map(({ asset, key }, index) => (
+        <button
+          key={index}
+          onClick={() => handleMidShirtColorChange(key)}
+          className="UI-tile-button color-swatch"
+        >
+          <img src={asset} alt={`Mid Shirt Color ${index}`} />
+        </button>
+      ))}
+    </div>
+  </div>
+)}
+
+{/* Outer Layer Shirt Linework Selection */}
+{shirtAssets &&
+  shirtAssets[selectedShoulderType] &&
+  shirtAssets[selectedShoulderType]['outer-layer'] &&
+  shirtAssets[selectedShoulderType]['outer-layer'].linework &&
+  shirtAssets[selectedShoulderType]['outer-layer'].linework.length > 0 && (
+    <div className="option-category">
+      <h3>Outer Layer Shirts</h3>
+      <div>
+        {shirtAssets[selectedShoulderType]['outer-layer'].linework.map((linework, index) => {
+          const isSelected = selectedOuterShirtLinework === linework;
+          return (
+            <button
+              key={index}
+              onClick={() => {
+                if (isSelected) {
+                  setSelectedOuterShirtLinework(null);
+                  setSelectedOuterShirtColor(null);
+                } else {
+                  handleOuterShirtLineworkChange(linework);
+                }
+              }}
+              className={`UI-tile-button removeable ${isSelected ? 'selected' : ''}`}
+            >
+              <img src={linework} alt={`Outer Shirt Linework ${index}`} />
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  )}
+
+{/* Outer Layer Shirt Colors */}
+{selectedOuterShirtLinework && (
+  <div className="option-category">
+    <h3>Outer Shirt Colors</h3>
+    <div>
+      {clothesColorSwatches.map(({ asset, key }, index) => (
+        <button
+          key={index}
+          onClick={() => handleOuterShirtColorChange(key)}
+          className="UI-tile-button color-swatch"
+        >
+          <img src={asset} alt={`Outer Shirt Color ${index}`} />
+        </button>
+      ))}
+    </div>
+  </div>
+)}
+
 
 
 

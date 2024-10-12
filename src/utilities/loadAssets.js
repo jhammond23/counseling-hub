@@ -171,31 +171,50 @@ export const loadChestVolumeAssets = (context) => {
 // loadAssets.js
 
 export const loadShirtAssets = () => {
-    const thinShirtContext = require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/9-Thin-Shoulder-Tops', true, /\.(png|jpe?g|svg)$/);
-    const broadShirtContext = require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/8-Broad-Shoulder-Tops', true, /\.(png|jpe?g|svg)$/);
-    const narrowShirtContext = require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/10-Narrow-Shoulder-Tops', true, /\.(png|jpe?g|svg)$/);
+    // Thin Shoulder Tops
+    const thinBaseContext = require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/9-Thin-Shoulder-Tops/base-layer', true, /\.(png|jpe?g|svg)$/);
+    const thinMidContext = require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/9-Thin-Shoulder-Tops/mid-layer', true, /\.(png|jpe?g|svg)$/);
+    const thinOuterContext = require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/9-Thin-Shoulder-Tops/outer-layer', true, /\.(png|jpe?g|svg)$/);
 
-    const thinShirtKeys = thinShirtContext.keys();
-    const broadShirtKeys = broadShirtContext.keys();
-    const narrowShirtKeys = narrowShirtContext.keys();
+    // Broad Shoulder Tops
+    const broadBaseContext = require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/8-Broad-Shoulder-Tops/base-layer', true, /\.(png|jpe?g|svg)$/);
+    const broadMidContext = require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/8-Broad-Shoulder-Tops/mid-layer', true, /\.(png|jpe?g|svg)$/);
+    const broadOuterContext = require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/8-Broad-Shoulder-Tops/outer-layer', true, /\.(png|jpe?g|svg)$/);
 
-    const thinShirtValues = thinShirtKeys.map(thinShirtContext);
-    const broadShirtValues = broadShirtKeys.map(broadShirtContext);
-    const narrowShirtValues = narrowShirtKeys.map(narrowShirtContext);
+    // Narrow Shoulder Tops
+    const narrowBaseContext = require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/10-Narrow-Shoulder-Tops/base-layer', true, /\.(png|jpe?g|svg)$/);
+    const narrowMidContext = require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/10-Narrow-Shoulder-Tops/mid-layer', true, /\.(png|jpe?g|svg)$/);
+    const narrowOuterContext = require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/10-Narrow-Shoulder-Tops/outer-layer', true, /\.(png|jpe?g|svg)$/);
+
+    // Load assets for each context
+    const loadAssetsFromContext = (context, shoulderType) => {
+        const keys = context.keys();
+        const values = keys.map(context);
+        return {
+            linework: values.filter((_, index) => keys[index].includes(`${shoulderType}-Shoulder-Top`) && !keys[index].includes('Color')),
+            colors: values.filter((_, index) => keys[index].includes('Color')),
+        };
+    };
 
     return {
-        linework: {
-            thin: thinShirtValues.filter((_, index) => thinShirtKeys[index].includes('Thin-Shoulder-Top') && !thinShirtKeys[index].includes('Color')),
-            broad: broadShirtValues.filter((_, index) => broadShirtKeys[index].includes('Broad-Shoulder-Top') && !broadShirtKeys[index].includes('Color')),
-            narrow: narrowShirtValues.filter((_, index) => narrowShirtKeys[index].includes('Narrow-Shoulder-Top') && !narrowShirtKeys[index].includes('Color')),
+        thin: {
+            'base-layer': loadAssetsFromContext(thinBaseContext, 'Thin'),
+            'mid-layer': loadAssetsFromContext(thinMidContext, 'Thin'),
+            'outer-layer': loadAssetsFromContext(thinOuterContext, 'Thin'),
         },
-        colors: {
-            thin: thinShirtValues.filter((_, index) => thinShirtKeys[index].includes('Color')),
-            broad: broadShirtValues.filter((_, index) => broadShirtKeys[index].includes('Color')),
-            narrow: narrowShirtValues.filter((_, index) => narrowShirtKeys[index].includes('Color')),
-        }
+        broad: {
+            'base-layer': loadAssetsFromContext(broadBaseContext, 'Broad'),
+            'mid-layer': loadAssetsFromContext(broadMidContext, 'Broad'),
+            'outer-layer': loadAssetsFromContext(broadOuterContext, 'Broad'),
+        },
+        narrow: {
+            'base-layer': loadAssetsFromContext(narrowBaseContext, 'Narrow'),
+            'mid-layer': loadAssetsFromContext(narrowMidContext, 'Narrow'),
+            'outer-layer': loadAssetsFromContext(narrowOuterContext, 'Narrow'),
+        },
     };
 };
+
 
 export const loadNoseApexAssets = (context) => {
     const keys = context.keys();
