@@ -39,7 +39,7 @@ const SafeSpace = () => {
     const [selectedShoulderLinework, setSelectedShoulderLinework] = useState('/static/media/Narrow-Shoulder-1.757145b45a2fef3f8869.png');
     const [selectedShoulderSkinTone, setSelectedShoulderSkinTone] = useState(null);
     const [showChestVolume, setShowChestVolume] = useState(false);
-    const [selectedShoulderType, setSelectedShoulderType] = useState('thin'); // Can be 'narrow', 'broad', or 'thin'
+    const [selectedShoulderType, setSelectedShoulderType] = useState('narrow'); // Can be 'narrow', 'broad', or 'thin'
     // shirt states
     const [selectedShirtLinework, setSelectedShirtLinework] = useState(null);
     const [selectedShirtColor, setSelectedShirtColor] = useState(null);
@@ -1011,6 +1011,7 @@ const SafeSpace = () => {
         setSelectedMouthExpression(expression);
     };
 
+
     const handleLipColorChange = (colorNumber) => {
         if (selectedLipShape) {
             const selectedLipNumber = selectedLipShape.key.match(/Lip-Shape-(\d+)/)[1];
@@ -1242,7 +1243,10 @@ const SafeSpace = () => {
     // mouth expression
     const handleRemoveMouthExpression = () => {
         setSelectedMouthExpression(null);
+        setSelectedLipShape(null);
+        setSelectedLipColor(null);
     };
+
 
     // lip shape
     const handleRemoveLipShape = () => {
@@ -1742,7 +1746,7 @@ const SafeSpace = () => {
                         />
                     )}
 
-                    {selectedLipShape && (
+                    {selectedMouthExpression && selectedLipShape && (
                         <img
                             src={selectedLipShape.asset}
                             alt="Selected Lip Shape"
@@ -1750,6 +1754,7 @@ const SafeSpace = () => {
                             style={{ zIndex: selectedLipColor ? 0 : 36 }}
                         />
                     )}
+
 
                     {selectedLipColor && (
                         <img
@@ -1775,6 +1780,7 @@ const SafeSpace = () => {
 
                 <div className="customization-options">
                     <div className='option-quick-menu'>
+                        <h2>Quick Links</h2>
                         {/* quick link for head */}
                         <a href="#skin" className="quick-link">
                             Skin Tone
@@ -1832,7 +1838,7 @@ const SafeSpace = () => {
                             Backgrounds
                         </a>
                     </div>
-                    
+
                     <div className='options-container'>
                         <h2>Customize Your Character</h2>
 
@@ -1851,20 +1857,36 @@ const SafeSpace = () => {
                         </div>
 
                         {/* UI for Shoulder Linework */}
+                        {/* UI for Shoulder Linework */}
                         <div className="option-category">
                             <h3 id='shoulders'>Shoulders</h3>
                             <div>
-                                {shoulderAssets.linework.map((linework, index) => (
-                                    <button
-                                        key={index}
-                                        onClick={() => handleShoulderLineworkChange(linework)}
-                                        className={`UI-tile-button ${selectedShoulderLinework === linework ? 'selected' : ''}`}
-                                    >
-                                        <img src={linework} alt={`Shoulder Linework ${index}`} />
-                                    </button>
-                                ))}
+                                {[...shoulderAssets.linework]
+                                    .sort((a, b) => {
+                                        const extractShoulderType = (filename) => {
+                                            if (filename.includes('Narrow-Shoulder')) return 0;
+                                            if (filename.includes('Thin-Shoulder')) return 1;
+                                            if (filename.includes('Broad-Shoulder')) return 2;
+                                            return 3; // If none of the types match
+                                        };
+
+                                        const typeA = extractShoulderType(a);
+                                        const typeB = extractShoulderType(b);
+
+                                        return typeA - typeB;
+                                    })
+                                    .map((linework, index) => (
+                                        <button
+                                            key={index}
+                                            onClick={() => handleShoulderLineworkChange(linework)}
+                                            className={`UI-tile-button ${selectedShoulderLinework === linework ? 'selected' : ''}`}
+                                        >
+                                            <img src={linework} alt={`Shoulder Linework ${index}`} />
+                                        </button>
+                                    ))}
                             </div>
                         </div>
+
 
 
 
@@ -2248,30 +2270,33 @@ const SafeSpace = () => {
 
 
                         {/* UI for Lip Shapes */}
-                        <div className="option-category">
-                            <h3>Lip Shapes</h3>
-                            <div>
-                                {lipShapeAssets.map(({ asset, key }, index) => {
-                                    const isSelected = selectedLipShape?.key === key;
+                        {selectedMouthExpression && (
 
-                                    return (
-                                        <button
-                                            key={index}
-                                            onClick={() => {
-                                                if (isSelected) {
-                                                    handleRemoveLipShape(); // Remove lip shape if it's already selected
-                                                } else {
-                                                    handleLipShapeChange({ asset, key }); // Change to the newly selected lip shape
-                                                }
-                                            }}
-                                            className={`UI-tile-button removeable ${isSelected ? 'selected' : ''}`}
-                                        >
-                                            <img src={asset} alt={`Lip Shape ${index}`} />
-                                        </button>
-                                    );
-                                })}
+                            <div className="option-category">
+                                <h3>Lip Shapes</h3>
+                                <div>
+                                    {lipShapeAssets.map(({ asset, key }, index) => {
+                                        const isSelected = selectedLipShape?.key === key;
+
+                                        return (
+                                            <button
+                                                key={index}
+                                                onClick={() => {
+                                                    if (isSelected) {
+                                                        handleRemoveLipShape(); // Remove lip shape if it's already selected
+                                                    } else {
+                                                        handleLipShapeChange({ asset, key }); // Change to the newly selected lip shape
+                                                    }
+                                                }}
+                                                className={`UI-tile-button removeable ${isSelected ? 'selected' : ''}`}
+                                            >
+                                                <img src={asset} alt={`Lip Shape ${index}`} />
+                                            </button>
+                                        );
+                                    })}
+                                </div>
                             </div>
-                        </div>
+                        )}
 
                         {/* UI for Lip Colors */}
                         {selectedLipShape && (

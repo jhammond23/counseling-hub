@@ -18,6 +18,7 @@
     background: url('../media/wall/wall2.png') no-repeat center center/cover;
     filter: contrast(.6) brightness(.7);
     z-index: -1;
+
 }
 
 .safe-space::after
@@ -36,15 +37,11 @@
 .character-customization {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    padding: 20px;
-    font-family: 'Arial', sans-serif;
     overflow-y: hidden;
-    height: 80%;
+    height: calc(100vh - 100px);
     z-index: 1;
-    margin: 0 auto;
-    margin-top: 70px;
-    
+    margin: 0 20px;
+    margin-top: 60px;
 }
 
 .character-preview {
@@ -66,11 +63,7 @@
     10% 100%, 0% 90%, 0% 10%
 );
 
-/* Mask for the fancy border effect */
-mask: radial-gradient(circle at top left, transparent 0%, black 20%) top left / 80% 50% no-repeat,
-      radial-gradient(circle at top right, transparent 0%, black 20%) top right / 50% 50% no-repeat,
-      radial-gradient(circle at bottom left, transparent 0%, black 20%) bottom left / 70% 50% no-repeat,
-      radial-gradient(circle at bottom right, transparent 0%, black 20%) bottom right / 60% 50% no-repeat;
+
 
 }
 
@@ -96,10 +89,21 @@ mask: radial-gradient(circle at top left, transparent 0%, black 20%) top left / 
     scroll-behavior: smooth;
 }
 
-/* no visible scroll bar */
+
+/* brown scroller in scroll bar */
 
 .customization-options::-webkit-scrollbar {
-    display: none;
+    width: 12px;
+}
+
+.customization-options::-webkit-scrollbar-track {
+    background-color: #f9f9f9;
+    border-radius: 12px;
+}
+
+.customization-options::-webkit-scrollbar-thumb {
+    background-color: #533333 !important;
+    border-radius: 12px;
 }
 
 
@@ -125,6 +129,8 @@ mask: radial-gradient(circle at top left, transparent 0%, black 20%) top left / 
     display: flex;
     flex-direction: column; /* Stack content vertically */
     gap: 20px;
+    border-top: 4px solid #382828;
+    padding: 20px;
 }
 
 /* 70% width for the category buttons */
@@ -139,45 +145,70 @@ mask: radial-gradient(circle at top left, transparent 0%, black 20%) top left / 
 .option-quick-menu {
     text-align: center;
     position: sticky;
-    width: fit-content;
+    width: 250px; /* Reduce width to make the menu compact */
     height: fit-content;
     top: 0;
     z-index: 1;
     margin: 0 auto;
-    margin-right: 30px;
-    padding-left: 30px;
+    padding: 20px;
     display: flex;
-    flex-direction: column;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end; /* Aligns the buttons to the right */
+    flex-wrap: wrap; /* Allow buttons to wrap into multiple rows */
+    justify-content: center; /* Evenly space out buttons */
+    align-items: center; /* Center buttons vertically */
+    gap: 10px; /* Adjust gap between buttons */
     grid-column: 2 / 3; /* Buttons on the right side */
-    border-left: 4px solid #3e2000;
-    transform: translateY(-40px);
+    height: 70vh;
+    border-radius: 8px;
+    
+}
 
+.option-quick-menu::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('../media/crumpled-paper2.jpg') no-repeat center center/cover;
+    z-index: -1;
+    border-radius: 8px;
+    opacity: .8;
+}
+
+.option-quick-menu h2 {
+    font-size: 1.75rem;
+    color: #fff;
+    text-shadow: 2px 2px 4px #000;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
 .quick-link {
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: #3e2000;
-    padding: 8px 8px;
+    padding: 5px 10px; /* Reduce padding for compact layout */
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
     height: fit-content;
-    width: 50px;
+    width: 80px; /* Adjust width for compact layout */
+    height: 30px;
     border: 2px solid #3e2000;
     margin: 5px;
-    background-color: #fce8d1;
+    background-color: #DEB887;
     text-decoration: none;
     text-align: center;
-    font-size: .75rem;
+    font-size: 1rem;
 }
+
+
 
 .quick-link:hover {
     background-color: #8aea97;
-    scale: 1.1;
-    box-shadow: 5px 8px 12px #000;
+    scale: 1.01;
+    box-shadow: 5px 8px 12px #000000aa;
 }
 
 .quick-link img {
@@ -288,6 +319,11 @@ mask: radial-gradient(circle at top left, transparent 0%, black 20%) top left / 
     width: fit-content;
     border: 4px solid #3e2000;
     margin: 5px;
+}
+
+.UI-tile-button:hover, .UI-swatch:hover {
+    scale: 1.01;
+    box-shadow: 5px 8px 12px #000000aa;
 }
 
 .option-category button img {
