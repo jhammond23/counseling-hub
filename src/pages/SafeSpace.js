@@ -1751,7 +1751,7 @@ const SafeSpace = () => {
                             src={selectedLipShape.asset}
                             alt="Selected Lip Shape"
                             className="character-layer lip-linework"
-                            style={{ zIndex: selectedLipColor ? 0 : 36 }}
+                            // style={{ zIndex: selectedLipColor ? 0 : 36 }}
                         />
                     )}
 
@@ -2290,7 +2290,7 @@ const SafeSpace = () => {
                                                 }}
                                                 className={`UI-tile-button removeable ${isSelected ? 'selected' : ''}`}
                                             >
-                                                <img src={asset} alt={`Lip Shape ${index}`} />
+                                                <img src={asset} alt={`Lip Shape ${index}`} id='lips' />
                                             </button>
                                         );
                                     })}
