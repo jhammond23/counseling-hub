@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { loadEyebrowAssets, loadClothesColorSwatches, loadMakeupColorSwatches, loadLipShapeAssets, skinToneSwatches, hairColorSwatches, loadFrontLayerFringeAssets, loadSecondaryFringeAssets, loadMouthExpressionAssets, loadLipAssets, loadNoseApexAssets, loadNoseBridgeAssets, loadShirtAssets, loadShoulderAssets, loadChestVolumeAssets, loadEyeballAssets, loadEyeShapeAssets, loadEyeMakeupAssets, loadEyeSocketShadowAssets, loadHeadAssets, loadChinAssets, loadEarAssets, loadHairAssets, loadFaceScarAssets, loadBodyScarAssets, loadBackgroundAssets, loadAccessoryAssets, loadBeardAssets, loadMustacheAssets, loadCheekboneAssets, loadEyelashAssets, loadEyeColorAssets } from '../utilities/loadAssets';
 import './SafeSpace.css'; // Assuming you're using the provided CSS
 import CloseButton from '../components/CloseButton';
+// SafeSpace.js
+import { auth, db } from '../firebase-config'; // Adjust the path if needed
+import { doc, setDoc, getDoc } from 'firebase/firestore';
+
 
 const SafeSpace = () => {
     // State for selected skin tone, chin linework, and cleft option
@@ -43,7 +47,6 @@ const SafeSpace = () => {
     // shirt states
     const [selectedShirtLinework, setSelectedShirtLinework] = useState(null);
     const [selectedShirtColor, setSelectedShirtColor] = useState(null);
-    const [shirtAssets, setShirtAssets] = useState({});
     const [selectedNoseApex, setSelectedNoseApex] = useState(null);
     const [selectedNoseBridge, setSelectedNoseBridge] = useState(null);
     const [selectedMouthExpression, setSelectedMouthExpression] = useState(null);
@@ -53,17 +56,89 @@ const SafeSpace = () => {
     const [selectedEyebrow, setSelectedEyebrow] = useState(null);
     const [selectedSkinToneSwatch, setSelectedSkinToneSwatch] = useState(null);
 
-    // Base Layer Shirt
+    // Shirt States
     const [selectedBaseShirtLinework, setSelectedBaseShirtLinework] = useState(null);
     const [selectedBaseShirtColor, setSelectedBaseShirtColor] = useState(null);
-
-    // Mid Layer Shirt
     const [selectedMidShirtLinework, setSelectedMidShirtLinework] = useState(null);
     const [selectedMidShirtColor, setSelectedMidShirtColor] = useState(null);
-
-    // Outer Layer Shirt
     const [selectedOuterShirtLinework, setSelectedOuterShirtLinework] = useState(null);
     const [selectedOuterShirtColor, setSelectedOuterShirtColor] = useState(null);
+    const [shirtAssets, setShirtAssets] = useState({});
+
+
+
+
+    // key states
+    const [selectedHairLineworkKey, setSelectedHairLineworkKey] = useState(null);
+
+
+
+    const handleSaveAvatar = async () => {
+        if (!auth.currentUser) {
+            alert('You need to be logged in to save your avatar.');
+            return;
+        }
+
+        // Collect all avatar state variables into avatarData
+        const avatarData = {
+            selectedSkinToneSwatch,
+            selectedHeadSkinTone,
+            selectedShoulderSkinTone,
+            selectedEarSkinTone,
+            selectedShoulderSkinTone,
+            selectedChinSkinTone,
+            selectedShoulderLinework,
+            selectedShoulderType,
+            showChestVolume,
+            selectedChinLinework,
+            isCleft,
+            selectedEarLinework,
+            selectedHairLinework,
+            selectedHairColor,
+            selectedFrontLayerFringeLinework,
+            selectedFrontLayerFringeColor,
+            selectedSecondaryFringeLinework,
+            selectedSecondaryFringeColor,
+            selectedFaceScars,
+            selectedBodyScars,
+            selectedAccessory,
+            selectedMustacheLinework,
+            selectedMustacheColor,
+            selectedBeardLinework,
+            selectedBeardColor,
+            selectedCheekbone,
+            selectedUpperEyelash,
+            selectedLowerEyelash,
+            selectedEyeColor,
+            selectedEyeShape,
+            selectedEyeMakeup,  // Make sure this field exists and is saved
+            selectedEyeSocketShadow,
+            selectedBackground,
+            selectedBaseShirtLinework,
+            selectedBaseShirtColor,
+            selectedMidShirtLinework,
+            selectedMidShirtColor,
+            selectedOuterShirtLinework,
+            selectedOuterShirtColor,
+            selectedMouthExpression,
+            selectedLipShape,  // Make sure this field exists and is saved
+            selectedLipColor,
+            selectedNoseApex,
+            selectedNoseBridge,
+            selectedEyebrow,
+
+
+        };
+
+        try {
+            const userDocRef = doc(db, `users/${auth.currentUser.uid}`);
+            await setDoc(userDocRef, { avatarData }, { merge: true });
+            alert('Avatar saved successfully!');
+        } catch (error) {
+            console.error('Error saving avatar:', error);
+            alert('Failed to save avatar. Please try again.');
+        }
+    };
 
 
 
@@ -164,6 +239,7 @@ const SafeSpace = () => {
     const handleSkinToneClick = (swatch) => {
         setSelectedSkinToneSwatch(swatch);  // Set the clicked swatch as selected
         handleSkinToneChange(swatch);  // Call your existing function to handle the skin tone change
+
     };
 
     // Set the default chin to 'Chin-1' when the component mounts
@@ -285,20 +361,27 @@ const SafeSpace = () => {
 
     // Handle Hair Linework
     const handleHairLineworkChange = (hairLinework) => {
+        // hairLinework is a string (image URL)
         setSelectedHairLinework(hairLinework);
 
-        if (hairLinework) {
-            const currentColorNumber = selectedHairColor?.match(/Color-(\d+)/)?.[1];
+        // Extract the hair number from the image URL
+        const hairMatch = hairLinework.match(/Hair-\d+/);
+        const hairNumber = hairMatch ? hairMatch[0] : null;
 
-            // Find matching color for hair linework
-            const matchingHairColor = hairAssets.colors.find(asset =>
-                asset.includes(hairLinework.match(/Hair-\d+/)?.[0]) &&
-                asset.includes(`Color-${currentColorNumber}`)
-            );
+        const currentColorNumber = selectedHairColor?.match(/Color-(\d+)/)?.[1];
 
-            setSelectedHairColor(matchingHairColor || null);
-        }
+        // Find matching hair color
+        const matchingHairColor = hairAssets.colors.find((colorAsset) => {
+            const includesHairNumber = hairNumber ? colorAsset.includes(hairNumber) : false;
+            const includesColorNumber = currentColorNumber ? colorAsset.includes(`Color-${currentColorNumber}`) : true;
+            return includesHairNumber && includesColorNumber;
+        });
+
+        setSelectedHairColor(matchingHairColor || null);
     };
+
+
+
 
 
 
@@ -1366,9 +1449,92 @@ const SafeSpace = () => {
         }
     }, [selectedShoulderLinework, selectedHeadSkinTone, shoulderAssets.colors]);
 
+    useEffect(() => {
+        const fetchAvatarData = async (user) => {
+            if (user) {
+                const userDocRef = doc(db, `users/${user.uid}`);
+                const docSnap = await getDoc(userDocRef);
+
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    const avatarData = data.avatarData || {};
+
+                    // Set the state variables using the stored image URLs
+                    setSelectedHairLinework(avatarData.selectedHairLinework || null);
+                    setSelectedHairColor(avatarData.selectedHairColor || null);
+                    setSelectedChinLinework(avatarData.selectedChinLinework || null);
+                    setSelectedChinSkinTone(avatarData.selectedChinSkinTone || null);
+                    setSelectedEarLinework(avatarData.selectedEarLinework || null);
+                    setSelectedEarSkinTone(avatarData.selectedEarSkinTone || null);
+                    setSelectedHeadSkinTone(avatarData.selectedHeadSkinTone || null);
+                    setSelectedShoulderLinework(avatarData.selectedShoulderLinework || null);
+                    setSelectedShoulderType(avatarData.selectedShoulderType || null);
+                    setSelectedShoulderSkinTone(avatarData.selectedShoulderSkinTone || null);
+                    setSelectedShirtLinework(avatarData.selectedShirtLinework || null);
+                    setSelectedShirtColor(avatarData.selectedShirtColor || null);
+                    setSelectedBaseShirtLinework(avatarData.selectedBaseShirtLinework || null);
+                    setSelectedBaseShirtColor(avatarData.selectedBaseShirtColor || null);
+                    setSelectedMidShirtLinework(avatarData.selectedMidShirtLinework || null);
+                    setSelectedMidShirtColor(avatarData.selectedMidShirtColor || null);
+                    setSelectedOuterShirtLinework(avatarData.selectedOuterShirtLinework || null);
+                    setSelectedOuterShirtColor(avatarData.selectedOuterShirtColor || null);
+                    setSelectedMustacheLinework(avatarData.selectedMustacheLinework || null);
+                    setSelectedMustacheColor(avatarData.selectedMustacheColor || null);
+                    setShowChestVolume(avatarData.showChestVolume || false);
+                    setSelectedBeardLinework(avatarData.selectedBeardLinework || null);
+                    setSelectedBeardColor(avatarData.selectedBeardColor || null);
+                    setSelectedFrontLayerFringeLinework(avatarData.selectedFrontLayerFringeLinework || null);
+                    setSelectedFrontLayerFringeColor(avatarData.selectedFrontLayerFringeColor || null);
+                    setSelectedSecondaryFringeLinework(avatarData.selectedSecondaryFringeLinework || null);
+                    setSelectedSecondaryFringeColor(avatarData.selectedSecondaryFringeColor || null);
+                    setSelectedBodyScars(avatarData.selectedBodyScars || []);
+                    setSelectedAccessory(avatarData.selectedAccessory || null);
+                    setSelectedCheekbone(avatarData.selectedCheekbone || null);
+                    setSelectedUpperEyelash(avatarData.selectedUpperEyelash || null);
+                    setSelectedLowerEyelash(avatarData.selectedLowerEyelash || null);
+                    setSelectedEyeColor(avatarData.selectedEyeColor || null);
+                    setSelectedEyeShape(avatarData.selectedEyeShape || null);
+                    setSelectedEyeMakeup(avatarData.selectedEyeMakeup || null);
+                    setSelectedEyeSocketShadow(avatarData.selectedEyeSocketShadow || null);
+                    setSelectedNoseApex(avatarData.selectedNoseApex || null);
+                    setSelectedNoseBridge(avatarData.selectedNoseBridge || null);
+                    setSelectedMouthExpression(avatarData.selectedMouthExpression || null);
+                    setSelectedLipShape(avatarData.selectedLipShape || null);
+                    setSelectedLipColor(avatarData.selectedLipColor || null);
+                    setIsCleft(avatarData.isCleft || false);
+                    setSelectedEyebrow(avatarData.selectedEyebrow || null);
+                    setSelectedFaceScars(avatarData.selectedFaceScars || []);
+                    setSelectedBackground(avatarData.selectedBackground || null);
+                    if (avatarData.selectedBackground) {
+                        document.querySelector('.character-preview').style.backgroundImage = `url(${avatarData.selectedBackground})`;
+                    }
+
+                }
+
+            }
+        };
+
+
+        // Use Firebase's onAuthStateChanged to ensure the user is correctly detected on page load
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            if (user) {
+                fetchAvatarData(user);  // Fetch the avatar data when the user is authenticated
+            }
+        });
+
+        // Cleanup the subscription to avoid memory leaks
+        return () => unsubscribe();
+    }, []);
+
 
     return (
         <div className="safe-space">
+            <div className='option-quick-menu'>
+                <button onClick={handleSaveAvatar}>Save Avatar</button>
+                <button>Reset Character</button>
+                <button>Randomize Character</button>
+            </div>
+
             <div className="character-customization">
                 <div className="character-preview">
                     {/* Render selected skin tone for the head */}
@@ -1751,7 +1917,7 @@ const SafeSpace = () => {
                             src={selectedLipShape.asset}
                             alt="Selected Lip Shape"
                             className="character-layer lip-linework"
-                            // style={{ zIndex: selectedLipColor ? 0 : 36 }}
+                        // style={{ zIndex: selectedLipColor ? 0 : 36 }}
                         />
                     )}
 
@@ -2386,7 +2552,6 @@ const SafeSpace = () => {
                             </div>
                         </div>
 
-                        {/* UI for Hair Linework */}
                         <div className="option-category">
                             <h3 id='hair'>Hair Linework</h3>
                             <div>
@@ -2400,7 +2565,7 @@ const SafeSpace = () => {
                                                 if (isSelected) {
                                                     handleRemoveHairLinework(); // Remove hair linework if it's already selected
                                                 } else {
-                                                    handleHairLineworkChange(hairLinework); // Change to the newly selected hair linework
+                                                    handleHairLineworkChange(hairLinework); // Pass the image URL directly
                                                 }
                                             }}
                                             className={`UI-tile-button removeable ${isSelected ? 'selected' : ''}`}
@@ -2411,6 +2576,7 @@ const SafeSpace = () => {
                                 })}
                             </div>
                         </div>
+
 
 
 

@@ -3,6 +3,12 @@ import { Link } from 'react-router-dom';
 import { auth } from '../firebase-config'; // Adjust the path as needed
 import './HomePage.css';
 import Avatar from '../components/Avatar';
+// HomePage.js
+import { db } from '../firebase-config'; // Adjust the path if needed
+import { doc, getDoc } from 'firebase/firestore';
+import SafeSpace from '../pages/SafeSpace'; // If you need to render the avatar
+import AvatarRenderer from '../components/AvatarRenderer'; // If you need to render the avatar
+
 
 export default function HomePage() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -32,12 +38,39 @@ export default function HomePage() {
     setHoverText(""); // Clear text immediately to prevent empty box from showing
   };
 
+  // Inside your HomePage component
+  const [avatarData, setAvatarData] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      setCurrentUser(user);
+
+      if (user) {
+        try {
+          const userDocRef = doc(db, `users/${user.uid}`);
+          const docSnap = await getDoc(userDocRef);
+
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            setAvatarData(data.avatarData || null);
+          }
+        } catch (error) {
+          console.error('Error fetching avatar data:', error);
+        }
+      } else {
+        setAvatarData(null);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+
   return (
     <section className="home">
       <div className="blackBG">
         <header className="homeMobileHeader">
           <h1 className="mirandus-hub">Counseling Hub</h1>
-          {currentUser && <Avatar image={currentUser.photoURL || ''} />}
         </header>
       </div>
       <div id="menu">
@@ -74,6 +107,13 @@ export default function HomePage() {
       >
         <p>{hoverText}</p>
       </div>
+
+      {avatarData ? (
+        <AvatarRenderer avatarData={avatarData} />
+      ) : (
+        <p>Loading avatar...</p>
+      )}
+
     </section>
   );
 }
