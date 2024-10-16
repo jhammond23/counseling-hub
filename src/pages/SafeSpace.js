@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { loadEyebrowAssets, loadClothesColorSwatches, loadMakeupColorSwatches, loadLipShapeAssets, skinToneSwatches, hairColorSwatches, loadFrontLayerFringeAssets, loadSecondaryFringeAssets, loadMouthExpressionAssets, loadLipAssets, loadNoseApexAssets, loadNoseBridgeAssets, loadShirtAssets, loadShoulderAssets, loadChestVolumeAssets, loadEyeballAssets, loadEyeShapeAssets, loadEyeMakeupAssets, loadEyeSocketShadowAssets, loadHeadAssets, loadChinAssets, loadEarAssets, loadHairAssets, loadFaceScarAssets, loadBodyScarAssets, loadBackgroundAssets, loadAccessoryAssets, loadBeardAssets, loadMustacheAssets, loadCheekboneAssets, loadEyelashAssets, loadEyeColorAssets } from '../utilities/loadAssets';
 import './SafeSpace.css'; // Assuming you're using the provided CSS
-import CloseButton from '../components/CloseButton';
-// SafeSpace.js
 import { auth, db } from '../firebase-config'; // Adjust the path if needed
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 
@@ -1526,13 +1524,64 @@ const SafeSpace = () => {
         return () => unsubscribe();
     }, []);
 
+    // function to reset the character to default values
+    const resetCharacter = () => {
+        // Resetting all states to their default values
+        setSelectedHairLinework(null);
+        setSelectedHairColor(null);
+        setSelectedChinLinework(null);
+        setSelectedChinSkinTone(null);
+        setSelectedEarLinework(null);
+        setSelectedEarSkinTone(null);
+        setSelectedHeadSkinTone(null);
+        setSelectedShoulderLinework(null);
+        setSelectedShoulderType(null);
+        setSelectedShoulderSkinTone(null);
+        setSelectedShirtLinework(null);
+        setSelectedShirtColor(null);
+        setSelectedBaseShirtLinework(null);
+        setSelectedBaseShirtColor(null);
+        setSelectedMidShirtLinework(null);
+        setSelectedMidShirtColor(null);
+        setSelectedOuterShirtLinework(null);
+        setSelectedOuterShirtColor(null);
+        setSelectedMustacheLinework(null);
+        setSelectedMustacheColor(null);
+        setShowChestVolume(false);
+        setSelectedBeardLinework(null);
+        setSelectedBeardColor(null);
+        setSelectedFrontLayerFringeLinework(null);
+        setSelectedFrontLayerFringeColor(null);
+        setSelectedSecondaryFringeLinework(null);
+        setSelectedSecondaryFringeColor(null);
+        setSelectedBodyScars([]);
+        setSelectedAccessory(null);
+        setSelectedCheekbone(null);
+        setSelectedUpperEyelash(null);
+        setSelectedLowerEyelash(null);
+        setSelectedEyeColor(null);
+        setSelectedEyeShape(null);
+        setSelectedEyeMakeup(null);
+        setSelectedEyeSocketShadow(null);
+        setSelectedNoseApex(null);
+        setSelectedNoseBridge(null);
+        setSelectedMouthExpression(null);
+        setSelectedLipShape(null);
+        setSelectedLipColor(null);
+        setIsCleft(false);
+        setSelectedEyebrow(null);
+        setSelectedFaceScars([]);
+        setSelectedBackground(null);
+      
+        console.log('Character reset to default values');
+      };
 
+      
     return (
         <div className="safe-space">
-            <div className='option-quick-menu'>
-                <button onClick={handleSaveAvatar}>Save Avatar</button>
-                <button>Reset Character</button>
-                <button>Randomize Character</button>
+            <div className='option-quick-menu small-quick-menu'>
+                <button className='quick-link big-button save-button' onClick={handleSaveAvatar}>Save Avatar</button>
+                <button className='quick-link big-button reset-button' onClick={resetCharacter}>Reset Avatar</button>
             </div>
 
             <div className="character-customization">
@@ -2438,30 +2487,32 @@ const SafeSpace = () => {
                         {/* UI for Lip Shapes */}
                         {selectedMouthExpression && (
 
-                            <div className="option-category">
-                                <h3>Lip Shapes</h3>
-                                <div>
-                                    {lipShapeAssets.map(({ asset, key }, index) => {
-                                        const isSelected = selectedLipShape?.key === key;
+<div className="option-category">
+    <h3>Lip Shapes</h3>
+    <div>
+        {lipShapeAssets.map(({ asset, key }, index) => {
+            const isSelected = selectedLipShape?.key === key;
 
-                                        return (
-                                            <button
-                                                key={index}
-                                                onClick={() => {
-                                                    if (isSelected) {
-                                                        handleRemoveLipShape(); // Remove lip shape if it's already selected
-                                                    } else {
-                                                        handleLipShapeChange({ asset, key }); // Change to the newly selected lip shape
-                                                    }
-                                                }}
-                                                className={`UI-tile-button removeable ${isSelected ? 'selected' : ''}`}
-                                            >
-                                                <img src={asset} alt={`Lip Shape ${index}`} id='lips' />
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-                            </div>
+            return (
+                <button
+                    key={index}
+                    onClick={() => {
+                        if (isSelected) {
+                            handleRemoveLipShape(); // Remove lip shape if it's already selected
+                        } else {
+                            handleLipShapeChange({ asset, key }); // Change to the newly selected lip shape
+                        }
+                    }}
+                    className={`UI-tile-button removeable ${isSelected ? 'selected' : ''}`}
+                >
+                    <img src={asset} alt={`Lip Shape ${index}`} className='lips' />
+                </button>
+            );
+        })}
+    </div>
+</div>
+
+
                         )}
 
                         {/* UI for Lip Colors */}

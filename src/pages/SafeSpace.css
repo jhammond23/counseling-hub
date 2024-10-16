@@ -57,17 +57,14 @@
     min-width: 40%;
     background: url('../media/crumpled-paper.jpg') no-repeat center center/cover;
     border: 4px solid #3e2000;
+    z-index: 0;
+    
  /* Clip-path for scooped corners */
  clip-path: polygon(
     10% 0%, 90% 0%, 100% 10%, 100% 90%, 90% 100%, 
     10% 100%, 0% 90%, 0% 10%
 );
-
-
-
 }
-
-
 
 .character-preview img {
     max-width: 100%;
@@ -194,7 +191,7 @@
     transition: all 0.3s ease;
     height: fit-content;
     width: 80px; /* Adjust width for compact layout */
-    height: 30px;
+    height: fit-content;
     border: 2px solid #3e2000;
     margin: 5px;
     background-color: #DEB887;
@@ -203,12 +200,32 @@
     font-size: 1rem;
 }
 
+.big-button {
+    width: fit-content;
+}
+
+.small-quick-menu {
+height: fit-content;
+gap: 40px;
+}
+
+.save-button {
+    background-color: #8aea97;
+}
+
+.reset-button:hover {
+    background-color: #ff7e7e !important;
+}
+
+.save-button:hover {
+    filter: brightness(1.1);
+}
 
 
 .quick-link:hover {
     background-color: #8aea97;
     scale: 1.01;
-    box-shadow: 5px 8px 12px #000000aa;
+    box-shadow: 2px 4px 6px #000000aa;
 }
 
 .quick-link img {
@@ -260,20 +277,33 @@
     width: 150px;
 }
 
+/* UI-tile-button container */
 .UI-swatch .UI-tile-button {
     height: 75px;
     width: 75px;
     border-radius: 50%; /* Make swatches circular */
     background-color: #f9f9f9;
+    overflow: hidden !important; /* This will clip the image that extends beyond the tile */
+    position: relative; /* Ensure correct positioning for the scaled image */
 }
 
-/* Image styles */
+/* Default image styles for UI-tile-button */
 .UI-tile-button img {
     width: 100%;
     height: 100%;
     object-fit: contain;
     border-radius: inherit; /* Inherit border-radius from parent */
 }
+
+/* Specific style for image with class "lips" */
+.lips {
+    width: 150%; /* Increase the size of the image */
+    height: 150%; /* Increase the size of the image */
+    object-fit: cover; /* Ensure it covers the entire tile */
+    transform: scale(1.25); /* Scale the image to make it larger */
+    position: relative; /* Position relative to the parent container */
+}
+
 
 /* Selected Tiles */
 .UI-tile.selected .UI-tile-button,
@@ -415,11 +445,6 @@
 .UI-tile-button.selected.removeable:hover {
     background-color: red;
 }
-
-#lips {
-    scale: 2;
-}
-
 
 
 /* SafeSpace.css */
