@@ -3,6 +3,7 @@ import { auth, db } from '../firebase-config';  // Adjust the path if necessary
 import { doc, getDoc } from 'firebase/firestore';
 import defaultEyeballAsset from '../media/Tasia-Pixel-Project-Revision-1056x1056/3-Face-Parts/Eye/2-Eyeball/Eyeball.png';
 import { loadChestVolumeAssets, loadHeadAssets } from '../utilities/loadAssets';
+import './AvatarRenderer.css';
 
 const AvatarRenderer = () => {
     const [selectedHairLinework, setSelectedHairLinework] = useState(null);
@@ -53,8 +54,8 @@ const AvatarRenderer = () => {
     const [cleftedChin, setCleftedChin] = useState(null);
     const [eyeballAssets, setEyeballAssets] = useState(null);
 
-        // Load head assets (linework and skin tones)
-        const headAssets = loadHeadAssets(require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/7-Head', true, /\.(png|jpe?g|svg)$/));
+    // Load head assets (linework and skin tones)
+    const headAssets = loadHeadAssets(require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/7-Head', true, /\.(png|jpe?g|svg)$/));
 
     // Load chest volume assets
     const chestVolumeAssets = loadChestVolumeAssets(require.context('../media/Tasia-Pixel-Project-Revision-1056x1056/12-Bodies/ChestVolumeAssets', true, /\.(png|jpe?g|svg)$/));
@@ -142,426 +143,424 @@ const AvatarRenderer = () => {
 
     // Render the avatar layers
     return (
-        <div className="avatar-render">
+        <div className='avatar-render-container'>
+            <div className="avatar-render"
+                style={
+                    selectedBackground
+                        ? { backgroundImage: `url(${selectedBackground})` }
+                        : {}
+                }>
 
-            {/* Always render the head linework */}
-            {headAssets.linework && (
-
-                <img
-                    src={headAssets.linework}
-                    alt="Head Linework"
-                    className="character-layer head-linework"
-                />
-
-            )}
-
-            {/* Render selected skin tone for the head */}
-            {selectedHeadSkinTone && (
-                <img
-                    src={selectedHeadSkinTone}
-                    alt="Selected Head Skin Tone"
-                    className="character-layer head-skin-tone"
-                />
-
-            )}
-
-
-            {/* Render selected skin tone for the chin (matches chin shape and head skin tone) */}
-            {selectedChinSkinTone && (
-
-                <img
-                    src={selectedChinSkinTone}
-                    alt="Chin Skin Tone"
-                    className="character-layer chin-skin-tone"
-                />
-
-            )}
-
-            {/* Render chin linework */}
-            {selectedChinLinework && (
-                <img
-                    src={selectedChinLinework}
-                    alt="Chin Linework"
-                    className="character-layer chin-linework"
-                />
-            )}
-
-            {/* Render cleft as an additional overlay, if applicable */}
-            {isCleft && cleftedChin && (
-                <img
-                    src={cleftedChin}
-                    alt="Cleft Chin Linework"
-                    className="character-layer cleft-linework"
-                />
-            )}
-
-            {/* Render selected skin tone for the ears */}
-            {selectedEarSkinTone && (
-                <img
-                    src={selectedEarSkinTone}
-                    alt="Ear Skin Tone"
-                    className="character-layer ear-skin-tone"
-                />
-            )}
-
-            {/* Render ear linework */}
-            {selectedEarLinework && (
-                <img
-                    src={selectedEarLinework}
-                    alt="Ear Linework"
-                    className="character-layer ear-linework"
-                />
-            )}
-
-            {/* Render Selected Hair Color */}
-            {selectedHairColor && (
-                <img
-                    src={selectedHairColor}
-                    alt="Selected Hair Color"
-                    className="character-layer hair-color"
-                />
-            )}
-
-
-            {/* Render hair linework */}
-            {selectedHairLinework && (
-
-                <img
-                    src={selectedHairLinework}
-                    alt="Selected Hair Linework"
-                    className="character-layer hair-linework"
-                />
-            )}
-
-            {/* Render selected cheekbones */}
-            {selectedCheekbone && (
-                <div className="character-layer-container">
-                    <img
-                        src={selectedCheekbone}
-                        alt="Selected Cheekbone"
-                        className="character-layer cheek-bones"
-                    />
-                </div>
-            )}
-
-            {/* Render selected upper eyelash */}
-            {selectedUpperEyelash && (
-                <img
-                    src={selectedUpperEyelash}
-                    alt="Selected Upper Eyelash"
-                    className="character-layer upper-eyelash"
-                />
-            )}
-
-            {/* Render selected lower eyelash */}
-            {selectedLowerEyelash && (
-                <img
-                    src={selectedLowerEyelash}
-                    alt="Selected Lower Eyelash"
-                    className="character-layer lower-eyelash"
-                />
-            )}
-
-            {/* Render eyeball and selected eye color */}
-            {selectedEyeColor && (
-                <>
+                {/* Always render the head linework */}
+                {headAssets.linework && (
 
                     <img
-                        src={defaultEyeballAsset}  // Use a fallback if missing
-                        alt="Eyeball"
-                        className="character-layer eyeballs"
+                        src={headAssets.linework}
+                        alt="Head Linework"
+                        className="character-layer head-linework"
                     />
 
+                )}
 
-                    {/* Render eye color */}
+                {/* Render selected skin tone for the head */}
+                {selectedHeadSkinTone && (
                     <img
-                        src={selectedEyeColor}
-                        alt="Selected Eye Color"
-                        className="character-layer eye-color"
+                        src={selectedHeadSkinTone}
+                        alt="Selected Head Skin Tone"
+                        className="character-layer head-skin-tone"
                     />
-                </>
-            )}
+
+                )}
+
+
+                {/* Render selected skin tone for the chin (matches chin shape and head skin tone) */}
+                {selectedChinSkinTone && (
+
+                    <img
+                        src={selectedChinSkinTone}
+                        alt="Chin Skin Tone"
+                        className="character-layer chin-skin-tone"
+                    />
+
+                )}
+
+                {/* Render chin linework */}
+                {selectedChinLinework && (
+                    <img
+                        src={selectedChinLinework}
+                        alt="Chin Linework"
+                        className="character-layer chin-linework"
+                    />
+                )}
+
+                {/* Render cleft as an additional overlay, if applicable */}
+                {isCleft && cleftedChin && (
+                    <img
+                        src={cleftedChin}
+                        alt="Cleft Chin Linework"
+                        className="character-layer cleft-linework"
+                    />
+                )}
+
+                {/* Render selected skin tone for the ears */}
+                {selectedEarSkinTone && (
+                    <img
+                        src={selectedEarSkinTone}
+                        alt="Ear Skin Tone"
+                        className="character-layer ear-skin-tone"
+                    />
+                )}
+
+                {/* Render ear linework */}
+                {selectedEarLinework && (
+                    <img
+                        src={selectedEarLinework}
+                        alt="Ear Linework"
+                        className="character-layer ear-linework"
+                    />
+                )}
+
+                {/* Render Selected Hair Color */}
+                {selectedHairColor && (
+                    <img
+                        src={selectedHairColor}
+                        alt="Selected Hair Color"
+                        className="character-layer hair-color"
+                    />
+                )}
+
+
+                {/* Render hair linework */}
+                {selectedHairLinework && (
+
+                    <img
+                        src={selectedHairLinework}
+                        alt="Selected Hair Linework"
+                        className="character-layer hair-linework"
+                    />
+                )}
+
+                {/* Render selected cheekbones */}
+                {selectedCheekbone && (
+                    <div className="character-layer-container">
+                        <img
+                            src={selectedCheekbone}
+                            alt="Selected Cheekbone"
+                            className="character-layer cheek-bones"
+                        />
+                    </div>
+                )}
+
+                {/* Render selected upper eyelash */}
+                {selectedUpperEyelash && (
+                    <img
+                        src={selectedUpperEyelash}
+                        alt="Selected Upper Eyelash"
+                        className="character-layer upper-eyelash"
+                    />
+                )}
+
+                {/* Render selected lower eyelash */}
+                {selectedLowerEyelash && (
+                    <img
+                        src={selectedLowerEyelash}
+                        alt="Selected Lower Eyelash"
+                        className="character-layer lower-eyelash"
+                    />
+                )}
+
+                {/* Render eyeball and selected eye color */}
+                {selectedEyeColor && (
+                    <>
+
+                        <img
+                            src={defaultEyeballAsset}  // Use a fallback if missing
+                            alt="Eyeball"
+                            className="character-layer eyeballs"
+                        />
+
+
+                        {/* Render eye color */}
+                        <img
+                            src={selectedEyeColor}
+                            alt="Selected Eye Color"
+                            className="character-layer eye-color"
+                        />
+                    </>
+                )}
 
 
 
-            {/* Render selected eye shape */}
-            {selectedEyeShape && (
-                <img
-                    src={selectedEyeShape}
-                    alt="Selected Eye Shape"
-                    className="character-layer eye-shape"
-                />
-            )}
+                {/* Render selected eye shape */}
+                {selectedEyeShape && (
+                    <img
+                        src={selectedEyeShape}
+                        alt="Selected Eye Shape"
+                        className="character-layer eye-shape"
+                    />
+                )}
 
-            {/* Render selected eye makeup */}
-            {selectedEyeMakeup && (
-                <img
-                    src={selectedEyeMakeup.asset}
-                    alt="Selected Eye Makeup"
-                    className="character-layer eye-makeup"
-                />
-            )}
-
-
-            {/* Render selected eye socket shadow */}
-            {selectedEyeSocketShadow && (
-                <img
-                    src={selectedEyeSocketShadow}
-                    alt="Selected Eye Socket Shadow"
-                    className="character-layer eye-socket-shadow"
-                />
-            )}
+                {/* Render selected eye makeup */}
+                {selectedEyeMakeup && (
+                    <img
+                        src={selectedEyeMakeup.asset}
+                        alt="Selected Eye Makeup"
+                        className="character-layer eye-makeup"
+                    />
+                )}
 
 
-            {/* Render selected nose apex */}
-            {selectedNoseApex && (
-                <img
-                    src={selectedNoseApex}
-                    alt="Selected Nose Apex"
-                    className="character-layer nose-apex"
-                />
-            )}
-
-            {/* Render selected nose bridge */}
-            {selectedNoseBridge && (
-                <img
-                    src={selectedNoseBridge}
-                    alt="Selected Nose Bridge"
-                    className="character-layer nose-bridge"
-                />
-            )}
+                {/* Render selected eye socket shadow */}
+                {selectedEyeSocketShadow && (
+                    <img
+                        src={selectedEyeSocketShadow}
+                        alt="Selected Eye Socket Shadow"
+                        className="character-layer eye-socket-shadow"
+                    />
+                )}
 
 
+                {/* Render selected nose apex */}
+                {selectedNoseApex && (
+                    <img
+                        src={selectedNoseApex}
+                        alt="Selected Nose Apex"
+                        className="character-layer nose-apex"
+                    />
+                )}
 
-            {/* Render selected face scars */}
-            {selectedFaceScars.map((faceScar, index) => (
-                <img
-                    key={index}
-                    src={faceScar}
-                    alt={`Selected Face Scar ${index}`}
-                    className="character-layer face-scars"
-                />
-            ))}
-
-
-            {/* Render selected Front Layer Fringe Linework */}
-            {selectedFrontLayerFringeLinework && (
-                <img
-                    src={selectedFrontLayerFringeLinework}
-                    alt="Selected Front Layer Fringe Linework"
-                    className="character-layer front-fringe-linework"
-                />
-            )}
-
-            {/* Render selected Front Layer Fringe color */}
-            {selectedFrontLayerFringeColor && (
-                <img
-                    src={selectedFrontLayerFringeColor}
-                    alt="Selected Front Layer Fringe Color"
-                    className="character-layer front-fringe-color"
-                />
-            )}
-
-            {/* Render selected Secondary Fringe Linework */}
-            {selectedSecondaryFringeLinework && (
-                <img
-                    src={selectedSecondaryFringeLinework}
-                    alt="Selected Secondary Fringe Linework"
-                    className="character-layer secondary-fringe-linework"
-                />
-            )}
-
-            {/* Render selected Secondary Fringe color */}
-            {selectedSecondaryFringeColor && (
-                <img
-                    src={selectedSecondaryFringeColor}
-                    alt="Selected Secondary Fringe Color"
-                    className="character-layer secondary-fringe-color"
-                />
-            )}
+                {/* Render selected nose bridge */}
+                {selectedNoseBridge && (
+                    <img
+                        src={selectedNoseBridge}
+                        alt="Selected Nose Bridge"
+                        className="character-layer nose-bridge"
+                    />
+                )}
 
 
-            {/* Render selected body scars */}
-            {selectedBodyScars.map((bodyScar, index) => (
-                <img
-                    key={index}
-                    src={bodyScar}
-                    alt={`Selected Body Scar ${index}`}
-                    className="character-layer body-scars"
-                />
 
-            ))}
-
-
-            {/* Render selected accessory */}
-            {selectedAccessory && (
-                <img
-                    src={selectedAccessory}
-                    alt="Selected Accessory"
-                    className="character-layer accessory"
-                />
-            )}
-
-            {/* Render selected mustache linework */}
-            {selectedMustacheLinework && (
-                <img
-                    src={selectedMustacheLinework.asset}
-                    alt="Selected Mustache Linework"
-                    className="character-layer mustache-linework"
-                />
-            )}
-
-            {/* Render selected mustache color */}
-            {selectedMustacheColor && (
-                <img
-                    src={selectedMustacheColor.asset}
-                    alt="Selected Mustache Color"
-                    className="character-layer mustache-color"
-                />
-            )}
-
-            {/* Render selected beard linework */}
-            {selectedBeardLinework && (
-                <img
-                    src={selectedBeardLinework.asset}
-                    alt="Selected Beard Linework"
-                    className="character-layer beard-linework"
-                />
-            )}
-
-            {/* Render selected beard color */}
-            {selectedBeardColor && (
-                <img
-                    src={selectedBeardColor.asset}
-                    alt="Selected Beard Color"
-                    className="character-layer beard-color"
-                />
-            )}
+                {/* Render selected face scars */}
+                {selectedFaceScars.map((faceScar, index) => (
+                    <img
+                        key={index}
+                        src={faceScar}
+                        alt={`Selected Face Scar ${index}`}
+                        className="character-layer face-scars"
+                    />
+                ))}
 
 
-            {/* Render shoulder linework */}
-            {selectedShoulderLinework && (
-                <img
-                    src={selectedShoulderLinework}
-                    alt="Shoulder Linework"
-                    className="character-layer shoulder-linework" />
-            )}
+                {/* Render selected Front Layer Fringe Linework */}
+                {selectedFrontLayerFringeLinework && (
+                    <img
+                        src={selectedFrontLayerFringeLinework}
+                        alt="Selected Front Layer Fringe Linework"
+                        className="character-layer front-fringe-linework"
+                    />
+                )}
 
-            {/* Render shoulder skin tone */}
-            {selectedShoulderSkinTone && (
-                <img
-                    src={selectedShoulderSkinTone}
-                    alt="Shoulder Skin Tone"
-                    className="character-layer shoulder-skin-color" />
-            )}
+                {/* Render selected Front Layer Fringe color */}
+                {selectedFrontLayerFringeColor && (
+                    <img
+                        src={selectedFrontLayerFringeColor}
+                        alt="Selected Front Layer Fringe Color"
+                        className="character-layer front-fringe-color"
+                    />
+                )}
 
-            {/* Chest Volume */}
-            {showChestVolume && selectedShoulderType && (
-                <img
-                    src={getChestVolume()}
-                    alt="Chest Volume"
-                    className="character-layer chest-volume"
-                />
-            )}
+                {/* Render selected Secondary Fringe Linework */}
+                {selectedSecondaryFringeLinework && (
+                    <img
+                        src={selectedSecondaryFringeLinework}
+                        alt="Selected Secondary Fringe Linework"
+                        className="character-layer secondary-fringe-linework"
+                    />
+                )}
 
-            {/* Base Layer Shirt */}
-            {selectedBaseShirtLinework && (
-                <img
-                    src={selectedBaseShirtLinework}
-                    alt="Base Shirt Linework"
-                    className="character-layer base-layer-linework"
-                />
-            )}
-            {selectedBaseShirtColor && (
-                <img
-                    src={selectedBaseShirtColor}
-                    alt="Base Shirt Color"
-                    className="character-layer base-layer-tops-color"
-                />
-            )}
-
-            {/* Mid Layer Shirt */}
-            {selectedMidShirtLinework && (
-                <img
-                    src={selectedMidShirtLinework}
-                    alt="Mid Shirt Linework"
-                    className="character-layer mid-layer-tops-linework"
-                />
-            )}
-            {selectedMidShirtColor && (
-                <img
-                    src={selectedMidShirtColor}
-                    alt="Mid Shirt Color"
-                    className="character-layer mid-layer-tops-color"
-                />
-            )}
-
-            {/* Outer Layer Shirt */}
-            {selectedOuterShirtLinework && (
-                <img
-                    src={selectedOuterShirtLinework}
-                    alt="Outer Shirt Linework"
-                    className="character-layer outer-layer-tops-linework"
-                />
-            )}
-            {selectedOuterShirtColor && (
-                <img
-                    src={selectedOuterShirtColor}
-                    alt="Outer Shirt Color"
-                    className="character-layer outer-layer-tops-color"
-                />
-            )}
+                {/* Render selected Secondary Fringe color */}
+                {selectedSecondaryFringeColor && (
+                    <img
+                        src={selectedSecondaryFringeColor}
+                        alt="Selected Secondary Fringe Color"
+                        className="character-layer secondary-fringe-color"
+                    />
+                )}
 
 
-            {/* Render selected mouth expression */}
-            {selectedMouthExpression && (
-                <img
-                    src={selectedMouthExpression}
-                    alt="Selected Mouth Expression"
-                    className="character-layer mouth-expression"
-                />
-            )}
+                {/* Render selected body scars */}
+                {selectedBodyScars.map((bodyScar, index) => (
+                    <img
+                        key={index}
+                        src={bodyScar}
+                        alt={`Selected Body Scar ${index}`}
+                        className="character-layer body-scars"
+                    />
 
-            {selectedMouthExpression && selectedLipShape && (
-                <img
-                    src={selectedLipShape.asset}
-                    alt="Selected Lip Shape"
-                    className="character-layer lip-linework"
-                // style={{ zIndex: selectedLipColor ? 0 : 36 }}
-                />
-            )}
+                ))}
 
 
-            {selectedLipColor && (
-                <img
-                    src={selectedLipColor.asset}
-                    alt="Selected Lip Color"
-                    className="character-layer lip-color"
-                    style={{ zIndex: 34 }}
-                />
-            )}
+                {/* Render selected accessory */}
+                {selectedAccessory && (
+                    <img
+                        src={selectedAccessory}
+                        alt="Selected Accessory"
+                        className="character-layer accessory"
+                    />
+                )}
 
-            {selectedEyebrow && (
-                <img
-                    src={selectedEyebrow}
-                    alt="Selected Eyebrow"
-                    className="character-layer eyebrows"
-                />
-            )}
+                {/* Render selected mustache linework */}
+                {selectedMustacheLinework && (
+                    <img
+                        src={selectedMustacheLinework.asset}
+                        alt="Selected Mustache Linework"
+                        className="character-layer mustache-linework"
+                    />
+                )}
 
-            {/* Render selected background */}
-            {selectedBackground && (
-                <img
-                    src={selectedBackground}
-                    alt="Selected Background"
-                    className="character-layer background"
-                />
-            )}
+                {/* Render selected mustache color */}
+                {selectedMustacheColor && (
+                    <img
+                        src={selectedMustacheColor.asset}
+                        alt="Selected Mustache Color"
+                        className="character-layer mustache-color"
+                    />
+                )}
+
+                {/* Render selected beard linework */}
+                {selectedBeardLinework && (
+                    <img
+                        src={selectedBeardLinework.asset}
+                        alt="Selected Beard Linework"
+                        className="character-layer beard-linework"
+                    />
+                )}
+
+                {/* Render selected beard color */}
+                {selectedBeardColor && (
+                    <img
+                        src={selectedBeardColor.asset}
+                        alt="Selected Beard Color"
+                        className="character-layer beard-color"
+                    />
+                )}
+
+
+                {/* Render shoulder linework */}
+                {selectedShoulderLinework && (
+                    <img
+                        src={selectedShoulderLinework}
+                        alt="Shoulder Linework"
+                        className="character-layer shoulder-linework" />
+                )}
+
+                {/* Render shoulder skin tone */}
+                {selectedShoulderSkinTone && (
+                    <img
+                        src={selectedShoulderSkinTone}
+                        alt="Shoulder Skin Tone"
+                        className="character-layer shoulder-skin-color" />
+                )}
+
+                {/* Chest Volume */}
+                {showChestVolume && selectedShoulderType && (
+                    <img
+                        src={getChestVolume()}
+                        alt="Chest Volume"
+                        className="character-layer chest-volume"
+                    />
+                )}
+
+                {/* Base Layer Shirt */}
+                {selectedBaseShirtLinework && (
+                    <img
+                        src={selectedBaseShirtLinework}
+                        alt="Base Shirt Linework"
+                        className="character-layer base-layer-linework"
+                    />
+                )}
+                {selectedBaseShirtColor && (
+                    <img
+                        src={selectedBaseShirtColor}
+                        alt="Base Shirt Color"
+                        className="character-layer base-layer-tops-color"
+                    />
+                )}
+
+                {/* Mid Layer Shirt */}
+                {selectedMidShirtLinework && (
+                    <img
+                        src={selectedMidShirtLinework}
+                        alt="Mid Shirt Linework"
+                        className="character-layer mid-layer-tops-linework"
+                    />
+                )}
+                {selectedMidShirtColor && (
+                    <img
+                        src={selectedMidShirtColor}
+                        alt="Mid Shirt Color"
+                        className="character-layer mid-layer-tops-color"
+                    />
+                )}
+
+                {/* Outer Layer Shirt */}
+                {selectedOuterShirtLinework && (
+                    <img
+                        src={selectedOuterShirtLinework}
+                        alt="Outer Shirt Linework"
+                        className="character-layer outer-layer-tops-linework"
+                    />
+                )}
+                {selectedOuterShirtColor && (
+                    <img
+                        src={selectedOuterShirtColor}
+                        alt="Outer Shirt Color"
+                        className="character-layer outer-layer-tops-color"
+                    />
+                )}
+
+
+                {/* Render selected mouth expression */}
+                {selectedMouthExpression && (
+                    <img
+                        src={selectedMouthExpression}
+                        alt="Selected Mouth Expression"
+                        className="character-layer mouth-expression"
+                    />
+                )}
+
+                {selectedMouthExpression && selectedLipShape && (
+                    <img
+                        src={selectedLipShape.asset}
+                        alt="Selected Lip Shape"
+                        className="character-layer lip-linework"
+                    // style={{ zIndex: selectedLipColor ? 0 : 36 }}
+                    />
+                )}
+
+
+                {selectedLipColor && (
+                    <img
+                        src={selectedLipColor.asset}
+                        alt="Selected Lip Color"
+                        className="character-layer lip-color"
+                        style={{ zIndex: 34 }}
+                    />
+                )}
+
+                {selectedEyebrow && (
+                    <img
+                        src={selectedEyebrow}
+                        alt="Selected Eyebrow"
+                        className="character-layer eyebrows"
+                    />
+                )}
 
 
 
 
 
+            </div>
         </div>
     );
 

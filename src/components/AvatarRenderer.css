@@ -1,18 +1,31 @@
+
+
 .avatar-render {
-    background: red;
-    border-radius: 50%;
-    height: 100px;
-    width: 100px;
+    border-radius: 8px;
+    width: 300px;
+    height: 300px;
     display: flex;
-    justify-content: center;
+    justify-content: baseline;
     align-items: center;
     font-size: 2rem;
     color: white;
     margin: 0 auto;
     margin-top: 20px;
     margin-bottom: 20px;
-    border: 2px solid white;
+    border: 4px solid #3e2000;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     transition: all 0.3s ease;
-    
+    position: absolute;
+    right: 3vw;
+    bottom: 5vh;
+
+    clip-path: polygon(
+        10% 0%, 90% 0%, 100% 10%, 100% 90%, 90% 100%, 
+        10% 100%, 0% 90%, 0% 10%
+    );
+}
+
+.avatar-render img {
+    height: 100%;
+
 }
