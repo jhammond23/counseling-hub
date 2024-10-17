@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { loadEyebrowAssets, loadClothesColorSwatches, loadMakeupColorSwatches, loadLipShapeAssets, skinToneSwatches, hairColorSwatches, loadFrontLayerFringeAssets, loadSecondaryFringeAssets, loadMouthExpressionAssets, loadLipAssets, loadNoseApexAssets, loadNoseBridgeAssets, loadShirtAssets, loadShoulderAssets, loadChestVolumeAssets, loadEyeballAssets, loadEyeShapeAssets, loadEyeMakeupAssets, loadEyeSocketShadowAssets, loadHeadAssets, loadChinAssets, loadEarAssets, loadHairAssets, loadFaceScarAssets, loadBodyScarAssets, loadBackgroundAssets, loadAccessoryAssets, loadBeardAssets, loadMustacheAssets, loadCheekboneAssets, loadEyelashAssets, loadEyeColorAssets } from '../utilities/loadAssets';
+import { loadEyeColorSwatches, loadEyebrowAssets, loadClothesColorSwatches, loadMakeupColorSwatches, loadLipShapeAssets, skinToneSwatches, hairColorSwatches, loadFrontLayerFringeAssets, loadSecondaryFringeAssets, loadMouthExpressionAssets, loadLipAssets, loadNoseApexAssets, loadNoseBridgeAssets, loadShirtAssets, loadShoulderAssets, loadChestVolumeAssets, loadEyeballAssets, loadEyeShapeAssets, loadEyeMakeupAssets, loadEyeSocketShadowAssets, loadHeadAssets, loadChinAssets, loadEarAssets, loadHairAssets, loadFaceScarAssets, loadBodyScarAssets, loadBackgroundAssets, loadAccessoryAssets, loadBeardAssets, loadMustacheAssets, loadCheekboneAssets, loadEyelashAssets, loadEyeColorAssets } from '../utilities/loadAssets';
 import './SafeSpace.css'; // Assuming you're using the provided CSS
 import { auth, db } from '../firebase-config'; // Adjust the path if needed
 import { doc, setDoc, getDoc } from 'firebase/firestore';
@@ -232,6 +232,15 @@ const SafeSpace = () => {
         )
     );
 
+        // Load eye color swatches
+        const eyeColorSwatches = loadEyeColorSwatches(
+            require.context(
+                '../media/Tasia-Pixel-Project-Revision-1056x1056/14-Color-Swatches',
+                false,
+                /Eye-Color-\d+\.(png|jpe?g|svg)$/
+            )
+        );
+
 
     // Handle skin tone change
     const handleSkinToneClick = (swatch) => {
@@ -398,6 +407,24 @@ const SafeSpace = () => {
             }
         } else {
             console.warn("No hair linework selected yet.");
+        }
+    };
+
+    const handleEyeColorChange = (swatch) => {
+        const colorNumber = swatch.match(/Eye-Color-(\d+)/)[1]; // Extract the color number
+
+        if (selectedEyeColor) {
+            const matchingEyeColor = eyeColorAssets.find(
+                (color) => color.includes(`Eye-Color-${colorNumber}`) && color.includes(selectedEyeColor.match(/Eye-\d+/)[0])
+            );
+
+            if (matchingEyeColor) {
+                setSelectedEyeColor(matchingEyeColor); // Set the matching eye color
+            } else {
+                console.warn("No matching eye color found.");
+            }
+        } else {
+            console.warn("No eye linework selected yet.");
         }
     };
 
@@ -652,15 +679,6 @@ const SafeSpace = () => {
 
     const handleLowerEyelashChange = (lowerEyelash) => {
         setSelectedLowerEyelash(lowerEyelash);
-    };
-
-    const handleEyeColorChange = (eyeColorAsset) => {
-        if (selectedEyeColor === eyeColorAsset) {
-            // If the same eye color is selected, remove it
-            setSelectedEyeColor(null);
-        } else {
-            setSelectedEyeColor(eyeColorAsset);
-        }
     };
 
 
@@ -2261,23 +2279,21 @@ const SafeSpace = () => {
 
                         {/* UI for Eye Colors */}
                         <div className="option-category">
-                            <h3>Eye Colors</h3>
+                            <h3>Eye Color Options</h3>
                             <div>
-                                {eyeColorAssets.colors.map((eyeColorAsset, index) => (
-                                    <button
-                                        key={index}
-                                        onClick={() => {
-                                            if (selectedEyeColor === eyeColorAsset) {
-                                                handleRemoveEyeColor(); // Remove eye color if it's already selected
-                                            } else {
-                                                handleEyeColorChange(eyeColorAsset); // Change to the newly selected eye color
-                                            }
-                                        }}
-                                        className={`UI-tile-button removeable ${selectedEyeColor === eyeColorAsset ? 'selected' : ''}`}
-                                    >
-                                        <img src={eyeColorAsset} alt={`Eye Color ${index}`} />
-                                    </button>
-                                ))}
+                                {eyeColorSwatches.map((swatch, index) => {
+                                    const isSelected = selectedEyeColor === swatch;
+
+                                    return (
+                                        <button
+                                            key={index}
+                                            onClick={() => handleEyeColorChange(swatch)}
+                                            className={`UI-tile-button color-swatch ${isSelected ? 'selected' : ''}`}
+                                        >
+                                            <img src={swatch} alt={`Eye Color ${index}`} />
+                                        </button>
+                                    );
+                                })}
                             </div>
                         </div>
 

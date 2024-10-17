@@ -366,3 +366,14 @@ export const loadEyebrowAssets = (context) => {
     };
     return assets;
 };
+
+// Function to load eye color swatches
+export const loadEyeColorSwatches = (context) => {
+    const keys = context.keys();
+    const values = keys.map(context);
+    const swatches = values.map((asset, index) => ({
+        asset,
+        key: keys[index],
+    }));
+    return swatches;
+};
